@@ -1,0 +1,42 @@
+{
+  "system_name": "CodeReborn Database Schema",
+  "domain": "Persistence and Traceability",
+  "facts": [
+    "All persistent storage uses PostgreSQL with JSONB data types to avoid schema rigidity.",
+    "Table 'jobs' tracks global execution state, metadata, and accumulated token costs.",
+    "Table 'agent_executions' isolates cost tracking (USD) and tokens for each agent's individual run.",
+    "Reports from the deterministic pipeline (stack_reports, architecture_contexts) are stored natively and serve as the input context for LLM Tasks.",
+    "Table 'tech_debt_findings' stores atomic lines of lint/static errors.",
+    "Table 'tech_debt_analyses' stores aggregated, LLM-generated summaries of findings.",
+    "Document generation is stored in 'doc_artifacts' categorized by audiences (technical, human, ai_context, debt)."
+  ],
+  "rules": [
+    "ALL IDs MUST be UUIDv4.",
+    "Every execution table MUST hold a foreign key (job_id) to the 'jobs' table.",
+    "No document generation Agent MUST run until the 'tech_debt_analyses', 'system_maps', 'architecture_contexts' are fully persisted in Postgres."
+  ],
+  "boundaries": [
+    "Database schemas MUST NOT be deeply normalized for the analytical outputs (Use JSONB).",
+    "The Repo Intelligence Interface MUST read exclusively from PostgreSQL, NOT from CrewAI memory."
+  ],
+  "extension_points": [
+    "The doc_artifacts table can be extended with vector embedding columns (pgvector) in the future to support raw semantic RAG without external vector databases."
+  ],
+  "patterns": [
+    "Eventual Consistency via PostgreSQL for state checkability",
+    "JSONB Document Store pattern inside Relational Database"
+  ],
+  "anti_patterns": [
+    "Creating 50 tables to store variations of 'frameworks', 'dependencies', or 'lint_errors'.",
+    "Relying on Redis for persistent state or recovery data."
+  ],
+  "conventions": [
+    "Snake_case naming for tables and columns",
+    "Store financial costs in DECIMAL(10,4)",
+    "Store tokens consumed as INT"
+  ],
+  "constraints": [
+    "The LLMBudgetService MUST record a projection in the 'llm_call_decisions' table BEFORE proceeding with the API call.",
+    "The 'agent_executions' table MUST append real exact costs post-LLM call returned directly by OpenAI/LiteLLM headers."
+  ]
+}

@@ -1,0 +1,1435 @@
+CodeReborn - Sistema de Inteligencia de Repositorios Legacy
+CodeReborn es una plataforma de inteligencia de repositorios legacy orientada a analizar un codebase existente, comprenderlo profundamente, detectar su arquitectura real, identificar deuda técnica, generar documentación especializada y exponer una interfaz inteligente del repositorio para asistir tareas futuras de desarrollo, navegación, consulta técnica y generación de contexto para coding.
+El sistema no debe pensar como un simple analizador de código ni como un lector bruto de repositorios. Debe comportarse como un motor de inteligencia técnica que transforma un repo legacy en conocimiento estructurado, reutilizable y útil para humanos y para agentes.
+PRINCIPIO CENTRAL DEL SISTEMA
+El sistema debe separar claramente tres tipos de trabajo:
+
+detección objetiva y determinística
+preparación inteligente de contexto
+razonamiento e interpretación
+
+El sistema no debe usar LLM para todo. Debe usar lógica determinística cuando una tarea puede resolverse con inspección, parsing, heurísticas o herramientas existentes. Debe usar LLM únicamente cuando el problema requiere interpretación, síntesis, juicio o reconstrucción conceptual.
+STACK TECNOLÓGICO DEL SISTEMA
+El sistema se construye sobre las siguientes tecnologías base:
+
+CrewAI para orquestación de agentes
+PostgreSQL para persistencia de estado, resultados y metadata
+Redis opcional para comunicación asíncrona entre Jobs si es necesario
+FastAPI para exposición del repo_intelligence_interface
+specfy/stack-analyser como motor base de detección de stack
+
+Cada agente del sistema se implementa como un Agent de CrewAI con roles, objetivos y herramientas específicas.
+La comunicación entre agentes se maneja mediante el sistema nativo de tareas de CrewAI, usando tareas secuenciales con contexto compartido.
+Redis PubSub se reserva únicamente para comunicación asíncrona entre Jobs distintos o notificaciones en tiempo real, no para el flujo principal del pipeline.
+SCOPE DEL ANÁLISIS
+Cada Job del sistema analiza un solo frente a la vez.
+Un Job nunca debe mezclar frontend y backend en el mismo análisis. Tampoco debe mezclar, dentro de un mismo análisis, distintos scopes como mobile, backend, frontend o desktop.
+Cada Job debe tener un analysis_scope explícito, por ejemplo:
+
+frontend
+backend
+mobile
+desktop
+library
+worker
+other
+
+Por el momento, el sistema solo procesa repositorios que tienen un solo frente. La detección de múltiples frentes y la creación de múltiples Jobs por frente es una funcionalidad futura que se implementará mediante un agente detector previo al pipeline actual.
+Si un repositorio contiene múltiples frentes, en la versión actual debe procesarse manualmente como Jobs separados, uno por frente.
+Aunque un Job analice un solo frente, ese frente puede ser pequeño, mediano, grande o muy grande. Por lo tanto, el sistema debe soportar partición interna del análisis cuando el frente sea demasiado grande o complejo.
+Por el momento, el sistema solo analiza repositorios con un stack tecnológico único. Repos polyglot con múltiples lenguajes principales son una funcionalidad futura.
+MODOS DE ANÁLISIS
+El sistema debe soportar distintos modos de análisis para adaptarse al tamaño y complejidad del frente:
+
+single_pass
+Se usa cuando el contexto total del frente cabe razonablemente en una sola fase de razonamiento LLM sin exceder límites de tokens ni presupuesto.
+multi_zone
+Se usa cuando el frente es grande y el contexto total excede los límites de tokens del modelo o el presupuesto disponible. El análisis se divide en zonas internas del mismo frente, por ejemplo módulos, features, capas, dominios o agrupaciones heurísticas. Cada zona se analiza en un request LLM separado y luego se consolidan resultados.
+hierarchical_multi_zone
+Se usa cuando el frente es muy grande y requiere análisis jerárquico por subzonas, luego consolidación por zonas, y finalmente síntesis global. Este modo implica múltiples niveles de partición y consolidación.
+
+La partición nunca debe hacerse por mezclar frentes, sino por tamaño y complejidad interna del mismo frente.
+IMPORTANTE: Multi-zone NO es un concepto arquitectónico. Es una estrategia operacional para partir el análisis LLM en múltiples requests cuando el contexto es demasiado grande para procesarse en una sola llamada.
+El modo de análisis es determinado automáticamente por el llm_budget_service antes de cada fase de razonamiento LLM, basándose en:
+
+Cantidad estimada de tokens del contexto
+Límites de tokens del modelo seleccionado
+Presupuesto disponible del Job
+Costo estimado del análisis
+
+OBJETIVO GENERAL DEL PIPELINE
+El sistema debe convertir un frente legacy en:
+
+un entendimiento estructurado del stack
+un mapa real de su arquitectura
+una lectura contextualizada de su deuda técnica
+una suite de documentación especializada
+una interfaz de inteligencia del repositorio reutilizable por herramientas externas y agentes
+
+El pipeline conceptual del sistema es:
+llm_budget_service (servicio transversal)
+→ stack_detector
+→ architecture_context_builder
+→ system_mapper
+→ tech_debt_analyzer
+→ doc_writing_layer
+→ repo_intelligence_interface
+COMPONENTE 0: LLM BUDGET SERVICE
+El llm_budget_service es un servicio centralizado crítico que se invoca ANTES de cualquier llamada LLM en el sistema.
+No es un agente de CrewAI. Es un servicio utilitario transversal que todos los agentes LLM deben consultar antes de ejecutar razonamiento.
+Su responsabilidad es:
+
+Estimar tokens del contexto que se enviará al LLM
+Consultar presupuesto restante del Job actual
+Consultar límites de tokens del modelo candidato
+Decidir el modelo óptimo a usar según presupuesto y necesidad
+Decidir el modo de análisis óptimo
+Calcular partición en chunks/zonas si el contexto es muy grande
+Rechazar o degradar llamadas si el presupuesto está agotado
+Registrar la decisión tomada en PostgreSQL
+
+El llm_budget_service debe implementar la siguiente lógica de decisión:
+PASO 1: Estimar tokens del contexto
+Usar un tokenizer apropiado para estimar cuántos tokens ocupa el payload que se enviará al LLM.
+PASO 2: Consultar presupuesto del Job
+Obtener de PostgreSQL el presupuesto configurado para el Job:
+
+max_tokens permitidos
+max_cost_usd permitido
+tokens ya consumidos
+costo ya consumido
+
+PASO 3: Evaluar viabilidad
+Comparar tokens estimados contra:
+
+Límite de contexto del modelo candidato
+Presupuesto restante del Job
+
+PASO 4: Decidir estrategia
+Si el contexto estimado cabe en el modelo y el presupuesto lo permite:
+
+Aprobar llamada en modo single_pass
+Retornar modelo seleccionado y costo estimado
+
+Si el contexto estimado excede límite de tokens del modelo:
+
+Cambiar a modo multi_zone
+Calcular cantidad óptima de chunks/zonas
+Retornar configuración de chunks y costo estimado total
+
+Si el presupuesto está muy limitado pero el análisis es viable:
+
+Degradar a modelo más económico
+O reducir cantidad de muestras del contexto
+Retornar modelo degradado y advertencias
+
+Si el presupuesto está agotado:
+
+Rechazar llamada
+Retornar error con detalle de presupuesto consumido
+
+PASO 5: Registrar decisión
+Guardar en PostgreSQL la decisión tomada con metadata completa.
+El llm_budget_service debe retornar un objeto estructurado LLMCallDecision que contenga:
+
+approved: boolean
+model: string del modelo seleccionado
+mode: single_pass | multi_zone | hierarchical_multi_zone
+chunks: número de chunks/zonas si aplica
+chunk_configs: configuración detallada de cada chunk si aplica
+estimated_input_tokens: int
+estimated_output_tokens: int
+estimated_total_tokens: int
+estimated_cost_usd: float
+warnings: lista de advertencias si aplica
+rejection_reason: string si approved=false
+
+Este objeto LLMCallDecision debe ser consumido por el agente que solicitó la evaluación para ejecutar el análisis según la estrategia aprobada.
+TOKEN Y COST TRACKING
+Todos los agentes LLM del sistema deben ser token-aware y cost-aware.
+Cada ejecución de agente que involucre llamada LLM debe registrar en PostgreSQL:
+
+job_id
+agent_name
+execution_id único
+input_tokens reales
+output_tokens reales
+total_tokens reales
+input_cost_usd
+output_cost_usd
+total_cost_usd
+model usado
+analysis_scope
+analysis_mode usado
+zone_name si aplica
+duration en segundos
+started_at timestamp
+completed_at timestamp
+status: success | failed | partial
+error_detail si aplica
+
+El sistema debe mantener un contador acumulado por Job de:
+
+total_tokens_used
+total_cost_usd
+
+Este contador debe actualizarse después de cada ejecución de agente LLM.
+El sistema debe validar antes de cada llamada LLM que el Job no haya excedido sus límites configurados.
+Si un Job se acerca a su límite (ej: 90% del presupuesto consumido), el llm_budget_service debe:
+
+Emitir warnings
+Sugerir degradación de modelo
+Sugerir reducción de scope
+O sugerir detener análisis y generar reporte parcial
+
+COMPONENTE 1: STACK DETECTOR
+El stack_detector es un agente determinístico implementado en CrewAI. No realiza razonamiento LLM.
+Debe tener como responsabilidad detectar qué usa el sistema desde el punto de vista técnico, no cómo está diseñado arquitectónicamente.
+Debe usar specfy/stack-analyser como motor base especializado de detección de stack.
+HERRAMIENTA BASE: specfy/stack-analyser
+specfy/stack-analyser es una herramienta open source que analiza repositorios y detecta:
+
+Frameworks principales (React, Vue, Angular, Django, Rails, Laravel, Spring, etc.)
+Lenguajes usados (JavaScript, TypeScript, Python, Go, Java, Ruby, PHP, etc.)
+Dependencias y librerías (desde package.json, requirements.txt, Gemfile, go.mod, pom.xml, etc.)
+Servicios detectados (Docker, Kubernetes, Redis, PostgreSQL, MongoDB, etc.)
+Señales de infraestructura
+
+El stack_detector debe ejecutar specfy/stack-analyser sobre el repositorio y capturar su output en formato JSON.
+POST-PROCESADOR DEL STACK DETECTOR
+El stack_detector debe incluir un post-procesador propio que tome el resultado crudo de specfy/stack-analyser y lo transforme en una salida interna estable, enriquecida y útil.
+Ese post-procesador debe:
+
+Normalizar nombres y categorías de tecnologías
+Completar información faltante leyendo archivos clave manualmente
+Detectar entrypoints probables del proyecto (main.py, index.js, index.tsx, App.tsx, app.py, server.js, etc.)
+Analizar archivos de configuración relevantes no detectados por stack-analyser
+Analizar Dockerfiles y docker-compose.yml si existen
+Detectar señales de arquitectura containerizada
+Enriquecer el resultado con hints, evidencias y señales derivadas
+Calcular confidence_score por cada hallazgo tecnológico
+Generar el output estándar oficial del sistema
+
+Este post-procesador existe para que el resto del sistema no dependa del formato exacto de specfy/stack-analyser y pueda evolucionar independientemente.
+OUTPUT DEL STACK DETECTOR
+El stack_detector debe producir un output JSON estructurado potente que sirva como input fundamental para otros componentes.
+Ese output debe ser un Stack Intelligence Report que contenga al menos:
+stack_summary: resumen ejecutivo del stack tecnológico detectado
+project_name: nombre del proyecto si es detectable
+analysis_scope: frontend | backend | mobile | desktop | library | worker | other
+primary_language: lenguaje principal detectado
+languages: lista de lenguajes detectados con porcentaje estimado de uso
+frameworks: lista de frameworks detectados con versión si es detectable, categoría y confidence_score
+dependencies: lista de dependencias relevantes agrupadas por tipo (runtime, dev, peer) con versiones
+services: lista de servicios externos detectados (bases de datos, colas, caches, APIs externas, etc.)
+infra_hints: señales de infraestructura detectadas (cloud provider hints, deployment signals, etc.)
+docker_hints: información sobre Docker si existe (Dockerfile presente, docker-compose presente, servicios definidos)
+build_tools: herramientas de build detectadas (webpack, vite, rollup, gradle, maven, make, etc.)
+test_frameworks: frameworks de testing detectados
+entrypoints: lista de archivos de entrada probables con su rol
+config_files: lista de archivos de configuración relevantes encontrados
+evidence_files: mapa de archivos que sirvieron como evidencia para cada detección tecnológica
+package_managers: gestores de paquetes detectados (npm, yarn, pnpm, pip, poetry, bundler, composer, etc.)
+monorepo_signals: señales de si es un monorepo (presencia de workspaces, lerna, nx, turborepo, etc.)
+confidence_score: score global de confianza del análisis (0.0 a 1.0)
+unknowns: lista de señales ambiguas o tecnologías no identificables
+analysis_timestamp: timestamp del análisis
+La idea de este output es que sea un Stack Intelligence Report completo y autoconsistente, no una simple lista de tecnologías.
+El stack_detector debe persistir este Stack Intelligence Report en PostgreSQL en una tabla dedicada vinculada al job_id.
+El stack_detector NO debe intentar decidir la arquitectura global ni inferir patrones de diseño complejos. Ese no es su rol. Su rol es puramente detectar el stack tecnológico.
+COMPONENTE 2: ARCHITECTURE CONTEXT BUILDER
+El architecture_context_builder es un agente determinístico implementado en CrewAI. No realiza razonamiento LLM.
+Su misión NO es interpretar la arquitectura todavía. Su misión es preparar el mejor contexto posible para que el siguiente componente (system_mapper) sí pueda interpretarla de manera precisa y eficiente.
+Debe funcionar con cualquier repo legacy, incluso si la estructura es caótica, inconsistente o no sigue ninguna convención conocida.
+No debe asumir carpetas fijas como controllers, services, repositories, modules, pages, components o similares. En lugar de eso, debe buscar señales arquitectónicas mediante heurísticas adaptativas.
+RESPONSABILIDADES DEL ARCHITECTURE CONTEXT BUILDER
+El architecture_context_builder debe:
+
+Inspeccionar el árbol de directorios del repositorio del frente analizado
+Construir un resumen estructural navegable del árbol completo
+Detectar archivos de configuración y arranque relevantes
+Detectar entrypoints probables del proyecto
+Clasificar archivos por rol arquitectónico probable
+Rankear archivos por valor arquitectónico estimado
+Agrupar el repositorio en zonas funcionales o estructurales
+Seleccionar muestras de código representativas por zona
+Construir un architecture_context_payload optimizado para LLM
+
+CLASIFICACIÓN HEURÍSTICA DE ARCHIVOS
+El architecture_context_builder debe clasificar cada archivo del repositorio según su rol arquitectónico probable.
+La clasificación heurística puede incluir roles probables como:
+
+entrypoint: archivos que inician la aplicación
+config: archivos de configuración
+route: archivos que definen rutas o endpoints
+controller: archivos que manejan requests
+service: archivos con lógica de negocio
+repository: archivos de acceso a datos
+model: definiciones de modelos o entidades
+entity: definiciones de entidades de dominio
+dto: objetos de transferencia de datos
+adapter: adaptadores a servicios externos
+middleware: middlewares o interceptors
+guard: guards o autorización
+validator: validadores
+transformer: transformadores de datos
+util: utilidades compartidas
+helper: funciones auxiliares
+constant: constantes
+type: definiciones de tipos
+interface: interfaces
+schema: schemas de validación o DB
+migration: migraciones de base de datos
+seed: seeders de datos
+test: archivos de testing
+mock: mocks para testing
+frontend-view: componentes de UI o vistas
+frontend-component: componentes reutilizables
+frontend-page: páginas o screens
+frontend-layout: layouts
+state: manejo de estado (redux, vuex, mobx, context, etc.)
+store: stores de estado
+action: acciones de estado
+reducer: reducers
+selector: selectors
+hook: custom hooks
+hoc: higher-order components
+provider: providers o context providers
+event-handler: manejadores de eventos
+subscriber: subscribers de eventos
+publisher: publishers de eventos
+queue: workers de colas
+job: jobs o tareas asíncronas
+scheduler: schedulers
+websocket: handlers de websockets
+graphql: resolvers o schemas GraphQL
+rest: controllers REST
+grpc: servicios gRPC
+infra: código de infraestructura
+deploy: scripts de deployment
+ci: archivos de CI/CD
+docs: documentación
+script: scripts auxiliares
+build: configuración de build
+asset: assets estáticos
+public: archivos públicos
+vendor: código de terceros
+generated: código autogenerado
+unknown: rol no determinable
+
+Esta clasificación debe hacerse mediante heurísticas basadas en:
+
+Nombre del archivo
+Ubicación en el árbol de directorios
+Extensión del archivo
+Imports que realiza
+Exports que expone
+Palabras clave en el contenido
+Patrones comunes por framework detectado
+
+El architecture_context_builder no debe decidir si algo es hexagonal, layered, clean architecture o event-driven. Debe quedarse en evidencia objetiva, no en juicio final arquitectónico.
+RANKING DE ARCHIVOS POR VALOR ARQUITECTÓNICO
+El architecture_context_builder debe rankear cada archivo según su valor arquitectónico estimado.
+El valor arquitectónico de un archivo puede determinarse por factores como:
+
+Es un entrypoint del proyecto
+Es un archivo de configuración principal
+Es un archivo de routing
+Define boundaries o límites de módulos
+Es importado por muchos otros archivos (alto fan-in)
+Importa de muchas partes del sistema (alto fan-out)
+Está en ubicaciones estructurales clave
+Contiene abstracciones importantes (interfaces, contratos, types principales)
+Define modelos de dominio core
+Coordina flujos importantes
+Tamaño moderado (ni muy pequeño ni muy grande)
+
+Los archivos con mayor valor arquitectónico deben priorizarse en las muestras de código que se incluyan en el architecture_context_payload.
+AGRUPACIÓN EN ZONAS
+El architecture_context_builder debe agrupar el repositorio en zonas funcionales o estructurales.
+Una zona puede ser:
+
+Un directorio top-level significativo
+Un módulo funcional detectado
+Una feature agrupada
+Una capa arquitectónica detectada
+Un dominio de negocio inferido
+Una agrupación heurística de archivos relacionados
+
+La agrupación en zonas sirve para:
+
+Organizar el contexto de manera navegable
+Facilitar análisis multi_zone si es necesario
+Permitir muestreo representativo por zona
+Facilitar comprensión modular del sistema
+
+SELECCIÓN DE MUESTRAS DE CÓDIGO
+El architecture_context_builder debe seleccionar muestras de código representativas que se incluirán en el architecture_context_payload.
+La selección debe priorizar:
+
+Archivos de alto valor arquitectónico
+Representatividad de cada zona
+Diversidad de roles arquitectónicos
+Entrypoints y archivos de configuración completos
+Fragmentos significativos de archivos muy grandes
+Balance entre detalle y cantidad de tokens
+
+La selección debe evitar:
+
+Archivos generados automáticamente
+Archivos de vendors o node_modules
+Archivos binarios
+Archivos de testing completos (solo muestras si son representativas)
+Archivos duplicados o boilerplate puro
+Código irrelevante arquitectónicamente
+
+ARCHITECTURE CONTEXT PAYLOAD
+El architecture_context_builder debe producir un payload curado y estructurado llamado architecture_context_payload.
+Este payload debe contener:
+repo_tree_summary: resumen navegable del árbol de directorios con metadata por directorio (cantidad de archivos, tipos predominantes, rol probable)
+zones: lista de zonas detectadas con descripción, archivos contenidos y rol probable de la zona
+file_classifications: mapa de archivos clasificados por rol arquitectónico probable
+file_rankings: lista de archivos rankeados por valor arquitectónico
+key_config_files: lista de archivos de configuración clave con contenido completo o extractos relevantes
+entrypoints: lista de entrypoints detectados con contenido completo
+architectural_samples: muestras de código seleccionadas por zona y por rol, con contexto de por qué fueron seleccionadas
+selection_rationale: explicación de los criterios de selección aplicados
+import_graph_hints: señales de dependencias entre archivos (quién importa a quién) en forma resumida
+directory_purposes: inferencias sobre el propósito probable de cada directorio principal
+framework_conventions_detected: convenciones del framework detectadas (ej: si es Next.js, detectar pages/, app/, api/, etc.)
+estimated_context_size_tokens: estimación de tokens del payload generado
+unknowns: señales ambiguas, directorios no clasificables, estructuras no reconocidas
+metadata: timestamp, versión del builder, configuración usada
+Este architecture_context_payload es el insumo fundamental para el system_mapper.
+El architecture_context_builder debe persistir este payload en PostgreSQL vinculado al job_id.
+El architecture_context_builder debe ser agnóstico al framework pero consciente de convenciones comunes. Si detecta convenciones conocidas (Next.js pages, Django apps, Rails MVC, etc.), debe aprovecharlas en su clasificación, pero nunca debe fallar si no las encuentra.
+COMPONENTE 3: SYSTEM MAPPER
+El system_mapper es el primer gran agente de razonamiento LLM del sistema y es uno de los corazones de CodeReborn.
+Se implementa como un Agent de CrewAI con capacidad de razonamiento profundo sobre arquitectura de software.
+Debe tomar como input:
+
+El architecture_context_payload generado por el architecture_context_builder
+El Stack Intelligence Report generado por el stack_detector
+Metadata del Job (analysis_scope, configuración, etc.)
+
+Su objetivo es reconstruir el modelo estructural real del frente analizado mediante razonamiento LLM.
+ANTES DE EJECUTAR RAZONAMIENTO
+El system_mapper DEBE consultar al llm_budget_service antes de realizar cualquier llamada LLM.
+Debe enviar al llm_budget_service:
+
+El architecture_context_payload completo
+El job_id
+La configuración de presupuesto del Job
+
+El llm_budget_service retornará un LLMCallDecision que indicará:
+
+Si la llamada está aprobada
+Qué modelo usar
+Qué modo usar (single_pass, multi_zone, hierarchical_multi_zone)
+Si hay que partir en chunks y cómo hacerlo
+Costo estimado
+
+El system_mapper debe ejecutar el análisis según la estrategia aprobada por el llm_budget_service.
+MODO SINGLE_PASS
+Si el llm_budget_service aprueba modo single_pass:
+El system_mapper debe enviar al LLM el contexto completo en una sola llamada y pedirle que analice la arquitectura del frente de manera integral.
+El prompt al LLM debe incluir:
+
+El Stack Intelligence Report
+El architecture_context_payload completo
+El analysis_scope del Job
+Instrucciones claras de qué se espera como output
+
+El LLM debe retornar un análisis arquitectónico estructurado completo.
+MODO MULTI_ZONE
+Si el llm_budget_service aprueba modo multi_zone y proporciona configuración de chunks:
+El system_mapper debe partir el análisis en múltiples llamadas LLM, una por zona.
+Para cada zona:
+
+Construir un contexto específico de esa zona desde el architecture_context_payload
+Consultar nuevamente al llm_budget_service para validar que esa zona individual cabe en el presupuesto
+Enviar al LLM el contexto de la zona y pedirle que analice la arquitectura de esa zona específica
+Recolectar el resultado de la zona
+
+Una vez analizadas todas las zonas:
+
+Construir un contexto de consolidación que contenga los resultados de todas las zonas
+Consultar al llm_budget_service para validar la llamada de consolidación
+Enviar al LLM los resultados zonales y pedirle que los consolide en un análisis arquitectónico global coherente
+Recolectar el resultado consolidado
+
+MODO HIERARCHICAL_MULTI_ZONE
+Si el llm_budget_service aprueba modo hierarchical_multi_zone:
+El system_mapper debe partir el análisis en múltiples niveles jerárquicos.
+Ejemplo de flujo jerárquico:
+
+Analizar subzonas dentro de cada zona
+Consolidar subzonas en análisis de zona
+Consolidar zonas en análisis global
+
+Este modo se usa en frentes muy grandes donde incluso las zonas son demasiado grandes.
+CAPACIDADES DE RAZONAMIENTO DEL SYSTEM MAPPER
+El system_mapper no debe limitarse a adivinar una sola arquitectura ideal. Debe ser capaz de detectar:
+
+Arquitectura dominante del frente
+Patrón arquitectónico principal si existe (layered, hexagonal, clean, MVC, MVVM, flux, redux, event-driven, microkernel, pipes-and-filters, etc.)
+Subpatrones coexistentes
+Patrones parcialmente implementados
+Mezcla de estilos arquitectónicos
+Inconsistencias arquitectónicas
+Señales ambiguas
+Zonas bien estructuradas vs zonas legacy confusas
+Evolución arquitectónica aparente (señales de que el sistema cambió de estilo con el tiempo)
+
+El system_mapper debe tolerar repos legacy desordenados y nunca asumir pureza arquitectónica.
+Debe reportar la realidad del código, no la arquitectura ideal que debería tener.
+SCOPE-AWARENESS DEL SYSTEM MAPPER
+El system_mapper debe ser scope-aware. Es decir, el análisis debe cambiar según el analysis_scope del Job.
+Si el scope es FRONTEND:
+Debe observar y analizar:
+
+Organización de features o módulos
+Estructura de routing
+Manejo de estado (local, global, server state)
+Composición de UI (componentes, páginas, layouts)
+Patrones de data fetching
+Shared UI components y design system
+Utilities y helpers frontend
+Estructura de assets y estilos
+Patrones de navegación
+Integración con APIs
+Manejo de autenticación y autorización frontend
+Optimizaciones y code splitting
+
+Si el scope es BACKEND:
+Debe observar y analizar:
+
+Organización en capas (presentation, application, domain, infrastructure, etc.)
+Organización en módulos funcionales
+Patrones de servicios
+Acceso a datos y repositorios
+Modelos de dominio y entidades
+Integraciones con servicios externos
+Manejo de eventos
+Boundaries entre módulos
+APIs expuestas (REST, GraphQL, gRPC, etc.)
+Middlewares y filtros
+Autenticación y autorización
+Workers y jobs asíncronos
+Websockets o comunicación real-time
+
+Si el scope es MOBILE:
+Debe observar y analizar:
+
+Organización de screens
+Navegación entre screens
+Manejo de estado local y global
+Servicios y lógica de negocio móvil
+Storage local (AsyncStorage, SQLite, etc.)
+Componentes compartidos
+Integración con APIs
+Manejo de permisos nativos
+Optimizaciones de performance móvil
+
+El system_mapper debe adaptar su razonamiento al tipo de frente que está analizando.
+PREGUNTAS QUE DEBE RESPONDER EL SYSTEM MAPPER
+El system_mapper debe responder preguntas como:
+
+¿Cómo está organizado este frente realmente?
+¿Cuál es su arquitectura dominante?
+¿Qué patrones estructurales aparecen?
+¿Cómo se agrupan los módulos o features?
+¿Cómo fluye la información en el sistema?
+¿Qué dependencias externas son arquitectónicamente relevantes?
+¿Qué zonas están arquitectónicamente claras y cuáles son ambiguas?
+¿Qué riesgos arquitectónicos iniciales ya se observan?
+¿Hay señales de evolución arquitectónica?
+¿Hay mezcla de estilos o inconsistencias?
+¿Qué boundaries o límites existen?
+¿Cómo interactúan los componentes principales?
+¿Qué abstracciones importantes existen?
+¿Hay violaciones evidentes de principios arquitectónicos?
+
+OUTPUT DEL SYSTEM MAPPER
+El system_mapper debe producir un output JSON estructurado y completo llamado System Map Report.
+Este reporte debe incluir al menos:
+job_id: identificador del Job
+analysis_scope: frontend | backend | mobile | desktop | library | worker | other
+analysis_mode_used: single_pass | multi_zone | hierarchical_multi_zone
+dominant_architecture: nombre del patrón arquitectónico dominante detectado o "mixed" o "unstructured" si no hay patrón claro
+architecture_confidence: score de confianza en la detección arquitectónica (0.0 a 1.0)
+system_style: descripción textual del estilo general del sistema
+patterns_detected: lista de patrones arquitectónicos detectados con descripción, evidencia y confidence_score por patrón
+patterns_partial: lista de patrones parcialmente implementados o en evolución
+module_structure: descripción de cómo están organizados los módulos o features del sistema
+layers_detected: lista de capas arquitectónicas detectadas si aplica (presentation, application, domain, infrastructure, etc.) con archivos y responsabilidades por capa
+components_identified: lista de componentes arquitectónicos principales identificados (no componentes UI, sino componentes arquitectónicos como "authentication module", "payment service", "user management", etc.)
+data_flow: descripción de cómo fluye la información en el sistema (unidirectional, bidirectional, event-driven, request-response, etc.)
+component_interactions: descripción de cómo interactúan los componentes principales entre sí
+external_dependencies: lista de dependencias externas arquitectónicamente relevantes (APIs, DBs, servicios, etc.)
+boundaries: lista de boundaries o límites detectados en el sistema (module boundaries, layer boundaries, context boundaries, etc.)
+abstractions: lista de abstracciones importantes detectadas (interfaces clave, contratos, types centrales, etc.)
+architectural_consistency: evaluación de qué tan consistente es la arquitectura a lo largo del frente (consistent, mostly_consistent, inconsistent, chaotic)
+architectural_risks: lista de riesgos arquitectónicos detectados con severidad y descripción
+architectural_strengths: lista de fortalezas arquitectónicas detectadas
+mixed_architecture_signals: señales de mezcla de estilos arquitectónicos si existen
+evolution_signals: señales de evolución arquitectónica aparente (código viejo vs nuevo, cambios de patrón, refactors incompletos, etc.)
+zone_analysis_summary: si se usó multi_zone, resumen de qué se encontró por zona antes de consolidar
+technical_debt_architectural: deuda técnica de naturaleza arquitectónica detectada durante el análisis
+unknowns: aspectos arquitectónicos que quedaron ambiguos o no determinables
+evidence_files: lista de archivos que sirvieron como evidencia clave para las conclusiones arquitectónicas
+confidence_score: score global de confianza del análisis (0.0 a 1.0)
+recommendations: recomendaciones arquitectónicas iniciales
+metadata: timestamp, modelo usado, tokens consumidos, costo, duración, etc.
+El system_mapper debe persistir este System Map Report en PostgreSQL vinculado al job_id.
+El system_mapper debe registrar en la tabla agent_executions su ejecución completa con tokens, costo y metadata.
+COMPONENTE 4: TECH DEBT ANALYZER
+El tech_debt_analyzer es un agente híbrido que combina análisis determinístico con razonamiento LLM.
+Se implementa como un Agent de CrewAI con dos fases de ejecución.
+FASE 1: DETECCIÓN DETERMINÍSTICA DE DEUDA TÉCNICA
+La primera fase del tech_debt_analyzer debe recolectar hallazgos de deuda técnica usando herramientas determinísticas y heurísticas.
+HERRAMIENTAS DETERMINÍSTICAS POR LENGUAJE
+El tech_debt_analyzer debe integrar herramientas de análisis estático según el lenguaje detectado por el stack_detector.
+Para JavaScript y TypeScript:
+
+ESLint con configuración estricta
+eslint-plugin-sonarjs para detectar code smells
+Análisis de complejidad ciclomática
+Detección de código duplicado
+
+Para Python:
+
+Pylint para code smells
+Bandit para análisis de seguridad
+Radon para complejidad ciclomática y maintainability index
+Detección de imports circulares
+
+Para Java:
+
+SpotBugs para detección de bugs
+PMD para code smells
+Checkstyle para convenciones
+
+Para Go:
+
+golangci-lint (agrega 50+ linters)
+
+Para Ruby:
+
+RuboCop
+
+Para PHP:
+
+PHPCS (PHP CodeSniffer)
+PHPStan para análisis estático
+
+MÉTRICAS ESTRUCTURALES PROPIAS
+El tech_debt_analyzer debe calcular métricas estructurales propias:
+
+Archivos con más de 500 líneas
+Archivos con más de 1000 líneas (código, no comentarios)
+Funciones con más de 50 líneas
+Funciones con más de 100 líneas
+Clases con más de 20 métodos (god objects)
+Profundidad de anidación mayor a 4 niveles
+Imports circulares entre módulos
+Archivos que importan de más de 20 lugares distintos (alto coupling)
+Archivos importados por más de 50 otros archivos (posible god module)
+Funciones con más de 7 parámetros
+Código comentado extenso
+TODOs, FIXMEs, HACKs en el código
+Archivos sin tests asociados en código crítico
+Duplicación de código (bloques similares)
+Falta de manejo de errores
+Console.log o prints olvidados en código de producción
+Dependencias desactualizadas (major versions atrasadas)
+Dependencias con vulnerabilidades conocidas
+
+DETECCIÓN DE ANTI-PATRONES
+El tech_debt_analyzer debe detectar anti-patrones comunes:
+
+God objects
+Spaghetti code (alto acoplamiento, baja cohesión)
+Lava flow (código obsoleto que nadie se atreve a borrar)
+Golden hammer (usar la misma solución para todo)
+Copy-paste programming
+Magic numbers y strings
+Shotgun surgery (cambios requieren tocar muchos archivos)
+Divergent change (un archivo cambia por muchas razones)
+Feature envy (un módulo usa demasiado de otro)
+Data clumps (grupos de datos que siempre van juntos)
+Primitive obsession
+Long parameter lists
+
+OUTPUT DE LA FASE DETERMINÍSTICA
+La fase determinística debe producir una lista estructurada de hallazgos (findings) que contenga:
+finding_id: identificador único del hallazgo
+category: categoría del hallazgo (code_smell, bug_risk, security, maintainability, complexity, duplication, structure, anti_pattern, outdated_dependency, missing_test, style, etc.)
+severity: low | medium | high | critical
+file_path: ruta del archivo afectado
+line_number: número de línea si aplica
+rule: regla o métrica que generó el hallazgo
+description: descripción del problema
+evidence: evidencia o snippet de código
+tool_source: herramienta que detectó el hallazgo (eslint, pylint, custom_metric, etc.)
+metadata: metadata adicional del hallazgo
+Esta lista de hallazgos debe persistirse en PostgreSQL vinculada al job_id.
+FASE 2: INTERPRETACIÓN Y SÍNTESIS LLM
+La segunda fase del tech_debt_analyzer debe interpretar los hallazgos recolectados en contexto arquitectónico usando razonamiento LLM.
+ANTES DE EJECUTAR RAZONAMIENTO
+El tech_debt_analyzer DEBE consultar al llm_budget_service antes de realizar la llamada LLM de síntesis.
+Debe enviar al llm_budget_service:
+
+Los hallazgos determinísticos (top N por severidad si son muchos)
+El System Map Report del system_mapper
+El Stack Intelligence Report del stack_detector
+El job_id
+La configuración de presupuesto del Job
+
+El llm_budget_service retornará un LLMCallDecision indicando si la llamada está aprobada, qué modelo usar, etc.
+RAZONAMIENTO LLM SOBRE DEUDA TÉCNICA
+El LLM debe recibir:
+
+Los hallazgos determinísticos
+El System Map Report para contexto arquitectónico
+El Stack Intelligence Report para contexto tecnológico
+
+El LLM debe realizar un razonamiento que responda:
+
+¿Cuál es la deuda técnica dominante del frente?
+¿Cuáles hallazgos son problemas locales y cuáles son sistémicos?
+¿Qué hallazgos tienen más impacto real en mantenibilidad?
+¿Qué hallazgos están relacionados entre sí?
+¿Hay grupos de hallazgos que en realidad forman un problema mayor?
+¿Qué conviene priorizar según el contexto arquitectónico?
+¿Qué quick wins existen (alta mejora, bajo esfuerzo)?
+¿Qué refactors estratégicos tienen más valor a largo plazo?
+¿Qué zonas del código son más frágiles?
+¿Qué riesgos de mantenibilidad son más críticos?
+
+CATEGORIZACIÓN DE DEUDA TÉCNICA
+El tech_debt_analyzer debe categorizar la deuda técnica detectada en:
+Deuda estructural:
+
+Mala organización de módulos
+Falta de boundaries claros
+Acoplamiento excesivo
+Mezcla de responsabilidades
+
+Deuda de código:
+
+Code smells
+Complejidad alta
+Duplicación
+Falta de abstracciones
+
+Deuda de mantenibilidad:
+
+Código difícil de entender
+Falta de documentación
+Naming pobre
+Inconsistencias de estilo
+
+Deuda de testing:
+
+Falta de tests
+Cobertura baja
+Tests frágiles
+
+Deuda de seguridad:
+
+Vulnerabilidades
+Malas prácticas de seguridad
+Dependencias con CVEs
+
+Deuda de performance:
+
+Ineficiencias detectables
+Falta de optimizaciones
+
+Deuda de actualización:
+
+Dependencias desactualizadas
+Uso de APIs deprecadas
+Tecnologías obsoletas
+
+OUTPUT DEL TECH DEBT ANALYZER
+El tech_debt_analyzer debe producir un output JSON estructurado llamado Tech Debt Analysis Report.
+Este reporte debe incluir al menos:
+job_id: identificador del Job
+total_findings: cantidad total de hallazgos determinísticos
+findings_by_category: conteo de hallazgos por categoría
+findings_by_severity: conteo de hallazgos por severidad
+dominant_debt_type: tipo de deuda técnica dominante
+debt_categories: deuda categorizada (structural, code, maintainability, testing, security, performance, update)
+systemic_issues: lista de problemas sistémicos detectados (problemas que afectan a múltiples partes del sistema)
+localized_issues: lista de problemas localizados (problemas específicos de archivos o módulos)
+fragile_zones: lista de zonas del código identificadas como frágiles con razones
+high_risk_areas: lista de áreas de alto riesgo para mantenibilidad
+coupling_issues: problemas de acoplamiento detectados
+cohesion_issues: problemas de cohesión detectados
+quick_wins: lista de mejoras de bajo esfuerzo y alto impacto
+strategic_refactors: lista de refactors estratégicos de alto valor con descripción, beneficios esperados y complejidad estimada
+priority_recommendations: recomendaciones priorizadas de qué abordar primero
+debt_trends: tendencias de deuda detectadas (si se detecta evolución, código viejo vs nuevo, etc.)
+related_finding_groups: grupos de hallazgos relacionados que forman problemas mayores
+architectural_debt_correlation: correlación de deuda técnica con problemas arquitectónicos del System Map Report
+confidence_score: score de confianza del análisis (0.0 a 1.0)
+metadata: timestamp, modelo usado, tokens consumidos, costo, duración, etc.
+El tech_debt_analyzer debe persistir este Tech Debt Analysis Report en PostgreSQL vinculado al job_id.
+El tech_debt_analyzer debe registrar en la tabla agent_executions su ejecución de fase LLM con tokens, costo y metadata.
+COMPONENTE 5: DOC WRITING LAYER
+El sistema no debe tener un solo doc_writer monolítico. Debe tener una capa de escritura documental especializada compuesta por múltiples writers.
+La razón no es solamente ahorrar tokens, sino separar objetivos, audiencias y formatos.
+Esta capa recibe como insumos los outputs ya procesados de:
+
+stack_detector (Stack Intelligence Report)
+architecture_context_builder (Architecture Context Payload)
+system_mapper (System Map Report)
+tech_debt_analyzer (Tech Debt Analysis Report)
+
+Y produce diferentes artefactos documentales especializados.
+Cada writer es un agente LLM independiente implementado en CrewAI.
+WRITER 1: TECHNICAL DOC WRITER
+El technical_doc_writer genera documentación técnica orientada a developers y perfiles técnicos.
+Debe enfocarse en:
+
+Descripción técnica de la arquitectura del frente
+Explicación de módulos y componentes principales
+Descripción de entrypoints y flujos de inicio
+Explicación de data flow
+Dependencias técnicas relevantes
+Estructura del frente a nivel técnico
+Convenciones técnicas detectadas
+Guías técnicas de navegación del código
+
+Debe producir documentación que un developer experimentado pueda usar para entender rápidamente el sistema desde un punto de vista técnico.
+Formato de output: Markdown
+WRITER 2: HUMAN DOC WRITER
+El human_doc_writer genera documentación más humana y entendible para onboarding y comprensión rápida.
+Debe enfocarse en:
+
+Overview del sistema en lenguaje simple
+Qué hace el proyecto
+Cómo está organizado en términos comprensibles
+Por dónde empezar a leer el código
+Explicación de alto nivel de cómo funciona
+Guía de onboarding para nuevos developers
+Glosario de términos del dominio si aplica
+FAQs anticipadas
+
+Debe producir documentación que alguien sin contexto previo del proyecto pueda leer y entender rápidamente de qué va el sistema.
+Formato de output: Markdown
+WRITER 3: AI CONTEXT WRITER
+El ai_context_writer genera documentación ultra estructurada y AI-friendly.
+Debe enfocarse en:
+
+Facts del repositorio
+Reglas del codebase detectadas
+Boundaries y límites
+Extension points seguros
+Patrones existentes que deben respetarse
+Anti-patterns a evitar
+Información muy consumible por agentes y herramientas automáticas
+Contexto óptimo para coding assistants
+
+Debe producir documentación en formato estructurado que herramientas de IA puedan consumir fácilmente.
+El formato JSON debe seguir este schema:
+{
+  "facts": [lista de hechos objetivos del repo],
+  "rules": [lista de reglas detectadas que deben seguirse],
+  "boundaries": [lista de boundaries que no deben cruzarse],
+  "extension_points": [lista de puntos seguros de extensión],
+  "patterns": [lista de patrones existentes a seguir],
+  "anti_patterns": [lista de anti-patterns a evitar],
+  "conventions": [lista de convenciones detectadas],
+  "constraints": [lista de restricciones técnicas]
+}
+Formato de output: JSON
+WRITER 4: DEBT DOC WRITER
+El debt_doc_writer genera documentación especializada en deuda técnica, riesgos y recomendaciones.
+Debe enfocarse en:
+
+Resumen ejecutivo de deuda técnica
+Zonas frágiles del código
+Quick wins priorizados
+Refactors estratégicos recomendados
+Riesgos estructurales
+Recomendaciones accionables
+Roadmap sugerido de mejoras
+Trade-offs de cada recomendación
+
+Debe producir documentación que un tech lead o engineering manager pueda usar para planificar mejoras del sistema.
+Formato de output: Markdown
+FLUJO DE CADA WRITER
+Cada writer debe:
+
+Obtener de PostgreSQL los insumos necesarios vinculados al job_id
+Consultar al llm_budget_service antes de generar el documento
+Generar el documento usando LLM según la estrategia aprobada
+Persistir el documento generado en PostgreSQL en la tabla doc_artifacts
+Registrar su ejecución en agent_executions con tokens y costo
+
+SCHEMA DE PERSISTENCIA DE DOCUMENTOS
+Los documentos generados deben persistirse en PostgreSQL en una tabla llamada doc_artifacts con estructura:
+
+id: UUID
+job_id: UUID
+doc_type: technical | human | ai_context | debt
+format: markdown | json
+content: TEXT (contenido del documento)
+metadata: JSONB (metadata adicional)
+created_at: TIMESTAMP
+
+RELACIÓN ENTRE WRITERS
+Los writers pueden compartir insumos, pero no deben cumplir la misma misión. Cada uno debe tener un propósito documental explícito y una audiencia clara.
+Los writers no deben duplicar información innecesariamente, pero pueden referirse a los mismos conceptos desde distintos ángulos según su audiencia.
+CALIDAD DE LA DOCUMENTACIÓN
+La documentación producida debe ser:
+
+Clara y bien estructurada
+Útil para humanos
+Útil para IA
+No redundante entre writers
+Trazable a la evidencia de análisis
+Concreta y específica al repo analizado
+No genérica ni boilerplate
+
+Esta documentación luego puede alimentar:
+
+Búsquedas semánticas si se implementa RAG en el futuro
+Tools del repo_intelligence_interface
+Onboarding de developers
+Asistentes técnicos
+Consultas contextuales
+
+COMPONENTE 6: REPO INTELLIGENCE INTERFACE
+Este componente reemplaza el antiguo concepto de mcp_generator.
+El nombre correcto del componente es repo_intelligence_interface.
+No debe pensarse como un simple generador de config MCP. Debe entenderse como una interfaz avanzada de inteligencia del repositorio, construida sobre todo el conocimiento generado por el sistema.
+Su misión es exponer, mediante una capa consultable y reutilizable, la inteligencia estructurada del frente analizado.
+El repo_intelligence_interface NO edita código directamente. No es una herramienta de coding. Es una herramienta de comprensión y navegación inteligente.
+PROPÓSITO DEL REPO INTELLIGENCE INTERFACE
+El repo_intelligence_interface debe servir para:
+
+Comprensión arquitectónica del repo
+Navegación inteligente del código
+Construcción de contexto optimizado para tareas de coding
+Análisis de impacto de cambios
+Consulta de riesgos y deuda técnica
+Acceso a documentación viva del repo
+Soporte a herramientas externas como IDEs, coding assistants, agentes y clientes MCP
+Responder preguntas sobre el repo
+Localizar partes relevantes del código por responsabilidad o dominio
+Sugerir estrategias de implementación o refactor
+
+PROTOCOLO DE EXPOSICIÓN
+El repo_intelligence_interface se expone como una REST API HTTP usando FastAPI.
+La API debe estar protegida por autenticación mediante Bearer token.
+La API debe implementar rate limiting de 100 requests por minuto por job_id para prevenir abuso.
+DOMINIOS DE CAPACIDAD DEL REPO INTELLIGENCE INTERFACE
+El repo_intelligence_interface debe organizar sus capabilities en dominios funcionales.
+DOMINIO 1: PROJECT UNDERSTANDING
+Tools para entender qué es el proyecto y cómo está construido.
+Endpoints:
+GET /jobs/{job_id}/project-overview
+Retorna overview del proyecto, qué hace, analysis_scope, arquitectura dominante, stack principal.
+GET /jobs/{job_id}/stack-summary
+Retorna resumen del Stack Intelligence Report con tecnologías principales.
+GET /jobs/{job_id}/architecture-summary
+Retorna resumen del System Map Report con arquitectura dominante, patrones detectados, componentes principales.
+GET /jobs/{job_id}/system-style
+Retorna descripción del estilo general del sistema.
+GET /jobs/{job_id}/entrypoints
+Retorna lista de entrypoints del proyecto con descripción de cada uno.
+GET /jobs/{job_id}/external-dependencies
+Retorna dependencias externas relevantes (APIs, DBs, servicios).
+GET /jobs/{job_id}/data-flow-summary
+Retorna descripción de cómo fluye la información en el sistema.
+DOMINIO 2: STRUCTURAL NAVIGATION
+Tools para encontrar y navegar partes relevantes del repo.
+Endpoints:
+GET /jobs/{job_id}/module-map
+Retorna mapa de módulos o features del sistema con descripción de cada uno.
+POST /jobs/{job_id}/find-module-files
+Body: {module_name: string}
+Retorna lista de archivos que pertenecen al módulo especificado.
+POST /jobs/{job_id}/find-files-by-responsibility
+Body: {responsibility: string}
+Retorna lista de archivos que tienen la responsabilidad especificada (ej: "authentication", "payment processing", "user management").
+GET /jobs/{job_id}/code-zones
+Retorna lista de zonas del código detectadas con descripción.
+GET /jobs/{job_id}/high-value-files
+Retorna archivos de alto valor arquitectónico rankeados.
+POST /jobs/{job_id}/find-files-related-to-component
+Body: {component_name: string}
+Retorna archivos relacionados al componente especificado.
+POST /jobs/{job_id}/find-files-related-to-domain
+Body: {domain: string}
+Retorna archivos relacionados al dominio de negocio especificado.
+DOMINIO 3: TASK CONTEXT BUILDING
+Tools para construir contexto útil para trabajo de desarrollo.
+Estos endpoints pueden usar LLM para sintetizar contexto optimizado, por lo que deben consultar al llm_budget_service antes de responder.
+Endpoints:
+POST /jobs/{job_id}/build-task-context
+Body: {task_description: string}
+Retorna contexto relevante para implementar la tarea descrita (archivos a revisar, patrones a seguir, boundaries a respetar, etc.).
+POST /jobs/{job_id}/build-feature-context
+Body: {feature_description: string}
+Retorna contexto relevante para implementar la feature descrita.
+POST /jobs/{job_id}/build-bugfix-context
+Body: {bug_description: string}
+Retorna contexto relevante para investigar y arreglar el bug descrito.
+POST /jobs/{job_id}/build-refactor-context
+Body: {refactor_description: string}
+Retorna contexto relevante para planificar el refactor descrito.
+POST /jobs/{job_id}/get-recommended-files-to-modify
+Body: {change_description: string}
+Retorna lista de archivos recomendados para modificar para implementar el cambio descrito.
+GET /jobs/{job_id}/get-safe-extension-points
+Retorna puntos seguros de extensión del sistema donde agregar funcionalidad nueva.
+POST /jobs/{job_id}/get-existing-patterns-for-feature
+Body: {feature_type: string}
+Retorna patrones existentes en el código para implementar el tipo de feature especificada.
+DOMINIO 4: CHANGE IMPACT AND RISK
+Tools para entender impacto de cambios, deuda y riesgo.
+Endpoints:
+POST /jobs/{job_id}/get-change-impact-context
+Body: {files_to_change: [string]}
+Retorna análisis de impacto de modificar los archivos especificados.
+POST /jobs/{job_id}/get-related-modules
+Body: {module_name: string}
+Retorna módulos relacionados o dependientes del módulo especificado.
+POST /jobs/{job_id}/get-dependency-impact
+Body: {file_path: string}
+Retorna qué partes del sistema dependen del archivo especificado.
+GET /jobs/{job_id}/get-high-risk-zones
+Retorna zonas del código de alto riesgo con razones.
+GET /jobs/{job_id}/get-known-architectural-risks
+Retorna riesgos arquitectónicos conocidos del sistema.
+GET /jobs/{job_id}/technical-debt-summary
+Retorna resumen de deuda técnica del Tech Debt Analysis Report.
+POST /jobs/{job_id}/get-zone-risk-profile
+Body: {zone_name: string}
+Retorna perfil de riesgo de la zona especificada.
+DOMINIO 5: DOCUMENTATION ACCESS
+Tools para acceder a la documentación viva y especializada generada por los writers.
+Endpoints:
+GET /jobs/{job_id}/docs/technical
+Retorna documentación técnica generada por technical_doc_writer.
+GET /jobs/{job_id}/docs/human
+Retorna documentación humana generada por human_doc_writer.
+GET /jobs/{job_id}/docs/ai-context
+Retorna documentación AI-friendly generada por ai_context_writer.
+GET /jobs/{job_id}/docs/debt
+Retorna documentación de deuda técnica generada por debt_doc_writer.
+POST /jobs/{job_id}/get-module-documentation
+Body: {module_name: string}
+Retorna documentación específica del módulo si existe.
+GET /jobs/{job_id}/get-architecture-explainer
+Retorna explicación de la arquitectura en formato narrativo.
+GET /jobs/{job_id}/get-onboarding-summary
+Retorna resumen de onboarding para nuevos developers.
+GET /jobs/{job_id}/get-developer-guide
+Retorna guía de desarrollo basada en patrones detectados.
+GET /jobs/{job_id}/get-recommendations-summary
+Retorna resumen de recomendaciones de mejora.
+DOMINIO 6: GUIDED INTELLIGENCE TOOLS
+Tools que no editan código, pero sí orientan decisiones técnicas mediante razonamiento LLM.
+Estos endpoints deben consultar al llm_budget_service antes de responder.
+Endpoints:
+POST /jobs/{job_id}/suggest-implementation-approach
+Body: {feature_description: string}
+Retorna sugerencias de cómo implementar la feature respetando la arquitectura existente.
+POST /jobs/{job_id}/suggest-refactor-strategy
+Body: {refactor_goal: string}
+Retorna estrategia de refactor recomendada.
+POST /jobs/{job_id}/suggest-debugging-entry-points
+Body: {bug_description: string}
+Retorna puntos de entrada recomendados para debuggear el problema descrito.
+POST /jobs/{job_id}/suggest-testing-focus-areas
+Body: {change_description: string}
+Retorna áreas recomendadas de testing para el cambio descrito.
+POST /jobs/{job_id}/suggest-investigation-plan
+Body: {investigation_goal: string}
+Retorna plan de investigación recomendado.
+POST /jobs/{job_id}/build-architecture-consultation-context
+Body: {question: string}
+Retorna contexto arquitectónico relevante para responder la pregunta técnica.
+IMPLEMENTACIÓN DE ENDPOINTS
+Algunos endpoints pueden ser determinísticos y resolver consultas directamente desde datos estructurados persistidos en PostgreSQL.
+Otros endpoints pueden ser híbridos o requerir razonamiento LLM para sintetizar contexto más complejo.
+Los endpoints que requieran LLM deben:
+
+Consultar al llm_budget_service antes de llamar al LLM
+Validar que el Job tiene presupuesto disponible
+Realizar la llamada LLM según estrategia aprobada
+Registrar tokens y costo consumido
+Retornar resultado estructurado
+
+INSUMOS DEL REPO INTELLIGENCE INTERFACE
+El repo_intelligence_interface debe usar como insumos:
+
+Stack Intelligence Report persistido en PostgreSQL
+Architecture Context Payload persistido en PostgreSQL
+System Map Report persistido en PostgreSQL
+Tech Debt Analysis Report persistido en PostgreSQL
+Doc Artifacts persistidos en PostgreSQL
+Metadata del Job
+Hallazgos de deuda técnica persistidos en PostgreSQL
+
+CASOS DE USO DEL REPO INTELLIGENCE INTERFACE
+El componente debe servir al menos para los siguientes casos:
+
+Developer nuevo necesita onboarding técnico rápido del proyecto
+Developer quiere explorar el repo y entender su estructura
+Developer necesita comprensión rápida de una zona específica
+Developer va a implementar una feature y necesita contexto de qué archivos tocar, qué patrones seguir, qué boundaries respetar
+Developer va a arreglar un bug y necesita contexto de por dónde empezar a investigar
+Developer va a refactorizar una zona y necesita entender impacto y riesgos
+Tech lead quiere evaluar riesgo antes de tocar una zona del código
+Tech lead quiere consultar deuda técnica por módulo para planificar mejoras
+Engineering manager quiere acceso a reporte de deuda técnica y recomendaciones
+Coding assistant o agente necesita contexto estructurado del repo para asistir en coding sin releer todo el repo cada vez
+IDE plugin necesita información arquitectónica del proyecto
+Cliente MCP externo quiere consumir inteligencia del repo
+
+RESPONSABILIDADES DE CONOCIMIENTO DEL SISTEMA
+El sistema debe distinguir entre varios tipos de conocimiento:
+
+Conocimiento técnico detectado
+Tecnologías, dependencias, servicios, entrypoints, archivos clave, convenciones del framework.
+Fuente: stack_detector y architecture_context_builder.
+Conocimiento arquitectónico inferido
+Arquitectura dominante, patrones, módulos, capas, flujos, componentes, boundaries, inconsistencias.
+Fuente: system_mapper.
+Conocimiento de deuda técnica
+Hallazgos, riesgos, quick wins, refactors prioritarios, zonas frágiles, problemas sistémicos.
+Fuente: tech_debt_analyzer.
+Conocimiento documental
+Documentos técnicos, humanos, AI-friendly y de deuda generados.
+Fuente: doc_writing_layer.
+Conocimiento operacional para agentes
+Contextos de tarea, rutas de entrada, safe extension points, impacto probable, estrategias de implementación.
+Fuente: repo_intelligence_interface mediante razonamiento sobre conocimiento previo.
+
+Todo este conocimiento debe persistirse en PostgreSQL y ser reutilizable dentro del flujo del Job y en consultas posteriores al Job.
+PERSISTENCIA EN POSTGRESQL
+Todas las entidades del sistema se guardan en PostgreSQL.
+TABLA: jobs
+Contiene metadata de cada Job.
+Campos:
+
+id: UUID primary key
+repo_url: TEXT
+repo_path: TEXT (path local del repo clonado)
+analysis_scope: VARCHAR(50) (frontend, backend, mobile, etc.)
+status: VARCHAR(50) (pending, running, completed, failed, partial)
+mode: VARCHAR(50) (single_pass, multi_zone, hierarchical_multi_zone)
+budget_config: JSONB (configuración de presupuesto: max_tokens, max_cost_usd)
+tokens_used: INT default 0
+cost_usd: DECIMAL(10,4) default 0
+created_at: TIMESTAMP
+started_at: TIMESTAMP
+completed_at: TIMESTAMP
+error_detail: TEXT
+
+TABLA: agent_executions
+Contiene registro de ejecución de cada agente.
+Campos:
+
+id: UUID primary key
+job_id: UUID foreign key a jobs
+agent_name: VARCHAR(100) (stack_detector, architecture_context_builder, system_mapper, tech_debt_analyzer, technical_doc_writer, etc.)
+status: VARCHAR(50) (running, success, failed, partial)
+input_payload: JSONB
+output_payload: JSONB
+tokens_used: INT
+cost_usd: DECIMAL(10,4)
+model_used: VARCHAR(50)
+analysis_mode_used: VARCHAR(50) (single_pass, multi_zone, etc.)
+zone_name: VARCHAR(100) (si aplica)
+started_at: TIMESTAMP
+completed_at: TIMESTAMP
+duration_seconds: INT
+error_detail: TEXT
+
+TABLA: stack_reports
+Contiene Stack Intelligence Reports.
+Campos:
+
+id: UUID primary key
+job_id: UUID foreign key a jobs
+analysis_scope: VARCHAR(50)
+stack_summary: JSONB
+project_name: VARCHAR(200)
+primary_language: VARCHAR(50)
+languages: JSONB
+frameworks: JSONB
+dependencies: JSONB
+services: JSONB
+infra_hints: JSONB
+docker_hints: JSONB
+build_tools: JSONB
+test_frameworks: JSONB
+entrypoints: JSONB
+config_files: JSONB
+evidence_files: JSONB
+package_managers: JSONB
+monorepo_signals: JSONB
+confidence_score: FLOAT
+unknowns: JSONB
+created_at: TIMESTAMP
+
+TABLA: architecture_contexts
+Contiene Architecture Context Payloads.
+Campos:
+
+id: UUID primary key
+job_id: UUID foreign key a jobs
+repo_tree_summary: JSONB
+zones: JSONB
+file_classifications: JSONB
+file_rankings: JSONB
+key_config_files: JSONB
+entrypoints: JSONB
+architectural_samples: JSONB
+selection_rationale: TEXT
+import_graph_hints: JSONB
+directory_purposes: JSONB
+framework_conventions_detected: JSONB
+estimated_context_size_tokens: INT
+unknowns: JSONB
+created_at: TIMESTAMP
+
+TABLA: system_maps
+Contiene System Map Reports.
+Campos:
+
+id: UUID primary key
+job_id: UUID foreign key a jobs
+analysis_scope: VARCHAR(50)
+analysis_mode_used: VARCHAR(50)
+dominant_architecture: VARCHAR(100)
+architecture_confidence: FLOAT
+system_style: TEXT
+patterns_detected: JSONB
+patterns_partial: JSONB
+module_structure: JSONB
+layers_detected: JSONB
+components_identified: JSONB
+data_flow: TEXT
+component_interactions: JSONB
+external_dependencies: JSONB
+boundaries: JSONB
+abstractions: JSONB
+architectural_consistency: VARCHAR(50)
+architectural_risks: JSONB
+architectural_strengths: JSONB
+mixed_architecture_signals: JSONB
+evolution_signals: JSONB
+zone_analysis_summary: JSONB
+technical_debt_architectural: JSONB
+unknowns: JSONB
+evidence_files: JSONB
+confidence_score: FLOAT
+recommendations: JSONB
+created_at: TIMESTAMP
+
+TABLA: tech_debt_findings
+Contiene hallazgos determinísticos de deuda técnica.
+Campos:
+
+id: UUID primary key
+job_id: UUID foreign key a jobs
+finding_id: VARCHAR(200) unique per job
+category: VARCHAR(50)
+severity: VARCHAR(20) (low, medium, high, critical)
+file_path: TEXT
+line_number: INT
+rule: VARCHAR(200)
+description: TEXT
+evidence: TEXT
+tool_source: VARCHAR(100)
+metadata: JSONB
+created_at: TIMESTAMP
+
+TABLA: tech_debt_analyses
+Contiene Tech Debt Analysis Reports.
+Campos:
+
+id: UUID primary key
+job_id: UUID foreign key a jobs
+total_findings: INT
+findings_by_category: JSONB
+findings_by_severity: JSONB
+dominant_debt_type: VARCHAR(100)
+debt_categories: JSONB
+systemic_issues: JSONB
+localized_issues: JSONB
+fragile_zones: JSONB
+high_risk_areas: JSONB
+coupling_issues: JSONB
+cohesion_issues: JSONB
+quick_wins: JSONB
+strategic_refactors: JSONB
+priority_recommendations: JSONB
+debt_trends: JSONB
+related_finding_groups: JSONB
+architectural_debt_correlation: JSONB
+confidence_score: FLOAT
+created_at: TIMESTAMP
+
+TABLA: doc_artifacts
+Contiene documentos generados por writers.
+Campos:
+
+id: UUID primary key
+job_id: UUID foreign key a jobs
+doc_type: VARCHAR(50) (technical, human, ai_context, debt)
+format: VARCHAR(20) (markdown, json)
+content: TEXT
+metadata: JSONB
+created_at: TIMESTAMP
+
+TABLA: llm_call_decisions
+Contiene decisiones del llm_budget_service.
+Campos:
+
+id: UUID primary key
+job_id: UUID foreign key a jobs
+agent_name: VARCHAR(100)
+requested_at: TIMESTAMP
+approved: BOOLEAN
+model_selected: VARCHAR(50)
+mode_selected: VARCHAR(50)
+chunks: INT
+chunk_configs: JSONB
+estimated_input_tokens: INT
+estimated_output_tokens: INT
+estimated_total_tokens: INT
+estimated_cost_usd: DECIMAL(10,4)
+warnings: JSONB
+rejection_reason: TEXT
+
+COMUNICACIÓN ENTRE AGENTES
+La comunicación entre agentes se maneja mediante el sistema nativo de CrewAI.
+Los agentes se organizan en tareas (Tasks) secuenciales con contexto compartido.
+Cada Task puede depender del contexto de Tasks previas.
+El flujo secuencial del pipeline es:
+Task 1: Stack Detection
+Agent: stack_detector
+Output: Stack Intelligence Report persistido en PostgreSQL
+Task 2: Architecture Context Building
+Agent: architecture_context_builder
+Context: Task 1 (tiene acceso al Stack Intelligence Report)
+Output: Architecture Context Payload persistido en PostgreSQL
+Task 3: System Mapping
+Agent: system_mapper
+Context: Task 1, Task 2
+Output: System Map Report persistido en PostgreSQL
+Task 4: Tech Debt Analysis
+Agent: tech_debt_analyzer
+Context: Task 1, Task 3
+Output: Tech Debt Analysis Report persistido en PostgreSQL
+Task 5: Technical Documentation
+Agent: technical_doc_writer
+Context: Task 1, Task 2, Task 3, Task 4
+Output: Technical documentation persistida en PostgreSQL
+Task 6: Human Documentation
+Agent: human_doc_writer
+Context: Task 1, Task 2, Task 3, Task 4
+Output: Human documentation persistida en PostgreSQL
+Task 7: AI Context Documentation
+Agent: ai_context_writer
+Context: Task 1, Task 2, Task 3, Task 4
+Output: AI context documentation persistida en PostgreSQL
+Task 8: Debt Documentation
+Agent: debt_doc_writer
+Context: Task 1, Task 3, Task 4
+Output: Debt documentation persistida en PostgreSQL
+Las Tasks 5, 6, 7, 8 pueden ejecutarse en paralelo si CrewAI lo soporta, ya que no dependen entre sí.
+Redis PubSub se reserva únicamente para:
+
+Comunicación asíncrona entre Jobs distintos ejecutándose concurrentemente
+Notificaciones en tiempo real a clientes externos (ej: frontend que monitorea progreso del Job)
+Eventos del sistema que requieran broadcasting
+
+Redis PubSub NO se usa para el flujo principal del pipeline de un Job.
+CONCURRENCIA Y PARALELIZACIÓN
+El sistema debe soportar ejecución concurrente de múltiples Jobs.
+Cada Job es independiente y puede ejecutarse en paralelo con otros Jobs.
+Dentro de un mismo Job, las Tasks se ejecutan secuencialmente según dependencias, excepto las Tasks de doc_writing_layer que pueden ejecutarse en paralelo entre sí.
+Si el system_mapper o tech_debt_analyzer usan modo multi_zone, las zonas pueden analizarse en paralelo si el sistema lo soporta, pero la consolidación debe ser secuencial después.
+VERSIONADO DEL CONOCIMIENTO
+Por el momento, el sistema analiza el repositorio una sola vez por Job.
+No hay análisis incremental ni detección de cambios en el repo.
+Si el repo cambia y se quiere reanalizar, debe crearse un nuevo Job.
+El versionado del conocimiento y análisis incremental son funcionalidades futuras.
+VALIDACIÓN DEL SISTEMA
+La siguiente fase del sistema no es agregar más componentes, sino validar el flujo sobre proyectos reales.
+La validación debe comprobar:
+
+Si el stack_detector detecta correctamente el stack tecnológico
+Si el architecture_context_builder selecciona bien el contexto relevante y evita ruido
+Si el system_mapper realmente entiende la arquitectura del frente analizado
+Si el tech_debt_analyzer detecta problemas accionables y no solo ruido
+Si los writers producen documentación útil, especializada y no genérica
+Si el repo_intelligence_interface realmente ayuda a navegar, consultar y construir contexto útil para coding
+
+La validación debe incluir:
+
+Análisis de repos pequeños (< 100 archivos)
+Análisis de repos medianos (100-500 archivos)
+Análisis de repos grandes (500-2000 archivos)
+Análisis de repos muy grandes (> 2000 archivos)
+Repos con arquitectura clara
+Repos con arquitectura mezclada
+Repos legacy desordenados
+Diferentes stacks tecnológicos
+Diferentes scopes (frontend, backend, mobile)
+
+Métricas de validación:
+
+Precisión de detección de stack
+Relevancia del contexto seleccionado
+Accuracy de arquitectura detectada
+Utilidad de deuda técnica detectada
+Calidad de documentación generada
+Tokens consumidos vs utilidad obtenida
+Costo total por Job
+Tiempo de ejecución por Job
+
+PRINCIPIOS DE CALIDAD DEL SISTEMA
+El sistema completo debe seguir estos principios:
+
+No asumir repos limpios o bien organizados
+Tolerar ambigüedad arquitectónica
+Devolver unknowns cuando no haya evidencia suficiente
+Separar evidencia objetiva de interpretación
+Evitar alucinaciones
+Ser trazable a archivos, zonas o señales concretas
+Optimizar uso de tokens mediante curación de contexto
+Particionar análisis cuando el frente lo requiera por tamaño
+Generar outputs estructurados y reutilizables en JSON
+Diseñar para producto real, no solo para demo
+Priorizar calidad sobre velocidad
+Priorizar precisión sobre cobertura total
+Ser cost-aware en cada decisión de llamada LLM
+Registrar todo para trazabilidad y debugging
+
+OBJETIVO FINAL DEL SISTEMA
+El objetivo final de CodeReborn es convertir un frente legacy en una base de conocimiento viva, estructurada y reutilizable que permita:
+
+Entender rápidamente el codebase sin leerlo completo
+Documentarlo de manera útil para múltiples audiencias
+Identificar la arquitectura real del sistema
+Localizar y priorizar deuda técnica
+Preparar contexto optimizado para tareas de desarrollo
+Reducir drásticamente el costo de comprensión del repositorio
+Asistir a developers, tech leads y engineering managers con inteligencia contextual
+Facilitar evolución futura del sistema sin depender de lecturas ciegas del repo cada vez
+Servir como interfaz inteligente para coding assistants, IDEs y agentes
+
+CodeReborn no debe ser un simple analizador de código estático.
+Debe ser una plataforma de inteligencia de repositorios legacy orientada a transformar código existente en conocimiento útil, accionable y reutilizable para humanos y para IA.

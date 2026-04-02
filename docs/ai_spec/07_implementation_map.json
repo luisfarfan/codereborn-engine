@@ -1,0 +1,399 @@
+{
+  "system_name": "CodeReborn Engine — Implementation Map",
+  "description": "Maps every spec concept to its expected Python file path, class name, and Pydantic model. Use this to locate or generate code for any part of the system without reading the entire codebase.",
+  "version": "1.0.0",
+  "conventions": {
+    "module_root": "app/",
+    "agent_folder": "app/agents/",
+    "model_folder": "app/models/",
+    "service_folder": "app/services/",
+    "api_folder": "app/api/",
+    "domain_folder": "app/domain/",
+    "infra_folder": "app/infrastructure/",
+    "core_folder": "app/core/"
+  },
+
+  "pipeline_components": [
+
+    {
+      "id": "llm_budget_service",
+      "name": "LLMBudgetService",
+      "spec_refs": ["ai_spec/01_core_architecture.json", "ai_spec/03_pipeline_agents.json", "docs/pipeline/pipeline_and_budget_service.md"],
+      "type": "service",
+      "description": "Transversal gatekeeper — must be called before every LLM call in the system.",
+      "files": {
+        "implementation": "app/services/llm_budget_service.py",
+        "interface": "app/core/ports/llm_budget_port.py"
+      },
+      "classes": ["LLMBudgetService"],
+      "methods": [
+        {
+          "name": "evaluate",
+          "signature": "def evaluate(self, job_id: UUID, context_payload: dict, agent_name: str) -> LLMCallDecision",
+          "description": "Main entry point. Runs all 5 steps and returns decision."
+        },
+        {
+          "name": "_estimate_tokens",
+          "signature": "def _estimate_tokens(self, payload: dict) -> int",
+          "description": "Step 1: Tokenize the payload and estimate token count."
+        },
+        {
+          "name": "_get_job_budget",
+          "signature": "def _get_job_budget(self, job_id: UUID) -> BudgetState",
+          "description": "Step 2: Fetch remaining budget from PostgreSQL."
+        },
+        {
+          "name": "_decide_strategy",
+          "signature": "def _decide_strategy(self, estimated_tokens: int, budget: BudgetState) -> LLMCallDecision",
+          "description": "Steps 3-4: Apply decision logic and return approved/rejected decision."
+        },
+        {
+          "name": "_record_decision",
+          "signature": "def _record_decision(self, decision: LLMCallDecision) -> None",
+          "description": "Step 5: Persist LLMCallDecision to llm_call_decisions table."
+        }
+      ],
+      "pydantic_models": {
+        "file": "app/models/llm_models.py",
+        "models": ["LLMCallDecision", "ChunkConfig", "BudgetState", "BudgetConfig"]
+      }
+    },
+
+    {
+      "id": "stack_detector",
+      "name": "StackDetector",
+      "spec_refs": ["ai_spec/03_pipeline_agents.json", "docs/agents/stack_detector.md"],
+      "type": "agent",
+      "description": "Deterministic agent. Wraps specfy/stack-analyser CLI + post-processor. Zero LLM tokens.",
+      "pipeline_position": 1,
+      "files": {
+        "agent": "app/agents/stack_detector/agent.py",
+        "tool": "app/agents/stack_detector/specfy_tool.py",
+        "post_processor": "app/agents/stack_detector/post_processor.py",
+        "schemas": "app/agents/stack_detector/schemas.py"
+      },
+      "classes": [
+        { "name": "StackDetectorAgent", "file": "app/agents/stack_detector/agent.py" },
+        { "name": "SpecfyTool", "file": "app/agents/stack_detector/specfy_tool.py", "description": "CrewAI Tool wrapping specfy/stack-analyser subprocess." },
+        { "name": "StackPostProcessor", "file": "app/agents/stack_detector/post_processor.py" }
+      ],
+      "pydantic_models": {
+        "file": "app/models/stack_models.py",
+        "models": [
+          "StackIntelligenceReport",
+          "LanguageInfo",
+          "FrameworkInfo",
+          "DependencyInfo",
+          "ServiceInfo",
+          "InfraHint",
+          "DockerHints",
+          "BuildToolInfo",
+          "TestFrameworkInfo",
+          "EntrypointInfo",
+          "ConfigFileInfo",
+          "MonorepoSignals",
+          "UnknownSignal"
+        ]
+      },
+      "db_table": "stack_reports",
+      "db_model_file": "app/models/db_models.py",
+      "db_model_class": "StackReport"
+    },
+
+    {
+      "id": "architecture_context_builder",
+      "name": "ArchitectureContextBuilder",
+      "spec_refs": ["ai_spec/03_pipeline_agents.json", "docs/agents/context_builder.md"],
+      "type": "agent",
+      "description": "Deterministic agent. Graph-based repo tree crawler. Zero LLM tokens.",
+      "pipeline_position": 2,
+      "depends_on": ["stack_detector"],
+      "files": {
+        "agent": "app/agents/context_builder/agent.py",
+        "file_classifier": "app/agents/context_builder/file_classifier.py",
+        "file_ranker": "app/agents/context_builder/file_ranker.py",
+        "zone_grouper": "app/agents/context_builder/zone_grouper.py",
+        "sample_selector": "app/agents/context_builder/sample_selector.py",
+        "import_analyzer": "app/agents/context_builder/import_analyzer.py",
+        "schemas": "app/agents/context_builder/schemas.py"
+      },
+      "classes": [
+        { "name": "ArchitectureContextBuilderAgent", "file": "app/agents/context_builder/agent.py" },
+        { "name": "FileClassifier", "file": "app/agents/context_builder/file_classifier.py", "description": "Classifies files into ~50 architectural role labels." },
+        { "name": "FileRanker", "file": "app/agents/context_builder/file_ranker.py", "description": "Scores files by architectural value (fan-in, fan-out, entrypoint signals, etc.)." },
+        { "name": "ZoneGrouper", "file": "app/agents/context_builder/zone_grouper.py", "description": "Groups files into functional/structural zones." },
+        { "name": "SampleSelector", "file": "app/agents/context_builder/sample_selector.py", "description": "Selects curated code excerpts for LLM context." },
+        { "name": "ImportGraphAnalyzer", "file": "app/agents/context_builder/import_analyzer.py" }
+      ],
+      "pydantic_models": {
+        "file": "app/models/context_models.py",
+        "models": [
+          "ArchitectureContextPayload",
+          "DirectorySummary",
+          "Zone",
+          "FileClassification",
+          "FileRanking",
+          "FileWithContent",
+          "ArchitecturalSample",
+          "ImportGraphNode",
+          "FrameworkConvention",
+          "BuilderMetadata"
+        ]
+      },
+      "db_table": "architecture_contexts",
+      "db_model_class": "ArchitectureContext"
+    },
+
+    {
+      "id": "system_mapper",
+      "name": "SystemMapper",
+      "spec_refs": ["ai_spec/03_pipeline_agents.json", "docs/agents/system_mapper.md"],
+      "type": "agent",
+      "description": "Primary LLM agent. Uses CrewAI. MUST call LLMBudgetService before any LLM call.",
+      "pipeline_position": 3,
+      "depends_on": ["stack_detector", "architecture_context_builder"],
+      "files": {
+        "agent": "app/agents/system_mapper/agent.py",
+        "task": "app/agents/system_mapper/task.py",
+        "prompts": "app/agents/system_mapper/prompts.py",
+        "zone_analyzer": "app/agents/system_mapper/zone_analyzer.py",
+        "consolidator": "app/agents/system_mapper/consolidator.py",
+        "schemas": "app/agents/system_mapper/schemas.py"
+      },
+      "classes": [
+        { "name": "SystemMapperAgent", "file": "app/agents/system_mapper/agent.py" },
+        { "name": "SystemMapperTask", "file": "app/agents/system_mapper/task.py", "description": "CrewAI Task definition for system mapping." },
+        { "name": "ZoneAnalyzer", "file": "app/agents/system_mapper/zone_analyzer.py", "description": "Handles multi_zone analysis: per-zone LLM calls." },
+        { "name": "ResultConsolidator", "file": "app/agents/system_mapper/consolidator.py", "description": "Merges zone results into a single SystemMapReport." }
+      ],
+      "pydantic_models": {
+        "file": "app/models/system_map_models.py",
+        "models": [
+          "SystemMapReport",
+          "DetectedPattern",
+          "PartialPattern",
+          "ModuleStructure",
+          "ModuleInfo",
+          "ArchitecturalLayer",
+          "ArchitecturalComponent",
+          "ComponentInteraction",
+          "ExternalDependency",
+          "Boundary",
+          "Abstraction",
+          "ArchitecturalRisk",
+          "ArchitecturalStrength",
+          "MixedSignal",
+          "EvolutionSignal",
+          "ZoneAnalysis",
+          "ArchitecturalDebtItem",
+          "EvidenceFile",
+          "AgentExecutionMetadata"
+        ]
+      },
+      "db_table": "system_maps",
+      "db_model_class": "SystemMap"
+    },
+
+    {
+      "id": "tech_debt_analyzer",
+      "name": "TechDebtAnalyzer",
+      "spec_refs": ["ai_spec/03_pipeline_agents.json", "docs/agents/tech_debt_analyzer.md"],
+      "type": "agent",
+      "description": "Hybrid agent. Phase 1: deterministic linters + metrics. Phase 2: LLM synthesis (budget-gated).",
+      "pipeline_position": 4,
+      "depends_on": ["stack_detector", "system_mapper"],
+      "files": {
+        "agent": "app/agents/debt_analyzer/agent.py",
+        "phase1_runner": "app/agents/debt_analyzer/phase1_runner.py",
+        "linter_adapters": "app/agents/debt_analyzer/linters/",
+        "metrics_calculator": "app/agents/debt_analyzer/metrics_calculator.py",
+        "anti_pattern_detector": "app/agents/debt_analyzer/anti_pattern_detector.py",
+        "phase2_synthesizer": "app/agents/debt_analyzer/phase2_synthesizer.py",
+        "schemas": "app/agents/debt_analyzer/schemas.py"
+      },
+      "classes": [
+        { "name": "TechDebtAnalyzerAgent", "file": "app/agents/debt_analyzer/agent.py" },
+        { "name": "Phase1Runner", "file": "app/agents/debt_analyzer/phase1_runner.py", "description": "Orchestrates all deterministic linters and metrics." },
+        { "name": "MetricsCalculator", "file": "app/agents/debt_analyzer/metrics_calculator.py", "description": "Computes structural metrics: file size, function length, god objects, coupling, etc." },
+        { "name": "AntiPatternDetector", "file": "app/agents/debt_analyzer/anti_pattern_detector.py" },
+        { "name": "Phase2Synthesizer", "file": "app/agents/debt_analyzer/phase2_synthesizer.py", "description": "LLM synthesis of Phase 1 findings in context of SystemMapReport." },
+        { "name": "ESLintAdapter", "file": "app/agents/debt_analyzer/linters/eslint_adapter.py" },
+        { "name": "PylintAdapter", "file": "app/agents/debt_analyzer/linters/pylint_adapter.py" },
+        { "name": "BanditAdapter", "file": "app/agents/debt_analyzer/linters/bandit_adapter.py" },
+        { "name": "RadonAdapter", "file": "app/agents/debt_analyzer/linters/radon_adapter.py" }
+      ],
+      "pydantic_models": {
+        "file": "app/models/debt_models.py",
+        "models": [
+          "TechDebtFinding",
+          "TechDebtAnalysisReport",
+          "SystemicIssue",
+          "LocalizedIssue",
+          "FragileZone",
+          "HighRiskArea",
+          "CouplingIssue",
+          "CohesionIssue",
+          "QuickWin",
+          "StrategicRefactor",
+          "DebtTrend",
+          "FindingGroup",
+          "DebtArchCorrelation"
+        ]
+      },
+      "db_tables": ["tech_debt_findings", "tech_debt_analyses"],
+      "db_model_classes": ["TechDebtFindingDB", "TechDebtAnalysisDB"]
+    },
+
+    {
+      "id": "doc_writing_layer",
+      "name": "DocWritingLayer",
+      "spec_refs": ["ai_spec/03_pipeline_agents.json", "docs/agents/doc_writing_layer.md"],
+      "type": "agent_pool",
+      "description": "4 parallel LLM writers. All run concurrently (Tasks 5-8). All budget-gated.",
+      "pipeline_position": "5-8 (parallel)",
+      "depends_on": ["stack_detector", "architecture_context_builder", "system_mapper", "tech_debt_analyzer"],
+      "writers": [
+        {
+          "id": "technical_doc_writer",
+          "file": "app/agents/doc_writers/technical_writer.py",
+          "class": "TechnicalDocWriter",
+          "output_doc_type": "technical",
+          "output_format": "markdown"
+        },
+        {
+          "id": "human_doc_writer",
+          "file": "app/agents/doc_writers/human_writer.py",
+          "class": "HumanDocWriter",
+          "output_doc_type": "human",
+          "output_format": "markdown"
+        },
+        {
+          "id": "ai_context_writer",
+          "file": "app/agents/doc_writers/ai_context_writer.py",
+          "class": "AIContextWriter",
+          "output_doc_type": "ai_context",
+          "output_format": "json",
+          "output_schema": "AIContextDoc (see 05_data_contracts.json)"
+        },
+        {
+          "id": "debt_doc_writer",
+          "file": "app/agents/doc_writers/debt_writer.py",
+          "class": "DebtDocWriter",
+          "output_doc_type": "debt",
+          "output_format": "markdown"
+        }
+      ],
+      "pydantic_models": {
+        "file": "app/models/doc_models.py",
+        "models": ["DocArtifact", "DocArtifactMetadata", "AIContextDoc"]
+      },
+      "db_table": "doc_artifacts",
+      "db_model_class": "DocArtifactDB"
+    }
+  ],
+
+  "api_layer": {
+    "id": "repo_intelligence_interface",
+    "spec_refs": ["ai_spec/04_repo_intelligence_api.json", "ai_spec/06_api_contracts.json", "docs/api/repo_intelligence_interface.md"],
+    "description": "FastAPI application. 6 intelligence domains + job management. Read-only from PostgreSQL.",
+    "files": {
+      "app_factory": "app/api/main.py",
+      "dependencies": "app/api/dependencies.py",
+      "routers": {
+        "jobs": "app/api/routers/jobs.py",
+        "domain1_understanding": "app/api/routers/understanding.py",
+        "domain2_navigation": "app/api/routers/navigation.py",
+        "domain3_task_context": "app/api/routers/task_context.py",
+        "domain4_impact": "app/api/routers/impact.py",
+        "domain5_docs": "app/api/routers/docs.py",
+        "domain6_intelligence": "app/api/routers/intelligence.py"
+      },
+      "auth_middleware": "app/api/middleware/auth.py",
+      "rate_limit_middleware": "app/api/middleware/rate_limit.py"
+    },
+    "pydantic_models": {
+      "file": "app/api/schemas/",
+      "request_schemas": "app/api/schemas/requests.py",
+      "response_schemas": "app/api/schemas/responses.py"
+    }
+  },
+
+  "infrastructure": {
+    "database": {
+      "file": "app/infrastructure/database.py",
+      "description": "SQLModel/asyncpg session factory. Async PostgreSQL connection.",
+      "db_models_file": "app/models/db_models.py",
+      "tables": [
+        { "table": "jobs", "model_class": "Job" },
+        { "table": "agent_executions", "model_class": "AgentExecution" },
+        { "table": "stack_reports", "model_class": "StackReport" },
+        { "table": "architecture_contexts", "model_class": "ArchitectureContext" },
+        { "table": "system_maps", "model_class": "SystemMap" },
+        { "table": "tech_debt_findings", "model_class": "TechDebtFinding" },
+        { "table": "tech_debt_analyses", "model_class": "TechDebtAnalysis" },
+        { "table": "doc_artifacts", "model_class": "DocArtifact" },
+        { "table": "llm_call_decisions", "model_class": "LLMCallDecision" }
+      ],
+      "migrations_folder": "app/infrastructure/migrations/"
+    },
+    "redis": {
+      "file": "app/infrastructure/redis_client.py",
+      "allowed_uses": ["rate_limiting", "pubsub_inter_job_notifications"],
+      "forbidden_uses": ["pipeline_data_exchange", "agent_context_passing"]
+    },
+    "litellm": {
+      "file": "app/infrastructure/llm_client.py",
+      "description": "LiteLLM wrapper. Called only after LLMBudgetService approval.",
+      "class": "LLMClient"
+    },
+    "langfuse": {
+      "file": "app/infrastructure/observability.py",
+      "description": "Langfuse integration for LLM call tracing and observability."
+    }
+  },
+
+  "domain_layer": {
+    "description": "Pure domain logic — no framework dependencies.",
+    "files": {
+      "job_manager": "app/core/job_manager.py",
+      "pipeline_orchestrator": "app/core/pipeline_orchestrator.py",
+      "budget_calculator": "app/core/budget_calculator.py"
+    },
+    "classes": [
+      { "name": "JobManager", "file": "app/core/job_manager.py", "description": "Manages job lifecycle: create, start, complete, fail." },
+      { "name": "PipelineOrchestrator", "file": "app/core/pipeline_orchestrator.py", "description": "Sequences Tasks 1-4 and fans out Tasks 5-8 in parallel." }
+    ]
+  },
+
+  "crewai_task_graph": {
+    "description": "Official task dependency graph for CrewAI sequential pipeline.",
+    "file": "app/core/crew.py",
+    "tasks_in_order": [
+      { "task_id": 1, "name": "stack_detection", "agent": "stack_detector", "context": [] },
+      { "task_id": 2, "name": "architecture_context_building", "agent": "architecture_context_builder", "context": [1] },
+      { "task_id": 3, "name": "system_mapping", "agent": "system_mapper", "context": [1, 2] },
+      { "task_id": 4, "name": "tech_debt_analysis", "agent": "tech_debt_analyzer", "context": [1, 3] },
+      { "task_id": 5, "name": "technical_documentation", "agent": "technical_doc_writer", "context": [1, 2, 3, 4], "parallel_group": "doc_writers" },
+      { "task_id": 6, "name": "human_documentation", "agent": "human_doc_writer", "context": [1, 2, 3, 4], "parallel_group": "doc_writers" },
+      { "task_id": 7, "name": "ai_context_documentation", "agent": "ai_context_writer", "context": [1, 2, 3, 4], "parallel_group": "doc_writers" },
+      { "task_id": 8, "name": "debt_documentation", "agent": "debt_doc_writer", "context": [1, 3, 4], "parallel_group": "doc_writers" }
+    ]
+  },
+
+  "config_and_settings": {
+    "settings_file": "app/core/settings.py",
+    "class": "Settings",
+    "description": "Pydantic-settings model loading from .env. Includes DB URL, Redis URL, API keys, JWT config, debug flags.",
+    "env_template": ".env.example"
+  },
+
+  "testing": {
+    "folder": "tests/",
+    "structure": {
+      "unit": "tests/unit/",
+      "integration": "tests/integration/",
+      "e2e": "tests/e2e/"
+    },
+    "note": "Not yet implemented. Priority: unit tests for LLMBudgetService decision logic and ArchitectureContextBuilder classifier."
+  }
+}

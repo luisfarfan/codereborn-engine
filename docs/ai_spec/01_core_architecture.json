@@ -1,0 +1,47 @@
+{
+  "system_name": "CodeReborn Engine",
+  "domain": "Legacy Repository Intelligence",
+  "facts": [
+    "CodeReborn analyzes legacy codebase and transforms it into structured knowledge without altering the source code.",
+    "The system consists of deterministic extraction logic and LLM-based reasoning logic.",
+    "CrewAI is used as the orchestration framework for LLM agents.",
+    "FastAPI is the web framework used for the API layer (Repo Intelligence Interface).",
+    "PostgreSQL is the primary operational and analytical database using JSONB columns heavily.",
+    "The analysis pipeline is always executed across a pre-defined Analysis Scope (single front limitation)."
+  ],
+  "rules": [
+    "The system MUST NOT use an LLM for deterministic tasks (e.g., detecting if a package.json exists).",
+    "Every LLM call MUST be pre-authorized by the 'LLMBudgetService' to enforce token and cost limits.",
+    "All LLM token usage and monetary costs MUST be stored in the 'agent_executions' table immediately after execution.",
+    "Jobs MUST be executed sequentially within the inference chain (Tasks 1 to 4) and in parallel during the Document Generation phase (Tasks 5 to 8).",
+    "Redis MUST ONLY be used for cross-Job pub/sub broadcasting, NEVER for internal CrewAI Task context passing."
+  ],
+  "boundaries": [
+    "The StackDetector and ArchitectureContextBuilder components MUST remain 100% deterministic (0 LLM tokens).",
+    "Agents MUST NOT communicate back-and-forth using Pub/Sub; they MUST use CrewAI Shared Context.",
+    "Analysis logic MUST NOT mutate the target repository code (Read-Only)."
+  ],
+  "extension_points": [
+    "Doc Writing Layer is highly parallelizable and more Writer Agents representing new audiences can be safely dropped in.",
+    "New deterministic Linters/Static Scanners can be safely added to the first phase of the TechDebtAnalyzer."
+  ],
+  "patterns": [
+    "Spec-Driven Development (SDD)",
+    "Pipeline pattern for data preparation (Extract -> Filter/Rank -> Map -> Analyze -> Document)",
+    "Database-as-State-Machine: PostgreSQL persists intermediate JSON outputs at every stage to prevent inference loss."
+  ],
+  "anti_patterns": [
+    "Using LLMs to parse or map raw code files indiscriminately without heuristic filtering.",
+    "Loading entire repositories into context windows without chunking or multi-zone partitioning.",
+    "Building static relational schemas for tool outputs (instead, use JSONB due to high variance of framework rules)."
+  ],
+  "conventions": [
+    "Python 3.11+ explicit typing using Pydantic schemas",
+    "SQLModel for ORM definitions targeting PostgreSQL",
+    "Use of uuid4 for Postgres primary keys"
+  ],
+  "constraints": [
+    "A Job MUST NEVER mix Frontend and Backend analysis context in the same pipeline pass.",
+    "Total token payload MUST NEVER exceed the budget limit calculated by the LLMBudgetService."
+  ]
+}

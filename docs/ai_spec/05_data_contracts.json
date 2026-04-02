@@ -1,0 +1,700 @@
+{
+  "system_name": "CodeReborn Engine — Data Contracts",
+  "description": "Formal schemas for all data structures produced and consumed by the pipeline agents. Use these to generate Pydantic models, validate outputs, and understand inter-component contracts.",
+  "version": "1.0.0",
+
+  "enums": {
+    "AnalysisScope": ["frontend", "backend", "mobile", "desktop", "library", "worker", "other"],
+    "AnalysisMode": ["single_pass", "multi_zone", "hierarchical_multi_zone"],
+    "JobStatus": ["pending", "running", "completed", "failed", "partial"],
+    "AgentName": [
+      "stack_detector",
+      "architecture_context_builder",
+      "system_mapper",
+      "tech_debt_analyzer",
+      "technical_doc_writer",
+      "human_doc_writer",
+      "ai_context_writer",
+      "debt_doc_writer"
+    ],
+    "AgentStatus": ["running", "success", "failed", "partial"],
+    "FindingCategory": [
+      "code_smell", "bug_risk", "security", "maintainability",
+      "complexity", "duplication", "structure", "anti_pattern",
+      "outdated_dependency", "missing_test", "style"
+    ],
+    "FindingSeverity": ["low", "medium", "high", "critical"],
+    "DocType": ["technical", "human", "ai_context", "debt"],
+    "DocFormat": ["markdown", "json"],
+    "ArchitecturalConsistency": ["consistent", "mostly_consistent", "inconsistent", "chaotic"],
+    "DebtCategory": ["structural", "code", "maintainability", "testing", "security", "performance", "update"]
+  },
+
+  "contracts": {
+
+    "LLMCallDecision": {
+      "description": "Returned by LLMBudgetService before every LLM call. Agents MUST consume this before proceeding.",
+      "produced_by": "LLMBudgetService",
+      "consumed_by": ["system_mapper", "tech_debt_analyzer", "technical_doc_writer", "human_doc_writer", "ai_context_writer", "debt_doc_writer"],
+      "persisted_in": "llm_call_decisions",
+      "fields": {
+        "approved": { "type": "bool", "required": true, "description": "Whether the LLM call is approved to proceed." },
+        "model": { "type": "str", "required": true, "description": "Selected model identifier (e.g. 'gpt-4o', 'gpt-4o-mini')." },
+        "mode": { "type": "AnalysisMode", "required": true, "description": "Approved analysis mode." },
+        "chunks": { "type": "int", "required": false, "description": "Number of chunks/zones if mode != single_pass." },
+        "chunk_configs": {
+          "type": "list[ChunkConfig]",
+          "required": false,
+          "description": "Detailed config per chunk when chunking is needed."
+        },
+        "estimated_input_tokens": { "type": "int", "required": true },
+        "estimated_output_tokens": { "type": "int", "required": true },
+        "estimated_total_tokens": { "type": "int", "required": true },
+        "estimated_cost_usd": { "type": "float", "required": true },
+        "warnings": { "type": "list[str]", "required": false, "description": "Budget warnings (e.g. 'approaching 90% budget')." },
+        "rejection_reason": { "type": "str", "required": false, "description": "Populated only when approved=false." }
+      }
+    },
+
+    "ChunkConfig": {
+      "description": "Configuration for a single analysis chunk/zone within a multi_zone decision.",
+      "fields": {
+        "chunk_index": { "type": "int", "required": true },
+        "zone_name": { "type": "str", "required": true },
+        "file_paths": { "type": "list[str]", "required": true },
+        "estimated_tokens": { "type": "int", "required": true }
+      }
+    },
+
+    "StackIntelligenceReport": {
+      "description": "Full output of the StackDetector agent. Deterministic — zero LLM tokens.",
+      "produced_by": "stack_detector",
+      "persisted_in": "stack_reports",
+      "fields": {
+        "stack_summary": { "type": "str", "required": true, "description": "Executive text summary of the detected tech stack." },
+        "project_name": { "type": "str", "required": false, "description": "Project name if detectable from config files." },
+        "analysis_scope": { "type": "AnalysisScope", "required": true },
+        "primary_language": { "type": "str", "required": true },
+        "languages": {
+          "type": "list[LanguageInfo]",
+          "required": true,
+          "description": "All detected languages with usage percentage."
+        },
+        "frameworks": {
+          "type": "list[FrameworkInfo]",
+          "required": true
+        },
+        "dependencies": {
+          "type": "list[DependencyInfo]",
+          "required": true
+        },
+        "services": {
+          "type": "list[ServiceInfo]",
+          "required": true,
+          "description": "External services: databases, queues, caches, APIs."
+        },
+        "infra_hints": { "type": "list[InfraHint]", "required": true },
+        "docker_hints": { "type": "DockerHints", "required": true },
+        "build_tools": { "type": "list[BuildToolInfo]", "required": true },
+        "test_frameworks": { "type": "list[TestFrameworkInfo]", "required": true },
+        "entrypoints": { "type": "list[EntrypointInfo]", "required": true },
+        "config_files": { "type": "list[ConfigFileInfo]", "required": true },
+        "evidence_files": { "type": "dict[str, list[str]]", "required": true, "description": "Map: technology_name → list of evidence file paths." },
+        "package_managers": { "type": "list[str]", "required": true },
+        "monorepo_signals": { "type": "MonorepoSignals", "required": true },
+        "confidence_score": { "type": "float", "required": true, "range": [0.0, 1.0] },
+        "unknowns": { "type": "list[UnknownSignal]", "required": true },
+        "analysis_timestamp": { "type": "str", "required": true, "format": "ISO 8601 datetime" }
+      }
+    },
+
+    "LanguageInfo": {
+      "fields": {
+        "language": { "type": "str", "required": true },
+        "estimated_percentage": { "type": "float", "required": true, "range": [0.0, 100.0] }
+      }
+    },
+
+    "FrameworkInfo": {
+      "fields": {
+        "name": { "type": "str", "required": true },
+        "version": { "type": "str", "required": false },
+        "category": { "type": "str", "required": true, "description": "e.g. 'web_framework', 'state_management', 'testing', 'ui'" },
+        "confidence_score": { "type": "float", "required": true, "range": [0.0, 1.0] }
+      }
+    },
+
+    "DependencyInfo": {
+      "fields": {
+        "name": { "type": "str", "required": true },
+        "version": { "type": "str", "required": false },
+        "dep_type": { "type": "str", "required": true, "enum": ["runtime", "dev", "peer"] }
+      }
+    },
+
+    "ServiceInfo": {
+      "fields": {
+        "name": { "type": "str", "required": true },
+        "service_type": { "type": "str", "required": true, "description": "e.g. 'database', 'cache', 'queue', 'external_api'" },
+        "description": { "type": "str", "required": false }
+      }
+    },
+
+    "InfraHint": {
+      "fields": {
+        "signal": { "type": "str", "required": true, "description": "e.g. 'AWS S3 SDK present', 'Kubernetes manifests detected'" },
+        "description": { "type": "str", "required": false }
+      }
+    },
+
+    "DockerHints": {
+      "fields": {
+        "dockerfile_present": { "type": "bool", "required": true },
+        "compose_present": { "type": "bool", "required": true },
+        "services_defined": { "type": "list[str]", "required": false, "description": "Service names from docker-compose." }
+      }
+    },
+
+    "BuildToolInfo": {
+      "fields": {
+        "name": { "type": "str", "required": true, "description": "e.g. 'webpack', 'vite', 'gradle', 'make'" },
+        "tool_type": { "type": "str", "required": false }
+      }
+    },
+
+    "TestFrameworkInfo": {
+      "fields": {
+        "name": { "type": "str", "required": true },
+        "language": { "type": "str", "required": true }
+      }
+    },
+
+    "EntrypointInfo": {
+      "fields": {
+        "file_path": { "type": "str", "required": true },
+        "role": { "type": "str", "required": true, "description": "e.g. 'main', 'server', 'app', 'index'" },
+        "description": { "type": "str", "required": false }
+      }
+    },
+
+    "ConfigFileInfo": {
+      "fields": {
+        "file_path": { "type": "str", "required": true },
+        "config_type": { "type": "str", "required": true, "description": "e.g. 'env', 'docker', 'ci', 'lint', 'build'" },
+        "description": { "type": "str", "required": false }
+      }
+    },
+
+    "MonorepoSignals": {
+      "fields": {
+        "is_monorepo": { "type": "bool", "required": true },
+        "signals": { "type": "list[str]", "required": false, "description": "Evidence: e.g. 'nx.json detected', 'lerna.json detected'" }
+      }
+    },
+
+    "UnknownSignal": {
+      "fields": {
+        "signal": { "type": "str", "required": true },
+        "description": { "type": "str", "required": false }
+      }
+    },
+
+    "ArchitectureContextPayload": {
+      "description": "Full output of ArchitectureContextBuilder. Deterministic — zero LLM tokens. Primary input for SystemMapper.",
+      "produced_by": "architecture_context_builder",
+      "persisted_in": "architecture_contexts",
+      "fields": {
+        "repo_tree_summary": {
+          "type": "list[DirectorySummary]",
+          "required": true,
+          "description": "Navigable summary of the directory tree."
+        },
+        "zones": {
+          "type": "list[Zone]",
+          "required": true,
+          "description": "Functional/structural zones detected in the repo."
+        },
+        "file_classifications": {
+          "type": "dict[str, FileClassification]",
+          "required": true,
+          "description": "Map: file_path → classification with role and confidence."
+        },
+        "file_rankings": {
+          "type": "list[FileRanking]",
+          "required": true,
+          "description": "Files sorted descending by architectural value score."
+        },
+        "key_config_files": { "type": "list[FileWithContent]", "required": true },
+        "entrypoints": { "type": "list[FileWithContent]", "required": true },
+        "architectural_samples": {
+          "type": "list[ArchitecturalSample]",
+          "required": true,
+          "description": "Curated code excerpts selected for LLM reasoning."
+        },
+        "selection_rationale": { "type": "str", "required": true, "description": "Explanation of sampling criteria applied." },
+        "import_graph_hints": { "type": "list[ImportGraphNode]", "required": true },
+        "directory_purposes": {
+          "type": "dict[str, str]",
+          "required": true,
+          "description": "Map: dir_path → inferred_purpose string."
+        },
+        "framework_conventions_detected": { "type": "list[FrameworkConvention]", "required": true },
+        "estimated_context_size_tokens": { "type": "int", "required": true },
+        "unknowns": { "type": "list[UnknownSignal]", "required": true },
+        "metadata": { "type": "BuilderMetadata", "required": true }
+      }
+    },
+
+    "DirectorySummary": {
+      "fields": {
+        "dir_path": { "type": "str", "required": true },
+        "file_count": { "type": "int", "required": true },
+        "predominant_types": { "type": "list[str]", "required": true, "description": "e.g. ['.py', '.json']" },
+        "probable_role": { "type": "str", "required": false }
+      }
+    },
+
+    "Zone": {
+      "fields": {
+        "zone_name": { "type": "str", "required": true },
+        "description": { "type": "str", "required": true },
+        "files": { "type": "list[str]", "required": true },
+        "probable_role": { "type": "str", "required": false }
+      }
+    },
+
+    "FileClassification": {
+      "fields": {
+        "role": { "type": "str", "required": true, "description": "One of the ~50 architectural role labels defined in spec (entrypoint, service, repository, model, etc.)." },
+        "confidence": { "type": "float", "required": true, "range": [0.0, 1.0] },
+        "reasoning": { "type": "str", "required": false }
+      }
+    },
+
+    "FileRanking": {
+      "fields": {
+        "file_path": { "type": "str", "required": true },
+        "value_score": { "type": "float", "required": true, "range": [0.0, 1.0] },
+        "reasons": { "type": "list[str]", "required": true, "description": "e.g. ['high_fan_in', 'is_entrypoint', 'defines_domain_model']" }
+      }
+    },
+
+    "FileWithContent": {
+      "fields": {
+        "file_path": { "type": "str", "required": true },
+        "file_type": { "type": "str", "required": false },
+        "content_excerpt": { "type": "str", "required": true, "description": "Full content or meaningful excerpt." }
+      }
+    },
+
+    "ArchitecturalSample": {
+      "fields": {
+        "file_path": { "type": "str", "required": true },
+        "zone": { "type": "str", "required": true },
+        "role": { "type": "str", "required": true },
+        "content_excerpt": { "type": "str", "required": true },
+        "selection_reason": { "type": "str", "required": true }
+      }
+    },
+
+    "ImportGraphNode": {
+      "fields": {
+        "file_path": { "type": "str", "required": true },
+        "imports": { "type": "list[str]", "required": true, "description": "Files this file imports from." },
+        "imported_by": { "type": "list[str]", "required": true, "description": "Files that import this file (fan-in)." }
+      }
+    },
+
+    "FrameworkConvention": {
+      "fields": {
+        "convention_name": { "type": "str", "required": true, "description": "e.g. 'Next.js pages/ routing'" },
+        "description": { "type": "str", "required": true },
+        "evidence": { "type": "list[str]", "required": false }
+      }
+    },
+
+    "BuilderMetadata": {
+      "fields": {
+        "timestamp": { "type": "str", "required": true, "format": "ISO 8601 datetime" },
+        "builder_version": { "type": "str", "required": true },
+        "config_used": { "type": "dict", "required": false }
+      }
+    },
+
+    "SystemMapReport": {
+      "description": "Full output of SystemMapper (LLM agent). Primary architectural intelligence document.",
+      "produced_by": "system_mapper",
+      "persisted_in": "system_maps",
+      "fields": {
+        "job_id": { "type": "str", "required": true, "format": "UUID" },
+        "analysis_scope": { "type": "AnalysisScope", "required": true },
+        "analysis_mode_used": { "type": "AnalysisMode", "required": true },
+        "dominant_architecture": { "type": "str", "required": true, "description": "e.g. 'layered', 'hexagonal', 'mvc', 'mixed', 'unstructured'" },
+        "architecture_confidence": { "type": "float", "required": true, "range": [0.0, 1.0] },
+        "system_style": { "type": "str", "required": true, "description": "Narrative description of the overall system style." },
+        "patterns_detected": { "type": "list[DetectedPattern]", "required": true },
+        "patterns_partial": { "type": "list[PartialPattern]", "required": true },
+        "module_structure": { "type": "ModuleStructure", "required": true },
+        "layers_detected": { "type": "list[ArchitecturalLayer]", "required": true },
+        "components_identified": { "type": "list[ArchitecturalComponent]", "required": true },
+        "data_flow": { "type": "str", "required": true, "description": "e.g. 'unidirectional', 'event-driven', 'request-response'" },
+        "component_interactions": { "type": "list[ComponentInteraction]", "required": true },
+        "external_dependencies": { "type": "list[ExternalDependency]", "required": true },
+        "boundaries": { "type": "list[Boundary]", "required": true },
+        "abstractions": { "type": "list[Abstraction]", "required": true },
+        "architectural_consistency": { "type": "ArchitecturalConsistency", "required": true },
+        "architectural_risks": { "type": "list[ArchitecturalRisk]", "required": true },
+        "architectural_strengths": { "type": "list[ArchitecturalStrength]", "required": true },
+        "mixed_architecture_signals": { "type": "list[MixedSignal]", "required": true },
+        "evolution_signals": { "type": "list[EvolutionSignal]", "required": true },
+        "zone_analysis_summary": { "type": "list[ZoneAnalysis]", "required": false, "description": "Populated only when analysis_mode_used != single_pass." },
+        "technical_debt_architectural": { "type": "list[ArchitecturalDebtItem]", "required": true },
+        "unknowns": { "type": "list[UnknownSignal]", "required": true },
+        "evidence_files": { "type": "list[EvidenceFile]", "required": true },
+        "confidence_score": { "type": "float", "required": true, "range": [0.0, 1.0] },
+        "recommendations": { "type": "list[Recommendation]", "required": true },
+        "metadata": { "type": "AgentExecutionMetadata", "required": true }
+      }
+    },
+
+    "DetectedPattern": {
+      "fields": {
+        "pattern_name": { "type": "str", "required": true },
+        "description": { "type": "str", "required": true },
+        "evidence": { "type": "list[str]", "required": true },
+        "confidence_score": { "type": "float", "required": true, "range": [0.0, 1.0] }
+      }
+    },
+
+    "PartialPattern": {
+      "fields": {
+        "pattern_name": { "type": "str", "required": true },
+        "description": { "type": "str", "required": true },
+        "completion_status": { "type": "str", "required": true, "description": "e.g. 'partially_implemented', 'in_migration', 'degraded'" }
+      }
+    },
+
+    "ModuleStructure": {
+      "fields": {
+        "description": { "type": "str", "required": true },
+        "modules": {
+          "type": "list[ModuleInfo]",
+          "required": true
+        }
+      }
+    },
+
+    "ModuleInfo": {
+      "fields": {
+        "name": { "type": "str", "required": true },
+        "description": { "type": "str", "required": true },
+        "files": { "type": "list[str]", "required": false }
+      }
+    },
+
+    "ArchitecturalLayer": {
+      "fields": {
+        "layer_name": { "type": "str", "required": true, "description": "e.g. 'presentation', 'application', 'domain', 'infrastructure'" },
+        "responsibilities": { "type": "list[str]", "required": true },
+        "files": { "type": "list[str]", "required": false }
+      }
+    },
+
+    "ArchitecturalComponent": {
+      "fields": {
+        "name": { "type": "str", "required": true },
+        "component_type": { "type": "str", "required": true, "description": "e.g. 'module', 'service', 'subsystem', 'gateway'" },
+        "description": { "type": "str", "required": true },
+        "files": { "type": "list[str]", "required": false }
+      }
+    },
+
+    "ComponentInteraction": {
+      "fields": {
+        "from_component": { "type": "str", "required": true },
+        "to_component": { "type": "str", "required": true },
+        "interaction_type": { "type": "str", "required": true, "description": "e.g. 'calls', 'emits_event', 'reads_from', 'delegates_to'" },
+        "description": { "type": "str", "required": false }
+      }
+    },
+
+    "ExternalDependency": {
+      "fields": {
+        "name": { "type": "str", "required": true },
+        "dep_type": { "type": "str", "required": true, "description": "e.g. 'database', 'api', 'queue', 'cache'" },
+        "role": { "type": "str", "required": true },
+        "description": { "type": "str", "required": false }
+      }
+    },
+
+    "Boundary": {
+      "fields": {
+        "name": { "type": "str", "required": true },
+        "boundary_type": { "type": "str", "required": true, "description": "e.g. 'module_boundary', 'layer_boundary', 'context_boundary'" },
+        "description": { "type": "str", "required": true },
+        "files": { "type": "list[str]", "required": false }
+      }
+    },
+
+    "Abstraction": {
+      "fields": {
+        "name": { "type": "str", "required": true },
+        "abstraction_type": { "type": "str", "required": true, "description": "e.g. 'interface', 'contract', 'base_class', 'protocol'" },
+        "description": { "type": "str", "required": true },
+        "file_path": { "type": "str", "required": false }
+      }
+    },
+
+    "ArchitecturalRisk": {
+      "fields": {
+        "risk_name": { "type": "str", "required": true },
+        "severity": { "type": "FindingSeverity", "required": true },
+        "description": { "type": "str", "required": true }
+      }
+    },
+
+    "ArchitecturalStrength": {
+      "fields": {
+        "strength_name": { "type": "str", "required": true },
+        "description": { "type": "str", "required": true }
+      }
+    },
+
+    "MixedSignal": {
+      "fields": {
+        "signal": { "type": "str", "required": true },
+        "description": { "type": "str", "required": true }
+      }
+    },
+
+    "EvolutionSignal": {
+      "fields": {
+        "signal": { "type": "str", "required": true },
+        "description": { "type": "str", "required": true }
+      }
+    },
+
+    "ZoneAnalysis": {
+      "fields": {
+        "zone_name": { "type": "str", "required": true },
+        "findings": { "type": "str", "required": true, "description": "Summary of architectural findings for this zone." }
+      }
+    },
+
+    "ArchitecturalDebtItem": {
+      "fields": {
+        "issue_name": { "type": "str", "required": true },
+        "severity": { "type": "FindingSeverity", "required": true },
+        "description": { "type": "str", "required": true }
+      }
+    },
+
+    "EvidenceFile": {
+      "fields": {
+        "file_path": { "type": "str", "required": true },
+        "evidence_for": { "type": "list[str]", "required": true, "description": "What conclusions this file supports." }
+      }
+    },
+
+    "Recommendation": {
+      "fields": {
+        "recommendation": { "type": "str", "required": true },
+        "priority": { "type": "str", "required": true, "enum": ["low", "medium", "high"] },
+        "rationale": { "type": "str", "required": true }
+      }
+    },
+
+    "AgentExecutionMetadata": {
+      "description": "Standard metadata block appended to all LLM agent outputs.",
+      "fields": {
+        "timestamp": { "type": "str", "required": true, "format": "ISO 8601 datetime" },
+        "model_used": { "type": "str", "required": true },
+        "tokens_consumed": { "type": "int", "required": true },
+        "cost_usd": { "type": "float", "required": true },
+        "duration_seconds": { "type": "int", "required": true }
+      }
+    },
+
+    "TechDebtFinding": {
+      "description": "Single atomic finding from Phase 1 (deterministic) of TechDebtAnalyzer.",
+      "produced_by": "tech_debt_analyzer (phase 1)",
+      "persisted_in": "tech_debt_findings",
+      "fields": {
+        "finding_id": { "type": "str", "required": true, "description": "Unique per job. Format: '{tool_source}:{file_path}:{rule}:{line}'." },
+        "category": { "type": "FindingCategory", "required": true },
+        "severity": { "type": "FindingSeverity", "required": true },
+        "file_path": { "type": "str", "required": true },
+        "line_number": { "type": "int", "required": false },
+        "rule": { "type": "str", "required": true, "description": "Lint rule or metric name (e.g. 'pylint:R0902', 'complexity:cyclomatic')." },
+        "description": { "type": "str", "required": true },
+        "evidence": { "type": "str", "required": false, "description": "Relevant code snippet." },
+        "tool_source": { "type": "str", "required": true, "description": "e.g. 'eslint', 'pylint', 'bandit', 'radon', 'custom_metric'" },
+        "metadata": { "type": "dict", "required": false }
+      }
+    },
+
+    "TechDebtAnalysisReport": {
+      "description": "Full output of TechDebtAnalyzer (Phase 2 — LLM synthesis over Phase 1 findings).",
+      "produced_by": "tech_debt_analyzer (phase 2)",
+      "persisted_in": "tech_debt_analyses",
+      "fields": {
+        "job_id": { "type": "str", "required": true, "format": "UUID" },
+        "total_findings": { "type": "int", "required": true },
+        "findings_by_category": { "type": "dict[str, int]", "required": true, "description": "Map: category → count." },
+        "findings_by_severity": { "type": "dict[str, int]", "required": true, "description": "Map: severity → count." },
+        "dominant_debt_type": { "type": "DebtCategory", "required": true },
+        "debt_categories": {
+          "type": "dict[DebtCategory, list[str]]",
+          "required": true,
+          "description": "Map: category → list of key issues in that category."
+        },
+        "systemic_issues": { "type": "list[SystemicIssue]", "required": true },
+        "localized_issues": { "type": "list[LocalizedIssue]", "required": true },
+        "fragile_zones": { "type": "list[FragileZone]", "required": true },
+        "high_risk_areas": { "type": "list[HighRiskArea]", "required": true },
+        "coupling_issues": { "type": "list[CouplingIssue]", "required": true },
+        "cohesion_issues": { "type": "list[CohesionIssue]", "required": true },
+        "quick_wins": { "type": "list[QuickWin]", "required": true },
+        "strategic_refactors": { "type": "list[StrategicRefactor]", "required": true },
+        "priority_recommendations": { "type": "list[Recommendation]", "required": true },
+        "debt_trends": { "type": "list[DebtTrend]", "required": true },
+        "related_finding_groups": { "type": "list[FindingGroup]", "required": true },
+        "architectural_debt_correlation": { "type": "list[DebtArchCorrelation]", "required": true },
+        "confidence_score": { "type": "float", "required": true, "range": [0.0, 1.0] },
+        "metadata": { "type": "AgentExecutionMetadata", "required": true }
+      }
+    },
+
+    "SystemicIssue": {
+      "fields": {
+        "issue_name": { "type": "str", "required": true },
+        "description": { "type": "str", "required": true },
+        "affected_files": { "type": "list[str]", "required": true },
+        "severity": { "type": "FindingSeverity", "required": true }
+      }
+    },
+
+    "LocalizedIssue": {
+      "fields": {
+        "issue_name": { "type": "str", "required": true },
+        "description": { "type": "str", "required": true },
+        "file_path": { "type": "str", "required": true },
+        "severity": { "type": "FindingSeverity", "required": true }
+      }
+    },
+
+    "FragileZone": {
+      "fields": {
+        "zone_name": { "type": "str", "required": true },
+        "reasons": { "type": "list[str]", "required": true },
+        "files": { "type": "list[str]", "required": false }
+      }
+    },
+
+    "HighRiskArea": {
+      "fields": {
+        "area_name": { "type": "str", "required": true },
+        "risk_level": { "type": "FindingSeverity", "required": true },
+        "description": { "type": "str", "required": true }
+      }
+    },
+
+    "CouplingIssue": {
+      "fields": {
+        "description": { "type": "str", "required": true },
+        "files": { "type": "list[str]", "required": true },
+        "severity": { "type": "FindingSeverity", "required": true }
+      }
+    },
+
+    "CohesionIssue": {
+      "fields": {
+        "description": { "type": "str", "required": true },
+        "files": { "type": "list[str]", "required": true },
+        "severity": { "type": "FindingSeverity", "required": true }
+      }
+    },
+
+    "QuickWin": {
+      "fields": {
+        "title": { "type": "str", "required": true },
+        "description": { "type": "str", "required": true },
+        "effort": { "type": "str", "required": true, "enum": ["low", "medium", "high"] },
+        "impact": { "type": "str", "required": true, "enum": ["low", "medium", "high"] },
+        "files": { "type": "list[str]", "required": false }
+      }
+    },
+
+    "StrategicRefactor": {
+      "fields": {
+        "title": { "type": "str", "required": true },
+        "description": { "type": "str", "required": true },
+        "expected_benefit": { "type": "str", "required": true },
+        "complexity": { "type": "str", "required": true, "enum": ["low", "medium", "high"] },
+        "priority": { "type": "str", "required": true, "enum": ["low", "medium", "high"] }
+      }
+    },
+
+    "DebtTrend": {
+      "fields": {
+        "trend_name": { "type": "str", "required": true },
+        "description": { "type": "str", "required": true }
+      }
+    },
+
+    "FindingGroup": {
+      "fields": {
+        "group_name": { "type": "str", "required": true },
+        "description": { "type": "str", "required": true },
+        "finding_ids": { "type": "list[str]", "required": true }
+      }
+    },
+
+    "DebtArchCorrelation": {
+      "fields": {
+        "debt_item": { "type": "str", "required": true },
+        "architectural_issue": { "type": "str", "required": true },
+        "description": { "type": "str", "required": true }
+      }
+    },
+
+    "DocArtifact": {
+      "description": "Document generated by one of the 4 DocWritingLayer writers.",
+      "produced_by": "technical_doc_writer | human_doc_writer | ai_context_writer | debt_doc_writer",
+      "persisted_in": "doc_artifacts",
+      "fields": {
+        "id": { "type": "str", "required": true, "format": "UUID" },
+        "job_id": { "type": "str", "required": true, "format": "UUID" },
+        "doc_type": { "type": "DocType", "required": true },
+        "format": { "type": "DocFormat", "required": true },
+        "content": { "type": "str", "required": true, "description": "Markdown string or JSON string depending on doc_type." },
+        "metadata": { "type": "DocArtifactMetadata", "required": true }
+      }
+    },
+
+    "DocArtifactMetadata": {
+      "fields": {
+        "created_at": { "type": "str", "required": true, "format": "ISO 8601 datetime" },
+        "tokens_consumed": { "type": "int", "required": true },
+        "model_used": { "type": "str", "required": true },
+        "cost_usd": { "type": "float", "required": true }
+      }
+    },
+
+    "AIContextDoc": {
+      "description": "The specific JSON structure that ai_context_writer MUST produce inside DocArtifact.content.",
+      "produced_by": "ai_context_writer",
+      "note": "This is the content schema for doc_type='ai_context'. Must be serialized as JSON string in DocArtifact.content.",
+      "fields": {
+        "facts": { "type": "list[str]", "required": true, "description": "Objective facts about the repository." },
+        "rules": { "type": "list[str]", "required": true, "description": "Rules that must be followed when working on the codebase." },
+        "boundaries": { "type": "list[str]", "required": true, "description": "Boundaries that must not be crossed." },
+        "extension_points": { "type": "list[str]", "required": true, "description": "Safe places to add new functionality." },
+        "patterns": { "type": "list[str]", "required": true, "description": "Existing patterns to follow." },
+        "anti_patterns": { "type": "list[str]", "required": true, "description": "Patterns to avoid." },
+        "conventions": { "type": "list[str]", "required": true, "description": "Detected code conventions." },
+        "constraints": { "type": "list[str]", "required": true, "description": "Hard technical constraints." }
+      }
+    }
+  }
+}

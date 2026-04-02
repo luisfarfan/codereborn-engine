@@ -1,0 +1,773 @@
+{
+  "system_name": "CodeReborn Engine — API Contracts",
+  "description": "Complete REST API contracts for the Repo Intelligence Interface. Includes all endpoints organized by domain with request/response schemas. Use this to generate FastAPI route handlers, Pydantic I/O models, and client SDKs.",
+  "version": "1.0.0",
+  "base_path": "/api/v1",
+  "auth": {
+    "type": "Bearer",
+    "header": "Authorization",
+    "format": "Bearer <jwt_token>",
+    "note": "All endpoints require a valid JWT token."
+  },
+  "rate_limiting": {
+    "limit": 100,
+    "window": "1 minute",
+    "key_by": "job_id",
+    "note": "Rate limiting is enforced per job_id to prevent abuse."
+  },
+  "llm_gated_endpoints": {
+    "description": "Endpoints in Domains 3 and 6 may invoke LLMs. They MUST call LLMBudgetService before any inference. Will return 402 if budget is exhausted.",
+    "domains": [3, 6]
+  },
+  "common_responses": {
+    "401": { "description": "Missing or invalid Bearer token." },
+    "402": { "description": "LLM budget exhausted for this job." },
+    "404": { "description": "Job not found or analysis not yet complete." },
+    "429": { "description": "Rate limit exceeded (100 req/min per job_id)." },
+    "500": { "description": "Internal server error." }
+  },
+
+  "job_management": {
+    "description": "Endpoints for creating and monitoring jobs. Not part of the 6 intelligence domains but required for the full workflow.",
+    "endpoints": [
+      {
+        "id": "create_job",
+        "method": "POST",
+        "path": "/jobs",
+        "description": "Create a new analysis job for a repository.",
+        "auth_required": true,
+        "llm_gated": false,
+        "request_body": {
+          "schema": "CreateJobRequest",
+          "fields": {
+            "repo_url": { "type": "str", "required": false, "description": "Remote repository URL to clone." },
+            "repo_path": { "type": "str", "required": false, "description": "Local absolute path if repo is already cloned." },
+            "analysis_scope": { "type": "AnalysisScope", "required": true, "description": "frontend | backend | mobile | desktop | library | worker | other" },
+            "budget_config": {
+              "type": "BudgetConfig",
+              "required": true,
+              "schema": {
+                "max_tokens": { "type": "int", "required": true, "description": "Maximum total LLM tokens for this job." },
+                "max_cost_usd": { "type": "float", "required": true, "description": "Maximum total USD cost for this job." }
+              }
+            }
+          },
+          "validation": "Either repo_url or repo_path must be provided."
+        },
+        "response": {
+          "status": 201,
+          "schema": "JobCreatedResponse",
+          "fields": {
+            "job_id": { "type": "str", "format": "UUID" },
+            "status": { "type": "str", "value": "pending" },
+            "created_at": { "type": "str", "format": "ISO 8601 datetime" }
+          }
+        }
+      },
+      {
+        "id": "get_job_status",
+        "method": "GET",
+        "path": "/jobs/{job_id}",
+        "description": "Get current status and metadata for a job.",
+        "auth_required": true,
+        "llm_gated": false,
+        "response": {
+          "status": 200,
+          "schema": "JobStatusResponse",
+          "fields": {
+            "job_id": { "type": "str", "format": "UUID" },
+            "repo_url": { "type": "str" },
+            "analysis_scope": { "type": "AnalysisScope" },
+            "status": { "type": "JobStatus" },
+            "mode": { "type": "AnalysisMode" },
+            "tokens_used": { "type": "int" },
+            "cost_usd": { "type": "float" },
+            "budget_config": { "type": "BudgetConfig" },
+            "created_at": { "type": "str", "format": "ISO 8601 datetime" },
+            "started_at": { "type": "str", "format": "ISO 8601 datetime", "nullable": true },
+            "completed_at": { "type": "str", "format": "ISO 8601 datetime", "nullable": true },
+            "error_detail": { "type": "str", "nullable": true }
+          }
+        }
+      },
+      {
+        "id": "list_jobs",
+        "method": "GET",
+        "path": "/jobs",
+        "description": "List all jobs with pagination.",
+        "auth_required": true,
+        "llm_gated": false,
+        "query_params": {
+          "limit": { "type": "int", "default": 20, "max": 100 },
+          "offset": { "type": "int", "default": 0 },
+          "status": { "type": "JobStatus", "required": false }
+        },
+        "response": {
+          "status": 200,
+          "schema": "JobsListResponse",
+          "fields": {
+            "items": { "type": "list[JobStatusResponse]" },
+            "total": { "type": "int" },
+            "limit": { "type": "int" },
+            "offset": { "type": "int" }
+          }
+        }
+      }
+    ]
+  },
+
+  "domains": [
+    {
+      "id": 1,
+      "name": "Project Understanding",
+      "description": "Tools to understand what the project is and how it is built. All endpoints are deterministic reads from PostgreSQL.",
+      "llm_gated": false,
+      "endpoints": [
+        {
+          "id": "project_overview",
+          "method": "GET",
+          "path": "/jobs/{job_id}/project-overview",
+          "description": "Overview of the project: what it does, scope, dominant architecture, primary stack.",
+          "response_fields": {
+            "job_id": { "type": "str" },
+            "analysis_scope": { "type": "AnalysisScope" },
+            "project_name": { "type": "str", "nullable": true },
+            "stack_summary": { "type": "str" },
+            "primary_language": { "type": "str" },
+            "dominant_architecture": { "type": "str" },
+            "system_style": { "type": "str" },
+            "analysis_mode_used": { "type": "AnalysisMode" },
+            "job_status": { "type": "JobStatus" }
+          }
+        },
+        {
+          "id": "stack_summary",
+          "method": "GET",
+          "path": "/jobs/{job_id}/stack-summary",
+          "description": "Summary of the Stack Intelligence Report with primary technologies.",
+          "response_ref": "StackIntelligenceReport (abbreviated)",
+          "response_fields": {
+            "primary_language": { "type": "str" },
+            "languages": { "type": "list[LanguageInfo]" },
+            "frameworks": { "type": "list[FrameworkInfo]" },
+            "build_tools": { "type": "list[BuildToolInfo]" },
+            "test_frameworks": { "type": "list[TestFrameworkInfo]" },
+            "package_managers": { "type": "list[str]" },
+            "services": { "type": "list[ServiceInfo]" },
+            "docker_hints": { "type": "DockerHints" },
+            "confidence_score": { "type": "float" }
+          }
+        },
+        {
+          "id": "architecture_summary",
+          "method": "GET",
+          "path": "/jobs/{job_id}/architecture-summary",
+          "description": "Summary of the System Map Report: dominant architecture, detected patterns, main components.",
+          "response_fields": {
+            "dominant_architecture": { "type": "str" },
+            "architecture_confidence": { "type": "float" },
+            "patterns_detected": { "type": "list[DetectedPattern]" },
+            "patterns_partial": { "type": "list[PartialPattern]" },
+            "components_identified": { "type": "list[ArchitecturalComponent]" },
+            "architectural_consistency": { "type": "ArchitecturalConsistency" },
+            "layers_detected": { "type": "list[ArchitecturalLayer]" }
+          }
+        },
+        {
+          "id": "system_style",
+          "method": "GET",
+          "path": "/jobs/{job_id}/system-style",
+          "description": "Narrative description of the system's overall architectural style.",
+          "response_fields": {
+            "system_style": { "type": "str" },
+            "mixed_architecture_signals": { "type": "list[MixedSignal]" },
+            "evolution_signals": { "type": "list[EvolutionSignal]" }
+          }
+        },
+        {
+          "id": "entrypoints",
+          "method": "GET",
+          "path": "/jobs/{job_id}/entrypoints",
+          "description": "List of project entrypoints with descriptions.",
+          "response_fields": {
+            "entrypoints": { "type": "list[EntrypointInfo]" }
+          }
+        },
+        {
+          "id": "external_dependencies",
+          "method": "GET",
+          "path": "/jobs/{job_id}/external-dependencies",
+          "description": "Architecturally relevant external dependencies (APIs, databases, services).",
+          "response_fields": {
+            "external_dependencies": { "type": "list[ExternalDependency]" }
+          }
+        },
+        {
+          "id": "data_flow_summary",
+          "method": "GET",
+          "path": "/jobs/{job_id}/data-flow-summary",
+          "description": "Description of how information flows through the system.",
+          "response_fields": {
+            "data_flow": { "type": "str" },
+            "component_interactions": { "type": "list[ComponentInteraction]" }
+          }
+        }
+      ]
+    },
+
+    {
+      "id": 2,
+      "name": "Structural Navigation",
+      "description": "Tools to find and navigate relevant parts of the repository. All deterministic reads from PostgreSQL.",
+      "llm_gated": false,
+      "endpoints": [
+        {
+          "id": "module_map",
+          "method": "GET",
+          "path": "/jobs/{job_id}/module-map",
+          "description": "Map of modules or features with descriptions.",
+          "response_fields": {
+            "module_structure": { "type": "ModuleStructure" }
+          }
+        },
+        {
+          "id": "find_module_files",
+          "method": "POST",
+          "path": "/jobs/{job_id}/find-module-files",
+          "description": "List files belonging to a specific module.",
+          "request_body": {
+            "module_name": { "type": "str", "required": true }
+          },
+          "response_fields": {
+            "module_name": { "type": "str" },
+            "files": { "type": "list[str]" }
+          }
+        },
+        {
+          "id": "find_files_by_responsibility",
+          "method": "POST",
+          "path": "/jobs/{job_id}/find-files-by-responsibility",
+          "description": "Find files that implement a given responsibility.",
+          "request_body": {
+            "responsibility": { "type": "str", "required": true, "example": "authentication" }
+          },
+          "response_fields": {
+            "responsibility": { "type": "str" },
+            "files": { "type": "list[FileWithRole]" }
+          }
+        },
+        {
+          "id": "code_zones",
+          "method": "GET",
+          "path": "/jobs/{job_id}/code-zones",
+          "description": "List of code zones detected in the repo with descriptions.",
+          "response_fields": {
+            "zones": { "type": "list[Zone]" }
+          }
+        },
+        {
+          "id": "high_value_files",
+          "method": "GET",
+          "path": "/jobs/{job_id}/high-value-files",
+          "description": "Top architecturally valuable files ranked by value score.",
+          "query_params": {
+            "limit": { "type": "int", "default": 20 }
+          },
+          "response_fields": {
+            "files": { "type": "list[FileRanking]" }
+          }
+        },
+        {
+          "id": "find_files_by_component",
+          "method": "POST",
+          "path": "/jobs/{job_id}/find-files-related-to-component",
+          "request_body": {
+            "component_name": { "type": "str", "required": true }
+          },
+          "response_fields": {
+            "component_name": { "type": "str" },
+            "files": { "type": "list[str]" }
+          }
+        },
+        {
+          "id": "find_files_by_domain",
+          "method": "POST",
+          "path": "/jobs/{job_id}/find-files-related-to-domain",
+          "request_body": {
+            "domain": { "type": "str", "required": true, "example": "payment processing" }
+          },
+          "response_fields": {
+            "domain": { "type": "str" },
+            "files": { "type": "list[str]" }
+          }
+        }
+      ]
+    },
+
+    {
+      "id": 3,
+      "name": "Task Context Building",
+      "description": "Tools to build optimized context for development tasks. LLM-gated: must call LLMBudgetService before inference.",
+      "llm_gated": true,
+      "endpoints": [
+        {
+          "id": "build_task_context",
+          "method": "POST",
+          "path": "/jobs/{job_id}/build-task-context",
+          "description": "Build relevant context for implementing a described task.",
+          "request_body": {
+            "task_description": { "type": "str", "required": true }
+          },
+          "response_fields": {
+            "task_description": { "type": "str" },
+            "relevant_files": { "type": "list[FileWithRole]" },
+            "patterns_to_follow": { "type": "list[str]" },
+            "boundaries_to_respect": { "type": "list[str]" },
+            "extension_points": { "type": "list[str]" },
+            "context_summary": { "type": "str" },
+            "llm_decision": { "type": "LLMCallDecision" }
+          }
+        },
+        {
+          "id": "build_feature_context",
+          "method": "POST",
+          "path": "/jobs/{job_id}/build-feature-context",
+          "request_body": {
+            "feature_description": { "type": "str", "required": true }
+          },
+          "response_fields": {
+            "feature_description": { "type": "str" },
+            "relevant_files": { "type": "list[FileWithRole]" },
+            "patterns_to_follow": { "type": "list[str]" },
+            "boundaries_to_respect": { "type": "list[str]" },
+            "similar_features": { "type": "list[str]" },
+            "context_summary": { "type": "str" },
+            "llm_decision": { "type": "LLMCallDecision" }
+          }
+        },
+        {
+          "id": "build_bugfix_context",
+          "method": "POST",
+          "path": "/jobs/{job_id}/build-bugfix-context",
+          "request_body": {
+            "bug_description": { "type": "str", "required": true }
+          },
+          "response_fields": {
+            "bug_description": { "type": "str" },
+            "investigation_entry_points": { "type": "list[FileWithRole]" },
+            "related_components": { "type": "list[str]" },
+            "relevant_risk_areas": { "type": "list[HighRiskArea]" },
+            "context_summary": { "type": "str" },
+            "llm_decision": { "type": "LLMCallDecision" }
+          }
+        },
+        {
+          "id": "build_refactor_context",
+          "method": "POST",
+          "path": "/jobs/{job_id}/build-refactor-context",
+          "request_body": {
+            "refactor_description": { "type": "str", "required": true }
+          },
+          "response_fields": {
+            "refactor_description": { "type": "str" },
+            "affected_files": { "type": "list[FileWithRole]" },
+            "impact_scope": { "type": "str" },
+            "risks": { "type": "list[str]" },
+            "context_summary": { "type": "str" },
+            "llm_decision": { "type": "LLMCallDecision" }
+          }
+        },
+        {
+          "id": "get_recommended_files_to_modify",
+          "method": "POST",
+          "path": "/jobs/{job_id}/get-recommended-files-to-modify",
+          "request_body": {
+            "change_description": { "type": "str", "required": true }
+          },
+          "response_fields": {
+            "change_description": { "type": "str" },
+            "recommended_files": { "type": "list[RecommendedFile]" }
+          }
+        },
+        {
+          "id": "get_safe_extension_points",
+          "method": "GET",
+          "path": "/jobs/{job_id}/get-safe-extension-points",
+          "description": "Safe places in the codebase to add new functionality.",
+          "llm_gated": false,
+          "response_fields": {
+            "extension_points": { "type": "list[ExtensionPoint]" }
+          }
+        },
+        {
+          "id": "get_patterns_for_feature",
+          "method": "POST",
+          "path": "/jobs/{job_id}/get-existing-patterns-for-feature",
+          "request_body": {
+            "feature_type": { "type": "str", "required": true, "example": "background job" }
+          },
+          "response_fields": {
+            "feature_type": { "type": "str" },
+            "patterns": { "type": "list[str]" },
+            "example_files": { "type": "list[str]" }
+          }
+        }
+      ]
+    },
+
+    {
+      "id": 4,
+      "name": "Change Impact and Risk",
+      "description": "Tools to assess the risk and impact of changes, and consult technical debt. Deterministic reads from PostgreSQL.",
+      "llm_gated": false,
+      "endpoints": [
+        {
+          "id": "get_change_impact",
+          "method": "POST",
+          "path": "/jobs/{job_id}/get-change-impact-context",
+          "request_body": {
+            "files_to_change": { "type": "list[str]", "required": true }
+          },
+          "response_fields": {
+            "files_to_change": { "type": "list[str]" },
+            "dependent_files": { "type": "list[str]" },
+            "affected_components": { "type": "list[str]" },
+            "risk_level": { "type": "FindingSeverity" },
+            "impact_summary": { "type": "str" }
+          }
+        },
+        {
+          "id": "get_related_modules",
+          "method": "POST",
+          "path": "/jobs/{job_id}/get-related-modules",
+          "request_body": {
+            "module_name": { "type": "str", "required": true }
+          },
+          "response_fields": {
+            "module_name": { "type": "str" },
+            "related_modules": { "type": "list[ModuleRelation]" }
+          }
+        },
+        {
+          "id": "get_dependency_impact",
+          "method": "POST",
+          "path": "/jobs/{job_id}/get-dependency-impact",
+          "request_body": {
+            "file_path": { "type": "str", "required": true }
+          },
+          "response_fields": {
+            "file_path": { "type": "str" },
+            "imported_by": { "type": "list[str]" },
+            "affected_components": { "type": "list[str]" },
+            "impact_summary": { "type": "str" }
+          }
+        },
+        {
+          "id": "get_high_risk_zones",
+          "method": "GET",
+          "path": "/jobs/{job_id}/get-high-risk-zones",
+          "response_fields": {
+            "high_risk_areas": { "type": "list[HighRiskArea]" },
+            "fragile_zones": { "type": "list[FragileZone]" }
+          }
+        },
+        {
+          "id": "get_architectural_risks",
+          "method": "GET",
+          "path": "/jobs/{job_id}/get-known-architectural-risks",
+          "response_fields": {
+            "architectural_risks": { "type": "list[ArchitecturalRisk]" },
+            "architectural_debt": { "type": "list[ArchitecturalDebtItem]" }
+          }
+        },
+        {
+          "id": "tech_debt_summary",
+          "method": "GET",
+          "path": "/jobs/{job_id}/technical-debt-summary",
+          "response_fields": {
+            "total_findings": { "type": "int" },
+            "findings_by_severity": { "type": "dict[str, int]" },
+            "findings_by_category": { "type": "dict[str, int]" },
+            "dominant_debt_type": { "type": "str" },
+            "systemic_issues": { "type": "list[SystemicIssue]" },
+            "quick_wins": { "type": "list[QuickWin]" },
+            "confidence_score": { "type": "float" }
+          }
+        },
+        {
+          "id": "get_zone_risk_profile",
+          "method": "POST",
+          "path": "/jobs/{job_id}/get-zone-risk-profile",
+          "request_body": {
+            "zone_name": { "type": "str", "required": true }
+          },
+          "response_fields": {
+            "zone_name": { "type": "str" },
+            "risk_level": { "type": "FindingSeverity" },
+            "fragile_reasons": { "type": "list[str]" },
+            "findings_in_zone": { "type": "list[TechDebtFinding]" },
+            "coupling_issues": { "type": "list[CouplingIssue]" }
+          }
+        }
+      ]
+    },
+
+    {
+      "id": 5,
+      "name": "Documentation Access",
+      "description": "Access to the live documentation generated by the DocWritingLayer. Pure database reads.",
+      "llm_gated": false,
+      "endpoints": [
+        {
+          "id": "docs_technical",
+          "method": "GET",
+          "path": "/jobs/{job_id}/docs/technical",
+          "description": "Technical documentation (Markdown) for developers.",
+          "response_fields": {
+            "doc_type": { "type": "str", "value": "technical" },
+            "format": { "type": "str", "value": "markdown" },
+            "content": { "type": "str" },
+            "metadata": { "type": "DocArtifactMetadata" }
+          }
+        },
+        {
+          "id": "docs_human",
+          "method": "GET",
+          "path": "/jobs/{job_id}/docs/human",
+          "description": "Human-friendly documentation (Markdown) for onboarding.",
+          "response_fields": {
+            "doc_type": { "type": "str", "value": "human" },
+            "format": { "type": "str", "value": "markdown" },
+            "content": { "type": "str" },
+            "metadata": { "type": "DocArtifactMetadata" }
+          }
+        },
+        {
+          "id": "docs_ai_context",
+          "method": "GET",
+          "path": "/jobs/{job_id}/docs/ai-context",
+          "description": "AI-friendly structured JSON context (facts, rules, boundaries, patterns).",
+          "response_fields": {
+            "doc_type": { "type": "str", "value": "ai_context" },
+            "format": { "type": "str", "value": "json" },
+            "content": { "type": "AIContextDoc", "note": "Serialized as JSON string in storage, returned as object here." },
+            "metadata": { "type": "DocArtifactMetadata" }
+          }
+        },
+        {
+          "id": "docs_debt",
+          "method": "GET",
+          "path": "/jobs/{job_id}/docs/debt",
+          "description": "Technical debt documentation (Markdown) for tech leads and managers.",
+          "response_fields": {
+            "doc_type": { "type": "str", "value": "debt" },
+            "format": { "type": "str", "value": "markdown" },
+            "content": { "type": "str" },
+            "metadata": { "type": "DocArtifactMetadata" }
+          }
+        },
+        {
+          "id": "get_module_documentation",
+          "method": "POST",
+          "path": "/jobs/{job_id}/get-module-documentation",
+          "request_body": {
+            "module_name": { "type": "str", "required": true }
+          },
+          "response_fields": {
+            "module_name": { "type": "str" },
+            "documentation": { "type": "str", "nullable": true },
+            "available": { "type": "bool" }
+          }
+        },
+        {
+          "id": "architecture_explainer",
+          "method": "GET",
+          "path": "/jobs/{job_id}/get-architecture-explainer",
+          "description": "Narrative explanation of the architecture.",
+          "response_fields": {
+            "explainer": { "type": "str" }
+          }
+        },
+        {
+          "id": "onboarding_summary",
+          "method": "GET",
+          "path": "/jobs/{job_id}/get-onboarding-summary",
+          "response_fields": {
+            "onboarding_summary": { "type": "str" }
+          }
+        },
+        {
+          "id": "developer_guide",
+          "method": "GET",
+          "path": "/jobs/{job_id}/get-developer-guide",
+          "response_fields": {
+            "developer_guide": { "type": "str" }
+          }
+        },
+        {
+          "id": "recommendations_summary",
+          "method": "GET",
+          "path": "/jobs/{job_id}/get-recommendations-summary",
+          "response_fields": {
+            "recommendations": { "type": "list[Recommendation]" },
+            "strategic_refactors": { "type": "list[StrategicRefactor]" },
+            "quick_wins": { "type": "list[QuickWin]" }
+          }
+        }
+      ]
+    },
+
+    {
+      "id": 6,
+      "name": "Guided Intelligence Tools",
+      "description": "LLM-powered tools that guide technical decisions without modifying code. MUST call LLMBudgetService before any inference. Will return 402 if budget is exhausted.",
+      "llm_gated": true,
+      "endpoints": [
+        {
+          "id": "suggest_implementation_approach",
+          "method": "POST",
+          "path": "/jobs/{job_id}/suggest-implementation-approach",
+          "description": "Suggest how to implement a feature respecting existing architecture.",
+          "request_body": {
+            "feature_description": { "type": "str", "required": true }
+          },
+          "response_fields": {
+            "feature_description": { "type": "str" },
+            "suggested_approach": { "type": "str" },
+            "files_to_create": { "type": "list[RecommendedFile]" },
+            "files_to_modify": { "type": "list[RecommendedFile]" },
+            "patterns_to_follow": { "type": "list[str]" },
+            "risks": { "type": "list[str]" },
+            "llm_decision": { "type": "LLMCallDecision" }
+          }
+        },
+        {
+          "id": "suggest_refactor_strategy",
+          "method": "POST",
+          "path": "/jobs/{job_id}/suggest-refactor-strategy",
+          "request_body": {
+            "refactor_goal": { "type": "str", "required": true }
+          },
+          "response_fields": {
+            "refactor_goal": { "type": "str" },
+            "strategy": { "type": "str" },
+            "phases": { "type": "list[RefactorPhase]" },
+            "estimated_effort": { "type": "str" },
+            "risks": { "type": "list[str]" },
+            "llm_decision": { "type": "LLMCallDecision" }
+          }
+        },
+        {
+          "id": "suggest_debugging_entry_points",
+          "method": "POST",
+          "path": "/jobs/{job_id}/suggest-debugging-entry-points",
+          "request_body": {
+            "bug_description": { "type": "str", "required": true }
+          },
+          "response_fields": {
+            "bug_description": { "type": "str" },
+            "entry_points": { "type": "list[FileWithRole]" },
+            "investigation_path": { "type": "str" },
+            "llm_decision": { "type": "LLMCallDecision" }
+          }
+        },
+        {
+          "id": "suggest_testing_focus",
+          "method": "POST",
+          "path": "/jobs/{job_id}/suggest-testing-focus-areas",
+          "request_body": {
+            "change_description": { "type": "str", "required": true }
+          },
+          "response_fields": {
+            "change_description": { "type": "str" },
+            "focus_areas": { "type": "list[TestingFocusArea]" },
+            "llm_decision": { "type": "LLMCallDecision" }
+          }
+        },
+        {
+          "id": "suggest_investigation_plan",
+          "method": "POST",
+          "path": "/jobs/{job_id}/suggest-investigation-plan",
+          "request_body": {
+            "investigation_goal": { "type": "str", "required": true }
+          },
+          "response_fields": {
+            "investigation_goal": { "type": "str" },
+            "plan": { "type": "list[InvestigationStep]" },
+            "llm_decision": { "type": "LLMCallDecision" }
+          }
+        },
+        {
+          "id": "build_architecture_consultation",
+          "method": "POST",
+          "path": "/jobs/{job_id}/build-architecture-consultation-context",
+          "description": "Return relevant architectural context to answer a technical question.",
+          "request_body": {
+            "question": { "type": "str", "required": true }
+          },
+          "response_fields": {
+            "question": { "type": "str" },
+            "context": { "type": "str" },
+            "relevant_files": { "type": "list[FileWithRole]" },
+            "relevant_components": { "type": "list[str]" },
+            "llm_decision": { "type": "LLMCallDecision" }
+          }
+        }
+      ]
+    }
+  ],
+
+  "shared_response_schemas": {
+    "FileWithRole": {
+      "fields": {
+        "file_path": { "type": "str" },
+        "role": { "type": "str", "nullable": true },
+        "description": { "type": "str", "nullable": true }
+      }
+    },
+    "RecommendedFile": {
+      "fields": {
+        "file_path": { "type": "str" },
+        "action": { "type": "str", "enum": ["create", "modify", "delete", "review"] },
+        "reason": { "type": "str" }
+      }
+    },
+    "ExtensionPoint": {
+      "fields": {
+        "name": { "type": "str" },
+        "file_path": { "type": "str" },
+        "description": { "type": "str" }
+      }
+    },
+    "ModuleRelation": {
+      "fields": {
+        "module_name": { "type": "str" },
+        "relation_type": { "type": "str", "enum": ["depends_on", "depended_by", "related"] },
+        "description": { "type": "str", "nullable": true }
+      }
+    },
+    "RefactorPhase": {
+      "fields": {
+        "phase": { "type": "int" },
+        "title": { "type": "str" },
+        "description": { "type": "str" },
+        "files_involved": { "type": "list[str]" }
+      }
+    },
+    "TestingFocusArea": {
+      "fields": {
+        "area": { "type": "str" },
+        "reason": { "type": "str" },
+        "files": { "type": "list[str]" }
+      }
+    },
+    "InvestigationStep": {
+      "fields": {
+        "step": { "type": "int" },
+        "action": { "type": "str" },
+        "files_to_check": { "type": "list[str]" },
+        "rationale": { "type": "str" }
+      }
+    }
+  }
+}

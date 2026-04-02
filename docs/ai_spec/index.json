@@ -1,0 +1,60 @@
+{
+  "system": "CodeReborn Engine",
+  "vision": "Transform legacy repositories into structured, indexable intelligence for agents and humans via SDD and LLM orchestration.",
+  "core_stack": ["FastAPI", "CrewAI", "PostgreSQL", "Redis", "specfy/stack-analyser", "LiteLLM", "Langfuse"],
+  "architectural_style": "Clean Architecture + DDD, Event-Driven API with Asynchronous AI Worker Clusters",
+  "key_components": [
+    {
+      "id": 0, 
+      "name": "LLMBudgetService", 
+      "role": "Gatekeeper, cost-tracking strictly enforcing token budget per job via PostgreSQL auditing.", 
+      "type": "Deterministic Service"
+    },
+    {
+      "id": 1, 
+      "name": "StackDetector", 
+      "role": "Runs specfy CLI in subproccess. Emits core tech stack without LLM guessing.", 
+      "type": "Deterministic Wrapper"
+    },
+    {
+      "id": 2, 
+      "name": "ContextBuilder", 
+      "role": "Graph-based hierarchy scorer mapping repo tree into valuable chunks, discarding boilerplate.", 
+      "type": "Deterministic Logic"
+    },
+    {
+      "id": 3, 
+      "name": "SystemMapper", 
+      "role": "Evaluates dominant architecture, mixed styles, domain boundaries.", 
+      "type": "LLM Crew Agent (Single/Multi Zone)"
+    },
+    {
+      "id": 4, 
+      "name": "TechDebtAnalyzer", 
+      "role": "Ph1: Linters (Go, Py, Eslint) Ph2: LLM reasoning correlating systemic vulnerabilities and tech debt clusters.", 
+      "type": "Hybrid System (Subprocess + Agent)"
+    },
+    {
+      "id": 5, 
+      "name": "DocWritingLayer", 
+      "role": "4 Parallel Agents building Tech, Human, AI-Spec and Debt Markdowns/JSON output structures.", 
+      "type": "Parallel LLM Agent Pool"
+    },
+    {
+      "id": 6, 
+      "name": "IntelligenceInterface", 
+      "role": "FastAPI REST API exposing 6 operational domain points (Understanding, Navigation, Context, Impact, Docs, Guided Intelligence)", 
+      "type": "API Controller"
+    }
+  ],
+  "crucial_rules": [
+    "No LLM usage for deterministic extraction/tree building.",
+    "Every LLM prompt strictly requires prior clearance from LLMBudgetService.",
+    "Strict separation between extraction, correlation/mapping, and documentation artifacts."
+  ],
+  "open_gaps": [
+    "RAG Vectorization method (PgVector vs ChromaDB) missing definition", 
+    "Timeouts configuration for asynchronous heavy jobs (Broker missing def)", 
+    "Exact MCP Protocol wrapper spec vs Local Standalone Host"
+  ]
+}

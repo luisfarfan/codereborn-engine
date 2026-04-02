@@ -1,0 +1,52 @@
+---
+description: CodeReborn Engine — project overview and critical rules for AI assistance
+alwaysApply: true
+---
+
+# CodeReborn Engine
+
+Intelligence engine that transforms legacy repositories into structured knowledge via a deterministic + LLM hybrid pipeline.
+
+**Stack:** FastAPI · CrewAI · PostgreSQL · Redis · LiteLLM · Langfuse · specfy/stack-analyser  
+**Style:** Clean Architecture + DDD · Async AI Worker Clusters  
+**Language:** Python ≥ 3.11 (packages under `app/`)
+
+## Documentation
+
+Full docs live in `docs/` — start with `docs/README.md` for the index.  
+For machine-readable context: `docs/ai_spec/index.json`
+
+## Pipeline (execution order)
+
+1. **StackDetector** — deterministic, specfy CLI wrapper
+2. **ContextBuilder** — deterministic, graph-based repo tree scorer
+3. **SystemMapper** — LLM agent (CrewAI), budget-gated
+4. **TechDebtAnalyzer** — hybrid: linters (Phase 1) + LLM synthesis (Phase 2)
+5. **DocWritingLayer** — 4 parallel LLM writers
+6. **IntelligenceInterface** — FastAPI REST, 6 domains
+
+## Critical Rules
+
+- **Never use LLM for deterministic extraction** (StackDetector, ContextBuilder are LLM-free)
+- **Every LLM call requires prior clearance from `LLMBudgetService`** — no exceptions
+- **Strict layer separation:** extraction → correlation/mapping → documentation artifacts
+- **Redis is for rate-limiting and PubSub notifications only** — never for pipeline data exchange
+- **All inter-agent data flows through PostgreSQL** (CrewAI shared context + JSONB columns)
+
+## Out of Scope — DO NOT generate
+
+- **Tests are explicitly out of scope.** Do not create, suggest, or modify any files under `tests/`. Do not add test cases, pytest fixtures, or testing utilities unless the user explicitly asks for it.
+
+## App Structure
+
+```
+app/
+├── agents/       ← context_builder, debt_analyzer, doc_writers, stack_detector, system_mapper
+├── api/          ← FastAPI routes
+├── application/  ← use cases / application services
+├── core/         ← domain logic
+├── domain/       ← domain models
+├── infrastructure/ ← DB, Redis, external services
+├── models/       ← SQLModel ORM models
+└── services/     ← shared services (LLMBudgetService, etc.)
+```

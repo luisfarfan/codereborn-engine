@@ -1,0 +1,48 @@
+---
+description: Git commit conventions for CodeReborn Engine (solo dev, Conventional Commits)
+alwaysApply: false
+globs: **/*
+---
+
+# Git Conventions
+
+Solo developer project — keep it simple. Use **Conventional Commits** format.
+
+## Commit format
+
+```
+<type>: <short description>
+```
+
+## Types
+
+| Type | Use when |
+|------|----------|
+| `feat` | New functionality or agent |
+| `fix` | Bug fix |
+| `refactor` | Code change with no behavior change |
+| `chore` | Config, deps, tooling, infra |
+| `docs` | Documentation only |
+| `test` | Adding or fixing tests |
+| `perf` | Performance improvement |
+
+## Examples
+
+```
+feat: add LLMBudgetService evaluate method
+fix: stack_detector fails on repos without package.json
+refactor: extract FileClassifier from ContextBuilder agent
+chore: add postgresql-table-design skill
+docs: update architecture to Clean Architecture + DDD
+test: add unit tests for budget decision logic
+```
+
+## Branching (optional, for bigger changes)
+
+```
+feat/stack-detector
+fix/budget-overflow
+refactor/context-builder-classifier
+```
+
+For small changes: commit directly to `main`.

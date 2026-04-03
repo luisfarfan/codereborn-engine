@@ -7,39 +7,44 @@ They are separate from the DB models — no SQLModel table flag here.
 
 from pydantic import BaseModel, field_validator
 
-from app.domain.enums import AnalysisDepth, AnalysisMode
+from app.domain.enums import AnalysisTier
 
 
-class BudgetConfig(BaseModel):
-    max_usd: float = 0.50
-    mode: AnalysisMode = AnalysisMode.BALANCED
+class AgentConfigItem(BaseModel):
+    """Per-agent configuration override within a Job request."""
 
-    @field_validator("max_usd")
-    @classmethod
-    def validate_budget(cls, v: float) -> float:
-        if v <= 0:
-            raise ValueError("max_usd must be positive")
-        if v > 50.0:
-            raise ValueError("max_usd cannot exceed $50 per job")
-        return round(v, 4)
+    agent_id: str
+    enabled: bool = True
+    model: str | None = None  # None = use tier default
 
 
 class CreateJobRequest(BaseModel):
     """Body for POST /api/v1/jobs — start a new analysis job."""
 
+    # Source — at least one must be provided
     repo_url: str | None = None
-    repo_path: str | None = None
-    analysis_depth: AnalysisDepth = AnalysisDepth.STANDARD
-    budget: BudgetConfig = BudgetConfig()
+    repo_path: str | None = None  # kept for CLI compatibility
 
-    @field_validator("repo_url", "repo_path")
+    branch: str = "main"
+    github_token: str | None = None  # stored as ref only, never returned
+
+    # Analysis configuration
+    tier: AnalysisTier = AnalysisTier.STANDARD
+    agent_configs: list[AgentConfigItem] = []
+
+    @field_validator("repo_url", "repo_path", mode="before")
     @classmethod
-    def at_least_one_source(cls, v: str | None) -> str | None:
-        return v
+    def strip_whitespace(cls, v: str | None) -> str | None:
+        return v.strip() if v else v
 
     def model_post_init(self, __context: object) -> None:
         if not self.repo_url and not self.repo_path:
             raise ValueError("Provide either repo_url or repo_path")
+
+
+class EstimateJobRequest(CreateJobRequest):
+    """Body for POST /api/v1/jobs/estimate — same shape as CreateJobRequest."""
+    pass
 
 
 class CancelJobRequest(BaseModel):

@@ -45,6 +45,24 @@
       "name": "IntelligenceInterface", 
       "role": "FastAPI REST API exposing 6 operational domain points (Understanding, Navigation, Context, Impact, Docs, Guided Intelligence)", 
       "type": "API Controller"
+    },
+    {
+      "id": 7,
+      "name": "EstimationService",
+      "role": "Pure heuristic estimator. Calculates expected tokens, cost, and duration for a planned Job using a static pricing table. Zero LLM calls, zero DB writes. Used by POST /jobs/estimate.",
+      "type": "Deterministic Service"
+    },
+    {
+      "id": 8,
+      "name": "AgentCatalog",
+      "role": "Static registry of all 8 pipeline agents with supported LLM models, pricing, durations, and the 3 analysis tiers (budget/standard/premium). Served by GET /agents.",
+      "type": "Static Configuration"
+    },
+    {
+      "id": 9,
+      "name": "SSEStream",
+      "role": "Real-time event stream for running Jobs via GET /jobs/{id}/stream. Subscribes to Redis PubSub channel 'job:{id}:events' and forwards agent events to the frontend client as SSE.",
+      "type": "Redis PubSub → SSE Bridge"
     }
   ],
   "crucial_rules": [
@@ -53,8 +71,10 @@
     "Strict separation between extraction, correlation/mapping, and documentation artifacts."
   ],
   "open_gaps": [
-    "RAG Vectorization method (PgVector vs ChromaDB) missing definition", 
-    "Timeouts configuration for asynchronous heavy jobs (Broker missing def)", 
-    "Exact MCP Protocol wrapper spec vs Local Standalone Host"
+    "RAG Vectorization method (PgVector vs ChromaDB) missing definition",
+    "Timeouts configuration for asynchronous heavy jobs (Broker missing def)",
+    "Exact MCP Protocol wrapper spec vs Local Standalone Host",
+    "Agent-to-Redis event publishing not yet implemented (agents must call publish_agent_event() when built)",
+    "github_token encryption/storage for async background worker not yet defined"
   ]
 }

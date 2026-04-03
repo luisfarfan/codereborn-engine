@@ -53,6 +53,15 @@ class Job(SQLModel, table=True):
     tokens_used: int = Field(default=0)
     cost_usd: float = Field(default=0.0)
 
+    # Frontend-facing fields
+    branch: str | None = Field(default=None)           # git branch analyzed
+    tier: str | None = Field(default=None, index=True) # budget/standard/premium
+    analysis_scope: str | None = Field(default=None, index=True)  # cached from StackReport
+    models_used: list[str] = Field(
+        default=[],
+        sa_column=Column(JSONB, nullable=False, server_default=text("'[]'::jsonb"))
+    )
+
     created_at: datetime = Field(default_factory=_now)
     started_at: datetime | None = Field(default=None)
     completed_at: datetime | None = Field(default=None)
@@ -83,6 +92,13 @@ class AgentExecution(SQLModel, table=True):
     tokens_used: int = Field(default=0)
     cost_usd: float = Field(default=0.0)
     llm_calls: int = Field(default=0)
+
+    # Per-agent model & token details for frontend
+    model_used: str | None = Field(default=None)
+    input_tokens: int = Field(default=0)
+    output_tokens: int = Field(default=0)
+    output_type: str | None = Field(default=None)     # stack_report, system_map, etc.
+    output_summary: str | None = Field(default=None)  # one-line human summary
 
     started_at: datetime | None = Field(default=None)
     completed_at: datetime | None = Field(default=None)

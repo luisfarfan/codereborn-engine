@@ -9,12 +9,24 @@ creating circular dependencies.
 from enum import StrEnum
 
 
-class AnalysisScope(StrEnum):
+class AnalysisDepth(StrEnum):
     """Controls which pipeline stages are executed for a job."""
 
     QUICK = "quick"          # stack detection only (~1 min, low cost)
     STANDARD = "standard"    # stack + system map + context (~5 min)
     FULL = "full"            # all agents including debt and docs (~15 min)
+
+
+class AnalysisScope(StrEnum):
+    """The technical frente of the repository. Detected or explicit."""
+
+    FRONTEND = "frontend"
+    BACKEND = "backend"
+    MOBILE = "mobile"
+    DESKTOP = "desktop"
+    LIBRARY = "library"
+    WORKER = "worker"
+    OTHER = "other"
 
 
 class AnalysisMode(StrEnum):
@@ -80,3 +92,16 @@ class DocArtifactType(StrEnum):
     ONBOARDING_GUIDE = "onboarding_guide"
     MIGRATION_GUIDE = "migration_guide"
     ADR = "adr"               # Architecture Decision Record
+
+
+class AgentName(StrEnum):
+    """Full list of agents in the CodeReborn pipeline."""
+
+    STACK_DETECTOR = "stack_detector"
+    CONTEXT_BUILDER = "context_builder"
+    SYSTEM_MAPPER = "system_mapper"
+    DEBT_ANALYZER = "tech_debt_analyzer"
+    TECHNICAL_WRITER = "technical_doc_writer"
+    HUMAN_WRITER = "human_doc_writer"
+    AI_CONTEXT_WRITER = "ai_context_writer"
+    DEBT_WRITER = "debt_doc_writer"

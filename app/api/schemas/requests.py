@@ -5,9 +5,9 @@ These are the validated input shapes for all POST/PATCH endpoints.
 They are separate from the DB models — no SQLModel table flag here.
 """
 
-from pydantic import BaseModel, HttpUrl, field_validator
+from pydantic import BaseModel, field_validator
 
-from app.domain.enums import AnalysisMode, AnalysisScope
+from app.domain.enums import AnalysisDepth, AnalysisMode
 
 
 class BudgetConfig(BaseModel):
@@ -29,7 +29,7 @@ class CreateJobRequest(BaseModel):
 
     repo_url: str | None = None
     repo_path: str | None = None
-    analysis_scope: AnalysisScope = AnalysisScope.STANDARD
+    analysis_depth: AnalysisDepth = AnalysisDepth.STANDARD
     budget: BudgetConfig = BudgetConfig()
 
     @field_validator("repo_url", "repo_path")

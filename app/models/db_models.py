@@ -17,9 +17,6 @@ from sqlalchemy.dialects.postgresql import JSONB, UUID as PG_UUID
 from sqlmodel import Field, SQLModel
 
 
-# ── Helpers ──────────────────────────────────────────────────────────────────
-
-
 def _uuid_pk() -> uuid.UUID:
     return uuid.uuid4()
 
@@ -46,9 +43,9 @@ class Job(SQLModel, table=True):
     repo_url: str | None = Field(default=None, index=True)
     repo_path: str | None = Field(default=None)
 
-    analysis_scope: str = Field(index=True)   # AnalysisScope enum value
-    analysis_mode: str = Field(default="balanced")  # AnalysisMode enum value
-    status: str = Field(default="pending", index=True)  # JobStatus enum value
+    analysis_depth: str = Field(default="standard", index=True)
+    analysis_mode: str = Field(default="balanced")
+    status: str = Field(default="pending", index=True)
 
     budget_config: dict[str, Any] | None = Field(
         default=None, sa_column=Column(JSONB, nullable=True)
@@ -103,6 +100,7 @@ class StackReport(SQLModel, table=True):
     """
     Output of the StackDetector agent.
     Stores the detected languages, frameworks, and tooling of the repository.
+    Strictly follows StackIntelligenceReport contract from ai_spec/05_data_contracts.json.
     """
 
     __tablename__ = "stack_reports"
@@ -112,20 +110,26 @@ class StackReport(SQLModel, table=True):
         sa_column=Column(PG_UUID(as_uuid=True), primary_key=True, default=_uuid_pk),
     )
     job_id: uuid.UUID = Field(
-        sa_column=Column(PG_UUID(as_uuid=True), nullable=False, unique=True)
+        sa_column=Column(PG_UUID(as_uuid=True), nullable=False, unique=True, index=True)
     )
 
-    primary_language: str | None = Field(default=None)
-    languages: list[Any] = Field(default=[], sa_column=Column(JSONB, nullable=False, server_default=text("'[]'::jsonb")))
-    frameworks: list[Any] = Field(default=[], sa_column=Column(JSONB, nullable=False, server_default=text("'[]'::jsonb")))
-    databases: list[Any] = Field(default=[], sa_column=Column(JSONB, nullable=False, server_default=text("'[]'::jsonb")))
-    infrastructure: list[Any] = Field(default=[], sa_column=Column(JSONB, nullable=False, server_default=text("'[]'::jsonb")))
-    raw_specfy_output: dict[str, Any] | None = Field(
+    analysis_scope: str = Field(index=True)  # AnalysisScope enum value
+    primary_language: str | None = Field(default=None, index=True)
+    confidence_score: float = Field(default=0.0)
+
+    # Full structured data as defined in ai_spec/05_data_contracts.json
+    # Contains: stack_summary, languages, frameworks, dependencies, services, hints, etc.
+    report_data: dict[str, Any] = Field(
+        default={}, sa_column=Column(JSONB, nullable=False, server_default=text("'{}'::jsonb"))
+    )
+
+    # Optional: Backup of the raw output from the underlying tool (specfy)
+    raw_tool_output: dict[str, Any] | None = Field(
         default=None, sa_column=Column(JSONB, nullable=True)
     )
 
-    confidence_score: float = Field(default=0.0)
     created_at: datetime = Field(default_factory=_now)
+    analysis_timestamp: datetime = Field(default_factory=_now)
 
 
 # ── ArchitectureContext ───────────────────────────────────────────────────────
@@ -148,8 +152,14 @@ class ArchitectureContext(SQLModel, table=True):
     )
 
     architectural_pattern: str | None = Field(default=None)
-    entry_points: list[Any] = Field(default=[], sa_column=Column(JSONB, nullable=False, server_default=text("'[]'::jsonb")))
-    key_modules: list[Any] = Field(default=[], sa_column=Column(JSONB, nullable=False, server_default=text("'[]'::jsonb")))
+    entry_points: list[Any] = Field(
+        default=[],
+        sa_column=Column(JSONB, nullable=False, server_default=text("'[]'::jsonb"))
+    )
+    key_modules: list[Any] = Field(
+        default=[],
+        sa_column=Column(JSONB, nullable=False, server_default=text("'[]'::jsonb"))
+    )
     dependency_graph: dict[str, Any] | None = Field(
         default=None, sa_column=Column(JSONB, nullable=True)
     )
@@ -181,7 +191,10 @@ class SystemMap(SQLModel, table=True):
     file_tree: dict[str, Any] | None = Field(
         default=None, sa_column=Column(JSONB, nullable=True)
     )
-    public_interfaces: list[Any] = Field(default=[], sa_column=Column(JSONB, nullable=False, server_default=text("'[]'::jsonb")))
+    public_interfaces: list[Any] = Field(
+        default=[],
+        sa_column=Column(JSONB, nullable=False, server_default=text("'[]'::jsonb"))
+    )
     created_at: datetime = Field(default_factory=_now)
 
 

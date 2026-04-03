@@ -37,6 +37,23 @@ class AnalysisMode(StrEnum):
     QUALITY = "quality"        # best available models, relaxed budget
 
 
+class AnalysisTier(StrEnum):
+    """Frontend-facing tier concept. Maps 1:1 to AnalysisMode internally."""
+
+    BUDGET = "budget"          # → AnalysisMode.ECONOMY
+    STANDARD = "standard"      # → AnalysisMode.BALANCED  (default)
+    PREMIUM = "premium"        # → AnalysisMode.QUALITY
+
+    def to_analysis_mode(self) -> AnalysisMode:
+        """Convert tier to internal AnalysisMode."""
+        mapping = {
+            AnalysisTier.BUDGET: AnalysisMode.ECONOMY,
+            AnalysisTier.STANDARD: AnalysisMode.BALANCED,
+            AnalysisTier.PREMIUM: AnalysisMode.QUALITY,
+        }
+        return mapping[self]
+
+
 class JobStatus(StrEnum):
     """Lifecycle states of an analysis job."""
 

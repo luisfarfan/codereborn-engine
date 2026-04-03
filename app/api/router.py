@@ -8,17 +8,24 @@ with the /api/v1 prefix. Adding a new domain = one import + one include_router.
 from fastapi import APIRouter
 
 from app.api.routers import (
+    agents,
     docs,
     impact,
     jobs,
     navigation,
+    stream,
     task_context,
     understanding,
 )
 
 api_router = APIRouter()
 
+# Core job lifecycle + frontend-facing endpoints
 api_router.include_router(jobs.router)
+api_router.include_router(stream.router)       # GET /jobs/{id}/stream (SSE)
+api_router.include_router(agents.router)       # GET /agents (static catalog)
+
+# Repo Intelligence Interface (MCP-style read endpoints)
 api_router.include_router(understanding.router)
 api_router.include_router(navigation.router)
 api_router.include_router(task_context.router)

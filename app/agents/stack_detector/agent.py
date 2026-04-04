@@ -2,11 +2,13 @@
 Stack Detector Agent — Local repository scanner.
 
 Identifies languages, frameworks, and services with high fidelity using
-the Specfy stack-analyser engine. 100% deterministic, no LLM cost.
+the Specfy stack-analyser engine and a deep deterministic repo scanner.
+100% deterministic, no LLM cost.
 """
 
 import json
 import uuid
+import logging
 from datetime import datetime
 
 from sqlmodel import select
@@ -14,6 +16,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.agents.stack_detector.post_processor import StackPostProcessor
 from app.agents.stack_detector.specfy_tool import SpecfyTool
+from app.agents.stack_detector.scanner import RepoScanner
 from app.domain.enums import AgentName, AgentStatus
 from app.models.db_models import AgentExecution, StackReport
 from app.services.notification_service import NotificationService
@@ -21,7 +24,7 @@ from app.services.notification_service import NotificationService
 
 class StackDetectorAgent:
     """
-    Agent responsible for identified the core stack of a repository.
+    Agent responsible for identifying the core stack and structure of a repository.
     Deterministic, high-fidelity engine.
     """
 
@@ -39,25 +42,39 @@ class StackDetectorAgent:
 
         # 1.1 Notify Frontend
         await NotificationService.notify_agent_started(
-            job_id, AgentName.STACK_DETECTOR, "Stack Detector"
+            job_id, AgentName.STACK_DETECTOR, "Stack Detector v2.0"
         )
 
         try:
             # 2. Raw Extraction using SpecfyTool
             await NotificationService.notify_agent_progress(
-                job_id, AgentName.STACK_DETECTOR, 20, "Running raw stack extraction..."
+                job_id, AgentName.STACK_DETECTOR, 10, "Running raw stack extraction (Specfy)..."
             )
             raw_json = self.tool._run(repo_path)
             if raw_json.startswith("Error") or raw_json.startswith("Exception"):
-                raise Exception(f"SpecfyTool failure: {raw_json}")
+                # Graceful degradation if specfy fails, we still want the scanner
+                logger.warning(f"SpecfyTool failed for {job_id}: {raw_json}")
+                raw_json = "{}" 
 
-            # 3. Intelligent Post-Processing
+            # 3. Intelligent Post-Processing (Phase 1)
             await NotificationService.notify_agent_progress(
-                job_id, AgentName.STACK_DETECTOR, 70, "Refining stack intelligence..."
+                job_id, AgentName.STACK_DETECTOR, 40, "Refining stack intelligence..."
             )
             report = self.post_processor.process(raw_json, repo_path)
 
-            # 4. Persistence into StackReport table
+            # 4. Deep Filesystem Scan (Phase 2 - NEW)
+            await NotificationService.notify_agent_progress(
+                job_id, AgentName.STACK_DETECTOR, 60, "Generating File Inventory & Directory Structure..."
+            )
+            scanner = RepoScanner(repo_path, report.analysis_scope)
+            scan_results = scanner.scan()
+            
+            # Merge results into report
+            report.file_inventory = scan_results["file_inventory"]
+            report.directory_structure = scan_results["directory_structure"]
+            report.repository_metadata = scan_results["repository_metadata"]
+
+            # 5. Persistence into StackReport table
             stack_report_model = StackReport(
                 job_id=job_id,
                 analysis_scope=report.analysis_scope.value,
@@ -84,13 +101,14 @@ class StackDetectorAgent:
 
             # Update AgentExecution with output summary
             summary = (
-                f"Detected {report.primary_language} with "
-                f"{len(report.frameworks)} frameworks."
+                f"Detected {report.primary_language}. "
+                f"Inventoried {report.file_inventory.total_files} files "
+                f"across {report.directory_structure.statistics['total_directories']} directories."
             )
             execution.output_type = "stack_report"
             execution.output_summary = summary
 
-            # 5. Mark execution as completed
+            # 6. Mark execution as completed
             await self._complete_execution(execution)
             await NotificationService.notify_agent_completed(
                 job_id, AgentName.STACK_DETECTOR, "completed", summary
@@ -108,7 +126,6 @@ class StackDetectorAgent:
             raise
 
     async def _start_execution(self, job_id: uuid.UUID) -> AgentExecution:
-        # Check if already exists for this job and agent
         q = select(AgentExecution).where(
             AgentExecution.job_id == job_id,
             AgentExecution.agent_name == AgentName.STACK_DETECTOR

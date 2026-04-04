@@ -91,11 +91,7 @@ class Job(SQLModel, table=True):
     completed_at: datetime | None = Field(default=None)
     error_detail: str | None = Field(default=None)
 
-    # Owner relationship
-    user_id: uuid.UUID | None = Field(
-        default=None,
-        sa_column=Column(PG_UUID(as_uuid=True), nullable=True, index=True)
-    )
+
 
 
 # ── AgentExecution ───────────────────────────────────────────────────────────
@@ -185,6 +181,7 @@ class ArchitectureContext(SQLModel, table=True):
     """
     Output of the ContextBuilder agent.
     Provides a structured description of architectural patterns found.
+    Deterministic — zero LLM tokens.
     """
 
     __tablename__ = "architecture_contexts"
@@ -194,23 +191,20 @@ class ArchitectureContext(SQLModel, table=True):
         sa_column=Column(PG_UUID(as_uuid=True), primary_key=True, default=_uuid_pk),
     )
     job_id: uuid.UUID = Field(
-        sa_column=Column(PG_UUID(as_uuid=True), nullable=False, unique=True)
+        sa_column=Column(PG_UUID(as_uuid=True), nullable=False, unique=True, index=True)
     )
 
-    architectural_pattern: str | None = Field(default=None)
-    entry_points: list[Any] = Field(
-        default=[],
-        sa_column=Column(JSONB, nullable=False, server_default=text("'[]'::jsonb"))
+    # Full structured context payload as defined in ai_spec/05_data_contracts.json
+    # Contains: repo_tree_summary, zones, file_classifications, rankings, samples, etc.
+    report_data: dict[str, Any] = Field(
+        default={}, sa_column=Column(JSONB, nullable=False, server_default=text("'{}'::jsonb"))
     )
-    key_modules: list[Any] = Field(
-        default=[],
-        sa_column=Column(JSONB, nullable=False, server_default=text("'[]'::jsonb"))
-    )
-    dependency_graph: dict[str, Any] | None = Field(
-        default=None, sa_column=Column(JSONB, nullable=True)
-    )
+
     complexity_score: float = Field(default=0.0)
+    estimated_context_size_tokens: int = Field(default=0)
+
     created_at: datetime = Field(default_factory=_now)
+    analysis_timestamp: datetime = Field(default_factory=_now)
 
 
 # ── SystemMap ─────────────────────────────────────────────────────────────────

@@ -20,6 +20,7 @@ class AnalysisDepth(StrEnum):
 class AnalysisScope(StrEnum):
     """The technical frente of the repository. Detected or explicit."""
 
+    ALL = "all"
     FRONTEND = "frontend"
     BACKEND = "backend"
     MOBILE = "mobile"
@@ -115,7 +116,8 @@ class AgentName(StrEnum):
     """Full list of agents in the CodeReborn pipeline."""
 
     STACK_DETECTOR = "stack_detector"
-    CONTEXT_BUILDER = "context_builder"
+    ARCHITECTURE_CONTEXT_BUILDER = "context_builder"
+    CONTEXT_BUILDER = "context_builder"  # Alias for backward compatibility
     SYSTEM_MAPPER = "system_mapper"
     DEBT_ANALYZER = "tech_debt_analyzer"
     TECHNICAL_WRITER = "technical_doc_writer"

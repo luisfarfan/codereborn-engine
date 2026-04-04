@@ -2,8 +2,8 @@
   "system_name": "CodeReborn Pipeline Agents",
   "domain": "Execution and Agent Logic",
   "facts": [
-    "Component 1: StackDetector handles 'specfy/stack-analyser' shell subprocess execution.",
-    "Component 2: ArchitectureContextBuilder parses file trees, calculates FAN-IN/FAN-OUT, and curates top-ranked architectural code files.",
+    "Component 1: StackDetector handles 'specfy/stack-analyser' shell subprocess execution and performs deep filesystem scanning to generate deterministic file inventories and directory structure mappings.",
+    "Component 2: ArchitectureContextBuilder parses file trees, extracts architectural signals, induces patterns via LLM, and ranks files via Fan-IN/OUT.",
     "Component 3: SystemMapper relies heavily on LLMs. Processes payloads dynamically via 'single_pass' or partitions via 'multi_zone'.",
     "Component 4: TechDebtAnalyzer employs local runner heuristics (Pylint, ESLint) and pushes only N top results to LLM correlation.",
     "Component 5: DocWritingLayer is an array of 4 independent parallelized writers."

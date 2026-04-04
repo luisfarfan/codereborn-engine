@@ -104,6 +104,9 @@
         "monorepo_signals": { "type": "MonorepoSignals", "required": true },
         "confidence_score": { "type": "float", "required": true, "range": [0.0, 1.0] },
         "unknowns": { "type": "list[UnknownSignal]", "required": true },
+        "file_inventory": { "type": "FileInventory", "required": true },
+        "directory_structure": { "type": "DirectoryStructure", "required": true },
+        "repository_metadata": { "type": "RepositoryMetadata", "required": true },
         "analysis_timestamp": { "type": "str", "required": true, "format": "ISO 8601 datetime" }
       }
     },
@@ -196,6 +199,55 @@
       "fields": {
         "signal": { "type": "str", "required": true },
         "description": { "type": "str", "required": false }
+      }
+    },
+
+    "LanguageFileBreakdown": {
+      "fields": {
+        "code_files": { "type": "list[str]", "required": true },
+        "test_files": { "type": "list[str]", "required": false },
+        "total_files": { "type": "int", "required": true },
+        "total_lines_of_code": { "type": "int", "required": true }
+      }
+    },
+
+    "DirectoryNode": {
+      "fields": {
+        "path": { "type": "str", "required": true },
+        "name": { "type": "str", "required": true },
+        "depth": { "type": "int", "required": true },
+        "parent": { "type": "str", "required": false },
+        "subdirectories": { "type": "list[str]", "required": true },
+        "file_count": { "type": "int", "required": true },
+        "file_breakdown": { "type": "dict[str, int]", "required": true },
+        "total_lines": { "type": "int", "required": true }
+      }
+    },
+
+    "FileInventory": {
+      "fields": {
+        "by_language": { "type": "dict", "required": true, "description": "Map: language -> LanguageFileBreakdown" },
+        "by_type": { "type": "dict", "required": true, "description": "counts by code, tests, configs, docs, other" },
+        "total_files": { "type": "int", "required": true },
+        "excluded_files": { "type": "int", "required": true },
+        "exclusion_reasons": { "type": "dict", "required": true }
+      }
+    },
+
+    "DirectoryStructure": {
+      "fields": {
+        "root_directories": { "type": "list[dict]", "required": true, "description": "List of DirectoryNode objects" },
+        "statistics": { "type": "dict", "required": true, "description": "total_directories, max_depth, largest_directory" }
+      }
+    },
+
+    "RepositoryMetadata": {
+      "fields": {
+        "total_size_bytes": { "type": "int", "required": true },
+        "git_available": { "type": "bool", "required": true },
+        "branch_analyzed": { "type": "str", "required": false },
+        "last_commit_date": { "type": "str", "required": false, "format": "ISO 8601 datetime" },
+        "file_count_by_depth": { "type": "dict[str, int]", "required": false }
       }
     },
 

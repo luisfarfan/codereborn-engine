@@ -60,7 +60,20 @@ class JobOrchestrator:
                     await self._fail_job(session, job, f"Stack Detection failed: {str(e)}")
                     return
 
-                # 3. RUN Phase 2: Context Builder & Beyond (To be integrated)
+                # 3. RUN Phase 2: Context Builder (Deterministic & Mapping)
+                logger.info(f"Executing ContextBuilder for job {job_id}")
+                from app.agents.context_builder.agent import ContextBuilderAgent
+                context_builder = ContextBuilderAgent(session)
+
+                try:
+                    await context_builder.execute(job_id, target_path)
+                except Exception as e:
+                    logger.error(f"ContextBuilder failed: {str(e)}")
+                    # ContextBuilder failure is critical as it feeds LLM agents
+                    await self._fail_job(session, job, f"Context Building failed: {str(e)}")
+                    return
+
+                # 4. RUN Phase 3: System Mapper & Beyond (To be integrated)
 
                 # 4. Finalize Job
                 await self._complete_job(session, job)

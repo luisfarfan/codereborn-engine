@@ -1,4 +1,5 @@
 import json
+import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Set
@@ -16,6 +17,7 @@ from app.models.stack_models import (
     ServiceInfo,
     StackIntelligenceReport,
     UnknownSignal,
+    EntrypointInfo
 )
 
 
@@ -92,8 +94,6 @@ class StackPostProcessor:
                     signal=name,
                     description=f"Infrastructure signal: {category}"
                 ))
-            # Note: TECH_REGISTRY with tech_type == "language" are purposefully skipped
-            # here to separate them from Frameworks/Services.
 
         # 4. Dependencies
         dependencies = []
@@ -138,7 +138,14 @@ class StackPostProcessor:
         # 7. Analysis Scope Heuristic
         scope = self._infer_scope(frameworks, primary_lang)
 
-        # 8. Confidence Score (based on flattened data volume)
+        # 8. Entrypoints (Basic heuristic)
+        entrypoints = []
+        main_files = ["main.py", "app.py", "index.ts", "server.js", "app.js"]
+        for mf in main_files:
+            if repo_dir.joinpath(mf).exists():
+                entrypoints.append(EntrypointInfo(file_path=mf, role="main"))
+
+        # 9. Confidence Score
         confidence = self._calculate_confidence(all_techs, all_languages)
 
         return StackIntelligenceReport(
@@ -153,27 +160,24 @@ class StackPostProcessor:
             infra_hints=infra_hints,
             docker_hints=docker_hints,
             config_files=config_files,
+            entrypoints=entrypoints,
             monorepo_signals=MonorepoSignals(
                 is_monorepo=len(raw_data.get("childs", [])) > 2
             ),
             confidence_score=confidence,
             unknowns=unknowns,
-            analysis_timestamp=datetime.utcnow()
+            analysis_timestamp=datetime.utcnow(),
+            agent_version="2.0.0"
         )
 
     def _extract_recursive(self, node: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Recursively flattens techs, languages and dependencies from Specfy tree.
-        """
         techs: Set[str] = set()
         languages: Dict[str, float] = {}
         dependencies: List[List[str]] = []
 
-        # Extract from current node
         for t in node.get("techs", []):
             techs.add(t)
 
-        # Tech can also be a single id
         if node.get("tech"):
             techs.add(node["tech"])
 
@@ -182,7 +186,6 @@ class StackPostProcessor:
 
         dependencies.extend(node.get("dependencies", []))
 
-        # Recursion on childs
         for child in node.get("childs", []):
             child_data = self._extract_recursive(child)
             techs.update(child_data["techs"])
@@ -197,15 +200,11 @@ class StackPostProcessor:
         }
 
     def _infer_scope(self, frameworks: List[FrameworkInfo], primary_lang: str) -> AnalysisScope:
-        # Check registry for scope hints
-        # Important: Since we removed languages from frameworks, this check
-        # must now rely on registry metadata or primary_lang
         for f in frameworks:
             reg_entry = TECH_REGISTRY.get(f.name.lower())
             if reg_entry and reg_entry.get("scope") == "mobile":
                 return AnalysisScope.MOBILE
 
-        # Fallback to language-based mobile indicators if needed
         language_mobile_hints = ["dart", "swift", "kotlin", "objective-c"]
         if primary_lang.lower() in language_mobile_hints:
             return AnalysisScope.MOBILE

@@ -116,8 +116,7 @@ class AgentName(StrEnum):
     """Full list of agents in the CodeReborn pipeline."""
 
     STACK_DETECTOR = "stack_detector"
-    ARCHITECTURE_CONTEXT_BUILDER = "context_builder"
-    CONTEXT_BUILDER = "context_builder"  # Alias for backward compatibility
+    PATTERN_DETECTOR = "pattern_detector"
     SYSTEM_MAPPER = "system_mapper"
     DEBT_ANALYZER = "tech_debt_analyzer"
     TECHNICAL_WRITER = "technical_doc_writer"

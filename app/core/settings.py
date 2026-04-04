@@ -32,6 +32,7 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: str = ""
     ANTHROPIC_API_KEY: str = ""
     GEMINI_API_KEY: str = ""
+    OPENROUTER_API_KEY: str = ""
 
     # ── LLM budget defaults ───────────────────────────────────────────────
     LLM_DEFAULT_BUDGET_USD: float = 0.50

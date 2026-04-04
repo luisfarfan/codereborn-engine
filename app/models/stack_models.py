@@ -186,6 +186,7 @@ class PatternInsight(BaseModel):
     evidence: list[str] = []
     secondary_patterns: list[DetectedPattern] = []
     notes: str | None = None
+    confidence_score: float | None = None  # To catch variations in LLM naming
 
 
 class DirectoryInterpretation(BaseModel):
@@ -224,6 +225,15 @@ class SpecialCase(BaseModel) :
     impact: str | None = None
 
 
+class AnalysisMetadata(BaseModel):
+    confidence_score: float = Field(default=1.0, ge=0.0, le=1.0)
+    analysis_timestamp: datetime = Field(default_factory=datetime.utcnow)
+    agent_version: str = "1.0.0"
+    llm_model_used: str | None = None
+    tokens_used: int = 0
+    cost_usd: float = 0.0
+
+
 class PatternReport(BaseModel):
     """
     Output structure for the Pattern Detector agent.
@@ -235,10 +245,8 @@ class PatternReport(BaseModel):
     sampling_strategy: SamplingStrategy
     special_cases: list[SpecialCase] = []
     
-    # Metadata
-    confidence_score: float = Field(ge=0.0, le=1.0)
-    analysis_timestamp: datetime = Field(default_factory=datetime.utcnow)
-    agent_version: str = "1.0.0"
-    llm_model_used: str | None = None
-    tokens_used: int = 0
-    cost_usd: float = 0.0
+    # Metadata nested as per PROMPTS/pattern_detector.md
+    analysis_metadata: AnalysisMetadata = Field(default_factory=AnalysisMetadata)
+    
+    # Root level confidence for safety
+    confidence_score: float = Field(default=1.0, ge=0.0, le=1.0)

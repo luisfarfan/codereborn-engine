@@ -4,12 +4,13 @@
   "facts": [
     "Component 1: StackDetector handles 'specfy/stack-analyser' shell subprocess execution and performs deep filesystem scanning to generate deterministic file inventories and directory structure mappings.",
     "Component 2: PatternDetector interprets repository structure into architectural patterns using LLM and establishes the SamplingStrategy for subsequent agents.",
-    "Component 3: SystemMapper relies heavily on LLMs. Processes payloads dynamically via 'single_pass' or partitions via 'multi_zone'.",
-    "Component 4: TechDebtAnalyzer employs local runner heuristics (Pylint, ESLint) and pushes only N top results to LLM correlation.",
-    "Component 5: DocWritingLayer is an array of 4 independent parallelized writers."
+    "Component 3: UniversalSignalExtractor dynamically chooses extraction layers per file (Tree-sitter or LLM Zero-shot) to normalize code architecture signatures.",
+    "Component 4: SystemMapper relies heavily on LLMs. Processes payloads dynamically via 'single_pass' or partitions via 'multi_zone'.",
+    "Component 5: TechDebtAnalyzer employs local runner heuristics (Pylint, ESLint) and pushes only N top results to LLM correlation.",
+    "Component 6: DocWritingLayer is an array of 4 independent parallelized writers."
   ],
   "rules": [
-    "SystemMapper, PatternDetector and TechDebtAnalyzer MUST invoke LLMBudgetService to calculate chunks and approve runs BEFORE reaching out to LiteLLM.",
+    "SystemMapper, PatternDetector, UniversalSignalExtractor, and TechDebtAnalyzer MUST invoke LLMBudgetService to calculate chunks and approve runs BEFORE reaching out to LiteLLM.",
     "StackDetector MUST NEVER trigger LiteLLM API calls.",
     "TechDebtAnalyzer MUST prioritize structural and systemic failures (God Objects, Lava flow) over standard cyclomatic complexity noise."
   ],

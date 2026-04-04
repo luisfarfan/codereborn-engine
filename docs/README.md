@@ -62,6 +62,7 @@ docs/
 |------|-------------|
 | [agents/stack_detector.md](agents/stack_detector.md) | Deterministic — specfy CLI wrapper, Stack Intelligence Report |
 | [agents/pattern_detector.md](agents/pattern_detector.md) | LLM — Interprets repository structure into patterns and establishes Sampling Strategy |
+| [agents/universal_signal_extractor.md](agents/universal_signal_extractor.md) | Hybrid — MVP Layer 1 (Tree-sitter) + Layer 3 (LLM) fallback for code signature parsing |
 | [agents/system_mapper.md](agents/system_mapper.md) | LLM — dominant architecture analysis, budget pre-check, System Map Report |
 | [agents/tech_debt_analyzer.md](agents/tech_debt_analyzer.md) | Hybrid — Phase 1 linters, Phase 2 LLM synthesis, Tech Debt Report |
 | [agents/doc_writing_layer.md](agents/doc_writing_layer.md) | LLM — 4 parallel writers (technical, human, AI JSON, debt), `doc_artifacts` |

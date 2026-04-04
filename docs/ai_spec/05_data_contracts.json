@@ -402,6 +402,50 @@
       }
     },
 
+    "SignalExtractionReport": {
+      "description": "Output of Universal Signal Extractor. Contains unified signal maps extracted via Tree-sitter or LLMs.",
+      "produced_by": "universal_signal_extractor",
+      "persisted_in": "signal_reports",
+      "fields": {
+        "extraction_summary": { "type": "ExtractionSummary", "required": true },
+        "signals_by_file": { "type": "dict[str, UniversalSignalFormat]", "required": true },
+        "global_patterns": { "type": "dict", "required": true, "description": "Aggregated patterns like most used imports." },
+        "cost_breakdown": { "type": "CostBreakdown", "required": true },
+        "analysis_metadata": { "type": "AnalysisMetadata", "required": true }
+      }
+    },
+
+    "ExtractionSummary": {
+      "fields": {
+        "total_files_analyzed": { "type": "int", "required": true },
+        "total_files_in_repo": { "type": "int", "required": true },
+        "extraction_strategies_used": { "type": "dict[str, int]", "required": true },
+        "languages_analyzed": { "type": "dict[str, int]", "required": true },
+        "sampling_applied": { "type": "bool", "required": true },
+        "sampling_ratio": { "type": "float", "required": true }
+      }
+    },
+
+    "UniversalSignalFormat": {
+      "fields": {
+        "file_path": { "type": "str", "required": true },
+        "language": { "type": "str", "required": true },
+        "extraction_method": { "type": "str", "required": true, "enum": ["tree-sitter", "lsp", "llm_zero_shot", "pattern_mining"] },
+        "signals": { "type": "dict", "required": true, "description": "Contains imports, class_declarations, function_declarations, decorators, etc." },
+        "metadata": { "type": "dict", "required": true }
+      }
+    },
+
+    "CostBreakdown": {
+      "fields": {
+        "tree_sitter_cost": { "type": "float", "required": true },
+        "lsp_cost": { "type": "float", "required": true },
+        "llm_cost": { "type": "float", "required": true },
+        "pattern_generation_cost": { "type": "float", "required": true },
+        "total_cost_usd": { "type": "float", "required": true }
+      }
+    },
+
     "SystemMapReport": {
       "description": "Full output of SystemMapper (LLM agent). Primary architectural intelligence document.",
       "produced_by": "system_mapper",

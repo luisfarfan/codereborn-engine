@@ -3,14 +3,14 @@
   "domain": "Execution and Agent Logic",
   "facts": [
     "Component 1: StackDetector handles 'specfy/stack-analyser' shell subprocess execution and performs deep filesystem scanning to generate deterministic file inventories and directory structure mappings.",
-    "Component 2: ArchitectureContextBuilder parses file trees, extracts architectural signals, induces patterns via LLM, and ranks files via Fan-IN/OUT.",
+    "Component 2: PatternDetector interprets repository structure into architectural patterns using LLM and establishes the SamplingStrategy for subsequent agents.",
     "Component 3: SystemMapper relies heavily on LLMs. Processes payloads dynamically via 'single_pass' or partitions via 'multi_zone'.",
     "Component 4: TechDebtAnalyzer employs local runner heuristics (Pylint, ESLint) and pushes only N top results to LLM correlation.",
     "Component 5: DocWritingLayer is an array of 4 independent parallelized writers."
   ],
   "rules": [
-    "SystemMapper and TechDebtAnalyzer MUST invoke LLMBudgetService to calculate chunks and approve runs BEFORE reaching out to LiteLLM.",
-    "StackDetector and ArchitectureContextBuilder MUST NEVER trigger LiteLLM API calls.",
+    "SystemMapper, PatternDetector and TechDebtAnalyzer MUST invoke LLMBudgetService to calculate chunks and approve runs BEFORE reaching out to LiteLLM.",
+    "StackDetector MUST NEVER trigger LiteLLM API calls.",
     "TechDebtAnalyzer MUST prioritize structural and systemic failures (God Objects, Lava flow) over standard cyclomatic complexity noise."
   ],
   "boundaries": [
@@ -25,7 +25,7 @@
     "Parallel Writer processing (Scatter-Gather or strictly Scatter-Write-DB)."
   ],
   "anti_patterns": [
-    "Trying to process 'everything simultaneously'. All data MUST go through the ArchitectureContextBuilder filtration.",
+    "Trying to process 'everything simultaneously'. All data MUST go through the PatternDetector filtration and sampling.",
     "Prompting the LLM using a single massive generic string. Always split prompts specifically to the system analysis scope limits."
   ],
   "conventions": [

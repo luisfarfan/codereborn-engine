@@ -16,10 +16,11 @@ El componente actúa como un intermediario (wrapper) que invoca la herramienta b
 Specfy es genial, pero el output crudo carece de uniformidad y convenciones extra. Inmediatamente tras la captura del STDOUT, el bloque Post-Processor interno del `stack_detector` arranca una heurística complementaria que rellena los *gaps*.
 
 ### Evaluaciones Post-Proceso:
-1. Normalización semántica de strings y frames detectados.
-2. Lectura directa determinista (Regex/FileSearch) de entrypoints probables que specfy obvia (Ej: `App.tsx`, `main.py`, `server.js`).
-3. Parseo agudo de Dockerfiles detectados o `docker-compose.yml`, intentando extraer servicios subyacentes mapeados localmente (redis cache image, posgres image port, etc).
-4. Generación algorítmica de un `confidence_score` (0.0 al 1.0) sobre la veracidad del lenguaje principal asumido frente a la evidencia volumétrica.
+1. **Normalización Semántica**: Estandarización de nombres de tecnologías y versiones.
+2. **Directory Mapping**: Genera recursivamente el árbol de carpetas con conteo de archivos, tipos predominantes y profundidad. Vital para el `Pattern Detector`.
+3. **File Inventory**: Clasifica cada archivo por lenguaje y tipo (code, test, config, doc, env) para obtener métricas volumétricas precisas.
+4. **Service Scanning**: Parseo de Dockerfiles y `docker-compose.yml` para extraer servicios subyacentes (Redis, Postgres, etc.).
+5. **Score de Confianza**: Cálculo algorítmico del `confidence_score` basado en la calidad de la evidencia encontrada.
 
 ## Output Target: Stack Intelligence Report
 Este agente genera el output universal e inmutable (que será ingestado por el Resto de los Agentes en sus inputs). 
@@ -31,16 +32,23 @@ Se persiste a PostgreSQL en la tabla `stack_reports`. Responde al model:
   "project_name": "Inferred from package.json/git",
   "analysis_scope": "frontend",
   "primary_language": "TypeScript",
-  "languages": [{"name": "TypeScript", "pct": 80.5}],
-  "frameworks": ["React 18", "Next.js 14"],
-  "dependencies": {},
-  "services": ["Docker Redis", "MySQL"],
-  "infra_hints": ["Vercel signals", "AWS amplify config detected"],
-  "docker_hints": {"dockerfile_exists": true},
-  "build_tools": ["vite", "tsc", "make"],
-  "entrypoints": ["src/index.tsx", "src/server/init.ts"],
-  "config_files": ["tsconfig.json", "next.config.js"],
+  "languages": [{"language": "TypeScript", "estimated_percentage": 80.5}],
+  "frameworks": [{"name": "React", "version": "18.0.0", "category": "ui"}],
+  "dependencies": [{"name": "next", "version": "^14.0.0", "dep_type": "runtime"}],
+  "services": [{"name": "Redis", "service_type": "cache"}],
+  "infra_hints": [{"signal": "Vercel signals", "description": "vercel.json detected"}],
+  "docker_hints": {"dockerfile_present": true, "compose_present": true},
+  "build_tools": [{"name": "vite", "tool_type": "bundler"}],
+  "entrypoints": [{"file_path": "src/index.tsx", "role": "main"}],
+  "config_files": [{"file_path": "next.config.js", "config_type": "build"}],
+  "file_inventory": {
+    "total_files": 150,
+    "by_language": {"TypeScript": {"total_files": 120, "total_lines_of_code": 12000}}
+  },
+  "directory_structure": {
+    "root_directories": [{"path": "/src", "file_count": 80, "subdirectories": ["components", "hooks"]}]
+  },
   "confidence_score": 0.98,
-  "unknowns": []
+  "analysis_timestamp": "2024-04-04T12:00:00Z"
 }
 ```

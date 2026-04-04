@@ -261,8 +261,20 @@
         "framework_conventions": { "type": "list[FrameworkConvention]", "required": true },
         "sampling_strategy": { "type": "SamplingStrategy", "required": true },
         "special_cases": { "type": "list[SpecialCase]", "required": true },
+        "analysis_metadata": { "type": "AnalysisMetadata", "required": true },
+        "confidence_score": { "type": "float", "required": true, "range": [0.0, 1.0], "description": "Root-level confidence for quick access." }
+      }
+    },
+
+    "AnalysisMetadata": {
+      "description": "Standard metadata block for Pattern Detector output.",
+      "fields": {
         "confidence_score": { "type": "float", "required": true, "range": [0.0, 1.0] },
-        "analysis_timestamp": { "type": "str", "required": true, "format": "ISO 8601 datetime" }
+        "analysis_timestamp": { "type": "str", "required": true, "format": "ISO 8601 datetime" },
+        "agent_version": { "type": "str", "required": true, "default": "1.0.0" },
+        "llm_model_used": { "type": "str", "required": false },
+        "tokens_used": { "type": "int", "required": true },
+        "cost_usd": { "type": "float", "required": true }
       }
     },
 
@@ -272,7 +284,8 @@
         "confidence": { "type": "float", "required": true },
         "evidence": { "type": "list[str]", "required": true },
         "secondary_patterns": { "type": "list[DetectedPattern]", "required": false },
-        "notes": { "type": "str", "required": false }
+        "notes": { "type": "str", "required": false },
+        "confidence_score": { "type": "float", "required": false, "description": "Alias for variations in LLM response." }
       }
     },
 

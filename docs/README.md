@@ -61,7 +61,7 @@ docs/
 | File | Description |
 |------|-------------|
 | [agents/stack_detector.md](agents/stack_detector.md) | Deterministic — specfy CLI wrapper, Stack Intelligence Report |
-| [agents/context_builder.md](agents/context_builder.md) | Deterministic — graph-based tree crawler, zone ranking, `architecture_context_payload` |
+| [agents/pattern_detector.md](agents/pattern_detector.md) | LLM — Interprets repository structure into patterns and establishes Sampling Strategy |
 | [agents/system_mapper.md](agents/system_mapper.md) | LLM — dominant architecture analysis, budget pre-check, System Map Report |
 | [agents/tech_debt_analyzer.md](agents/tech_debt_analyzer.md) | Hybrid — Phase 1 linters, Phase 2 LLM synthesis, Tech Debt Report |
 | [agents/doc_writing_layer.md](agents/doc_writing_layer.md) | LLM — 4 parallel writers (technical, human, AI JSON, debt), `doc_artifacts` |
@@ -101,9 +101,10 @@ docs/
 
 ## Critical Rules (for AI Agents)
 
-1. **No LLM for deterministic work** — StackDetector and ContextBuilder never call LLMs.
+1. **No LLM for deterministic work** — StackDetector and local linters never call LLMs.
 2. **Every LLM call requires prior clearance** from `LLMBudgetService`.
-3. **Strict layer separation** — extraction → correlation/mapping → documentation artifacts.
+3. **Phase 2 (Pattern Detection)** calls LLM only for structural interpretation, not code extraction.
+4. **Strict layer separation** — extraction → interpretation → mapping → documentation artifacts.
 
 ---
 

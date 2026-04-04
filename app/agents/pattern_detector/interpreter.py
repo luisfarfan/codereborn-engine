@@ -1,13 +1,13 @@
 import json
 import logging
-from typing import Dict, Any
 from pathlib import Path
+from typing import Any, Dict
 
 from litellm import completion
+
 from app.models.db_models import StackReport
 from app.models.stack_models import PatternReport
 from app.services.llm_budget_service import LLMBudgetService
-from app.domain.enums import AnalysisMode
 
 logger = logging.getLogger(__name__)
 
@@ -36,11 +36,9 @@ class PatternInterpreter:
         system_prompt = self._load_prompt()
         user_content = self._format_user_prompt(report_data)
 
-        # 3. Budget Check & Model Selection
-        # Pattern Detector typically uses gpt-4o-mini (budget tier)
-        # We can adjust based on AnalysisMode if needed
-        model = "gpt-4o-mini"
-        estimated_tokens = len(system_prompt + user_content) // 4 + 1000 # buffer for response
+        # 3. Model Selection (Using OpenRouter Stable Model)
+        model = "openrouter/google/gemini-2.0-flash-lite-001"
+        estimated_tokens = len(system_prompt + user_content) // 4 + 1000
         
         budget_state = budget_service.get_state(job_id)
         if not budget_state:
@@ -69,19 +67,31 @@ class PatternInterpreter:
             )
             
             # 5. Record Spend
-            actual_cost = response.get("_response_ms", 0) # This is dummy, LiteLLM usually returns cost in some fields
-            # For now, we estimate or use litellm metadata if available
-            cost_usd = getattr(response, "_hidden_params", {}).get("response_cost", 0.0)
+            # For free models, cost is 0.0
+            cost_usd = 0.0
+            if ":free" not in evaluation.approved_model:
+                cost_usd = getattr(response, "_hidden_params", {}).get("response_cost", 0.0)
+            
             budget_service.record_actual_spend(budget_state, cost_usd)
 
             # 6. Parse and Validate
             content = response.choices[0].message.content
             raw_json = json.loads(content)
             
-            # Enrich with metadata
-            raw_json["llm_model_used"] = evaluation.approved_model
-            raw_json["tokens_used"] = response.usage.total_tokens
-            raw_json["cost_usd"] = cost_usd
+            # Ensure metadata matches PatternReport schema (AnalysisMetadata)
+            # The LLM often puts metadata at the root or within analysis_metadata
+            metadata = raw_json.get("analysis_metadata", {})
+            metadata["llm_model_used"] = evaluation.approved_model
+            metadata["tokens_used"] = response.usage.total_tokens
+            metadata["cost_usd"] = cost_usd
+            
+            # Ensure root confidence_score exists for Pydantic
+            if "confidence_score" not in raw_json:
+                # Try to get it from nested objects if present
+                raw_json["confidence_score"] = metadata.get("confidence_score") or \
+                    raw_json.get("detected_patterns", {}).get("confidence", 1.0)
+            
+            raw_json["analysis_metadata"] = metadata
             
             return PatternReport(**raw_json)
 

@@ -65,7 +65,7 @@ class PatternDetectorAgent:
             # 4. Persist result in architecture_contexts table
             context_model = ArchitectureContext(
                 job_id=job_id,
-                report_data=report.model_dump(),
+                report_data=report.model_dump(mode="json"),
                 complexity_score=report.confidence_score,
                 estimated_context_size_tokens=(
                     report.sampling_strategy.recommended_sample_size * 500

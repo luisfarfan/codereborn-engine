@@ -2,7 +2,8 @@ import asyncio
 import uuid
 import logging
 import argparse
-from sqlmodel import select
+import json
+from datetime import datetime
 from app.infrastructure.database import AsyncSessionFactory
 from app.models.db_models import Job, StackReport
 from app.agents.pattern_detector.agent import PatternDetectorAgent
@@ -24,12 +25,11 @@ async def verify_pattern_detector(repo_path: str):
             id=job_id,
             repo_path=repo_path,
             status="pending",
-            analysis_scope=AnalysisScope.ALL
+            analysis_scope=AnalysisScope.ALL.value
         )
         session.add(job)
         
         # 2. Add a minimal StackReport to mock prerequisite
-        # In a real scenario, StackDetectorAgent would have run first
         mock_report_data = {
             "project_name": "VerifyProject",
             "primary_language": "python",
@@ -42,16 +42,28 @@ async def verify_pattern_detector(repo_path: str):
             },
             "directory_structure": {
                 "root_directories": [
-                    {"path": "app", "name": "app", "depth": 1, "subdirectories": ["api", "models"], "file_count": 5, "file_breakdown": {"python": 5}, "total_lines": 500},
-                    {"path": "tests", "name": "tests", "depth": 1, "subdirectories": [], "file_count": 2, "file_breakdown": {"python": 2}, "total_lines": 100}
+                    {
+                        "path": "app", "name": "app", "depth": 1, 
+                        "subdirectories": ["api", "models"], "file_count": 5, 
+                        "file_breakdown": {"python": 5}, "total_lines": 500
+                    },
+                    {
+                        "path": "tests", "name": "tests", "depth": 1, 
+                        "subdirectories": [], "file_count": 2, 
+                        "file_breakdown": {"python": 2}, "total_lines": 100
+                    }
                 ]
             }
         }
         
         stack_report = StackReport(
+            id=uuid.uuid4(),
             job_id=job_id,
             report_data=mock_report_data,
-            primary_language="python"
+            primary_language="python",
+            analysis_scope=AnalysisScope.ALL.value,
+            confidence_score=1.0,
+            analysis_timestamp=datetime.utcnow()
         )
         session.add(stack_report)
         await session.commit()
@@ -71,14 +83,14 @@ async def verify_pattern_detector(repo_path: str):
             
             # Print directory interpretations
             for path, interpretation in report.directory_interpretation.items():
-                logger.info(f"Directory [{path}]: {interpretation.purpose} ({interpretation.architectural_role})")
+                logger.info(f"Dir [{path}]: {interpretation.purpose} ({interpretation.architectural_role})")
                 
         except Exception as e:
             logger.error(f"Pattern Detector verification failed: {str(e)}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Verify Pattern Detector Agent")
-    parser.get_argument("--path", type=str, required=True, help="Path to analyze")
+    parser.add_argument("--path", type=str, required=True, help="Path to analyze")
     args = parser.parse_args()
     
     asyncio.run(verify_pattern_detector(args.path))

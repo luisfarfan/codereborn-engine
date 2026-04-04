@@ -1,0 +1,2050 @@
+# CodeReborn Frontend - System Specification
+
+CodeReborn es una plataforma de inteligencia de repositorios legacy. Este documento define las especificaciones completas del frontend de la aplicación.
+
+## SCOPE DE LA VERSIÓN 1
+
+### Limitaciones Iniciales
+- Un usuario, una organización
+- Navegación por Jobs (no por Repositorios)
+- Sin re-análisis de repositorios
+- Sin notificaciones push/email
+- Sin sistema de roles y permisos
+- Sin alertas de presupuesto
+- Sin comparación entre análisis
+
+### Características Incluidas
+- Lista y gestión de Jobs de análisis
+- Creación de nuevos Jobs con configuración granular de agentes LLM
+- Vista en tiempo real de Jobs en ejecución
+- Vista detallada de Jobs completados
+- Filtrado y búsqueda de Jobs
+- Visualización de outputs en formato JSON y renderizado
+- Tracking de costos por Job
+- Responsive design (mobile, tablet, desktop)
+
+---
+
+## ARQUITECTURA DE INFORMACIÓN
+
+### Jerarquía
+Usuario
+└── Jobs (múltiples)
+├── Configuración (repo, branch, agentes, tier)
+├── Ejecución (agentes corriendo, outputs en vivo)
+├── Resultados (outputs finales, costos, logs)
+└── Metadata (status, timestamps, tokens, costos)
+
+### Navegación Principal
+Dashboard
+└── Jobs List (página principal)
+├── Create New Job (flujo de creación)
+├── Job Detail (vista de Job completado)
+└── Job Live View (vista de Job en ejecución)
+
+---
+
+## FLUJOS PRINCIPALES
+
+### Flujo 1: Dashboard Principal
+
+**Punto de entrada**: Usuario inicia sesión y entra a la aplicación
+
+**Vista**: Lista de todos los Jobs del usuario
+
+**Endpoint requerido**:
+GET /api/jobs
+
+**Response esperado**:
+```json
+{
+  "jobs": [
+    {
+      "id": "uuid-1234",
+      "repo_url": "https://github.com/company/api-backend",
+      "repo_name": "api-backend",
+      "branch": "main",
+      "status": "completed",
+      "analysis_scope": "backend",
+      "tier": "standard",
+      "started_at": "2024-01-15T10:30:15Z",
+      "completed_at": "2024-01-15T10:48:57Z",
+      "duration_seconds": 1122,
+      "tokens_used": 123456,
+      "cost_usd": 2.45,
+      "models_used": ["gpt-4-turbo", "claude-haiku", "gpt-3.5-turbo"],
+      "created_at": "2024-01-15T10:30:00Z"
+    },
+    {
+      "id": "uuid-5678",
+      "repo_url": "https://github.com/company/web-frontend",
+      "repo_name": "web-frontend",
+      "branch": "develop",
+      "status": "running",
+      "analysis_scope": "frontend",
+      "tier": "premium",
+      "started_at": "2024-01-15T11:00:00Z",
+      "completed_at": null,
+      "duration_seconds": null,
+      "tokens_used": 45230,
+      "cost_usd": 0.72,
+      "models_used": ["gpt-4-turbo"],
+      "created_at": "2024-01-15T10:55:00Z"
+    }
+  ],
+  "total": 42,
+  "page": 1,
+  "page_size": 20
+}
+```
+
+**Tabla de Jobs muestra**:
+- Job ID (clickeable, navega a detalle)
+- Repo name
+- Branch
+- Status (badge visual: running, completed, failed)
+- Scope (auto-detectado: frontend/backend/mobile)
+- Started (fecha/hora relativa: "2h ago")
+- Duration (solo si completado)
+- Tokens used
+- Cost USD
+- Model(s) used (lista separada por comas)
+- Tier used (badge: Budget/Standard/Premium)
+
+**Filtros disponibles**:
+- Status (dropdown: All, Running, Completed, Failed)
+- Repo (dropdown con repos únicos del usuario)
+- Date range (date picker: Last 7 days, Last 30 days, Custom)
+- Scope (dropdown: All, Frontend, Backend, Mobile, Desktop, Library)
+- Tier (dropdown: All, Budget, Standard, Premium)
+
+**Acciones**:
+- Click en fila → Navega a Job Detail si completed, Job Live View si running
+- Botón "New Analysis" → Navega a Create Job flow
+
+---
+
+### Flujo 2: Crear Nuevo Job
+
+**Trigger**: Usuario hace click en "New Analysis"
+
+**Paso 1: Información Básica del Repositorio**
+
+**UI**:
+┌─────────────────────────────────────────────────┐
+│ New Repository Analysis                         │
+├─────────────────────────────────────────────────┤
+│                                                  │
+│ GitHub Repository URL *                         │
+│ [https://github.com/company/repo    ]          │
+│                                                  │
+│ Personal Access Token *                         │
+│ [ghp_xxxxxxxxxxxxxxxxxxxx           ]          │
+│ ℹ️  Required for private repos                  │
+│                                                  │
+│ Branch *                                        │
+│ [main ▼]                                        │
+│                                                  │
+│ [Cancel]              [Next: Configure →]       │
+└─────────────────────────────────────────────────┘
+
+**Validaciones**:
+- URL debe ser válida de GitHub (regex)
+- Token debe tener formato válido
+- Branch debe existir (opcional: validar con API de GitHub)
+
+---
+
+**Paso 2: Configuración de Agentes**
+
+**Endpoint requerido**:
+GET /api/agents
+
+**Response esperado**:
+```json
+{
+  "agents": [
+    {
+      "id": "stack_detector",
+      "name": "Stack Detector",
+      "description": "Detects technologies, frameworks, dependencies, and services used in the repository",
+      "order": 1,
+      "uses_llm": false,
+      "task_type": null,
+      "default_model": null,
+      "available_models": [],
+      "required": true,
+      "estimated_duration_seconds": 120
+    },
+    {
+      "id": "architecture_context_builder",
+      "name": "Architecture Context Builder",
+      "description": "Builds curated architectural context for LLM analysis",
+      "order": 2,
+      "uses_llm": false,
+      "task_type": null,
+      "default_model": null,
+      "available_models": [],
+      "required": true,
+      "estimated_duration_seconds": 180
+    },
+    {
+      "id": "system_mapper",
+      "name": "System Mapper",
+      "description": "Maps the real architecture of the codebase",
+      "order": 3,
+      "uses_llm": true,
+      "task_type": "analysis",
+      "default_model": "gpt-4-turbo",
+      "available_models": [
+        {
+          "id": "claude-opus-3.5",
+          "name": "Claude Opus 3.5",
+          "provider": "anthropic",
+          "cost_per_1k_input": 0.015,
+          "cost_per_1k_output": 0.075,
+          "context_window": 200000,
+          "specialty": "Deep architectural reasoning and pattern detection",
+          "recommended_for": ["complex architectures", "large codebases"]
+        },
+        {
+          "id": "gpt-4-turbo",
+          "name": "GPT-4 Turbo",
+          "provider": "openai",
+          "cost_per_1k_input": 0.01,
+          "cost_per_1k_output": 0.03,
+          "context_window": 128000,
+          "specialty": "Balanced performance and accuracy",
+          "recommended_for": ["general analysis", "standard codebases"]
+        },
+        {
+          "id": "gpt-3.5-turbo",
+          "name": "GPT-3.5 Turbo",
+          "provider": "openai",
+          "cost_per_1k_input": 0.0005,
+          "cost_per_1k_output": 0.0015,
+          "context_window": 16000,
+          "specialty": "Cost-efficient for simple architectures",
+          "recommended_for": ["budget-conscious", "simple codebases"]
+        },
+        {
+          "id": "llama-3-70b",
+          "name": "Llama 3 70B",
+          "provider": "meta",
+          "cost_per_1k_input": 0.0,
+          "cost_per_1k_output": 0.0,
+          "context_window": 8000,
+          "specialty": "Free open source model",
+          "recommended_for": ["budget tier", "experimentation"]
+        }
+      ],
+      "required": true,
+      "estimated_duration_seconds": 600
+    },
+    {
+      "id": "tech_debt_analyzer",
+      "name": "Tech Debt Analyzer",
+      "description": "Detects and prioritizes technical debt",
+      "order": 4,
+      "uses_llm": true,
+      "task_type": "analysis",
+      "default_model": "claude-haiku",
+      "available_models": [
+        {
+          "id": "claude-haiku",
+          "name": "Claude Haiku",
+          "provider": "anthropic",
+          "cost_per_1k_input": 0.00025,
+          "cost_per_1k_output": 0.00125,
+          "context_window": 200000,
+          "specialty": "Fast and cost-effective analysis",
+          "recommended_for": ["tech debt detection", "code quality"]
+        },
+        {
+          "id": "gpt-3.5-turbo",
+          "name": "GPT-3.5 Turbo",
+          "provider": "openai",
+          "cost_per_1k_input": 0.0005,
+          "cost_per_1k_output": 0.0015,
+          "context_window": 16000,
+          "specialty": "Budget-friendly option",
+          "recommended_for": ["basic debt analysis"]
+        }
+      ],
+      "required": true,
+      "estimated_duration_seconds": 300
+    },
+    {
+      "id": "technical_doc_writer",
+      "name": "Technical Doc Writer",
+      "description": "Generates technical documentation for developers",
+      "order": 5,
+      "uses_llm": true,
+      "task_type": "text_generation",
+      "default_model": "gpt-3.5-turbo",
+      "available_models": [
+        {
+          "id": "gpt-4-turbo",
+          "name": "GPT-4 Turbo",
+          "provider": "openai",
+          "cost_per_1k_input": 0.01,
+          "cost_per_1k_output": 0.03,
+          "context_window": 128000,
+          "specialty": "High-quality technical writing",
+          "recommended_for": ["detailed documentation"]
+        },
+        {
+          "id": "gpt-3.5-turbo",
+          "name": "GPT-3.5 Turbo",
+          "provider": "openai",
+          "cost_per_1k_input": 0.0005,
+          "cost_per_1k_output": 0.0015,
+          "context_window": 16000,
+          "specialty": "Efficient documentation generation",
+          "recommended_for": ["standard docs"]
+        }
+      ],
+      "required": false,
+      "estimated_duration_seconds": 240
+    },
+    {
+      "id": "human_doc_writer",
+      "name": "Human Doc Writer",
+      "description": "Generates human-friendly onboarding documentation",
+      "order": 6,
+      "uses_llm": true,
+      "task_type": "text_generation",
+      "default_model": "gpt-3.5-turbo",
+      "available_models": [
+        {
+          "id": "gpt-3.5-turbo",
+          "name": "GPT-3.5 Turbo",
+          "provider": "openai",
+          "cost_per_1k_input": 0.0005,
+          "cost_per_1k_output": 0.0015,
+          "context_window": 16000,
+          "specialty": "Clear and accessible writing",
+          "recommended_for": ["onboarding docs"]
+        }
+      ],
+      "required": false,
+      "estimated_duration_seconds": 180
+    },
+    {
+      "id": "ai_context_writer",
+      "name": "AI Context Writer",
+      "description": "Generates AI-friendly structured documentation",
+      "order": 7,
+      "uses_llm": true,
+      "task_type": "structured_generation",
+      "default_model": "gpt-3.5-turbo",
+      "available_models": [
+        {
+          "id": "gpt-3.5-turbo",
+          "name": "GPT-3.5 Turbo",
+          "provider": "openai",
+          "cost_per_1k_input": 0.0005,
+          "cost_per_1k_output": 0.0015,
+          "context_window": 16000,
+          "specialty": "Structured data generation",
+          "recommended_for": ["AI-consumable docs"]
+        }
+      ],
+      "required": false,
+      "estimated_duration_seconds": 120
+    },
+    {
+      "id": "debt_doc_writer",
+      "name": "Debt Doc Writer",
+      "description": "Generates technical debt documentation and recommendations",
+      "order": 8,
+      "uses_llm": true,
+      "task_type": "text_generation",
+      "default_model": "claude-haiku",
+      "available_models": [
+        {
+          "id": "claude-haiku",
+          "name": "Claude Haiku",
+          "provider": "anthropic",
+          "cost_per_1k_input": 0.00025,
+          "cost_per_1k_output": 0.00125,
+          "context_window": 200000,
+          "specialty": "Concise recommendations",
+          "recommended_for": ["tech debt reports"]
+        }
+      ],
+      "required": false,
+      "estimated_duration_seconds": 150
+    }
+  ],
+  "tiers": [
+    {
+      "id": "budget",
+      "name": "Budget",
+      "description": "Uses free/cheap LLMs. Good for experimentation.",
+      "default_models": {
+        "system_mapper": "llama-3-70b",
+        "tech_debt_analyzer": "gpt-3.5-turbo",
+        "technical_doc_writer": "gpt-3.5-turbo",
+        "human_doc_writer": "gpt-3.5-turbo",
+        "ai_context_writer": "gpt-3.5-turbo",
+        "debt_doc_writer": "gpt-3.5-turbo"
+      },
+      "estimated_cost_range": "0.00 - 1.00 USD"
+    },
+    {
+      "id": "standard",
+      "name": "Standard",
+      "description": "Balanced performance and cost. Recommended for most projects.",
+      "default_models": {
+        "system_mapper": "gpt-4-turbo",
+        "tech_debt_analyzer": "claude-haiku",
+        "technical_doc_writer": "gpt-3.5-turbo",
+        "human_doc_writer": "gpt-3.5-turbo",
+        "ai_context_writer": "gpt-3.5-turbo",
+        "debt_doc_writer": "claude-haiku"
+      },
+      "estimated_cost_range": "2.00 - 8.00 USD"
+    },
+    {
+      "id": "premium",
+      "name": "Premium",
+      "description": "Best models for highest accuracy. For complex/critical projects.",
+      "default_models": {
+        "system_mapper": "claude-opus-3.5",
+        "tech_debt_analyzer": "gpt-4-turbo",
+        "technical_doc_writer": "gpt-4-turbo",
+        "human_doc_writer": "gpt-4-turbo",
+        "ai_context_writer": "gpt-4-turbo",
+        "debt_doc_writer": "gpt-4-turbo"
+      },
+      "estimated_cost_range": "8.00 - 20.00 USD"
+    }
+  ]
+}
+```
+
+**UI - Configuración Híbrida (Tier + Overrides)**:
+┌─────────────────────────────────────────────────────────────┐
+│ Configure Analysis Agents                                   │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│ Analysis Tier                                               │
+│ ┌──────────┐ ┌──────────┐ ┌──────────┐                     │
+│ │  Budget  │ │ Standard │ │ Premium  │                     │
+│ │  Free-$1 │ │  $2-$8   │ │  $8-$20  │                     │
+│ └──────────┘ └──────────┘ └──────────┘                     │
+│      ○           ●              ○                            │
+│                                                              │
+│ ℹ️  Standard tier selected. Using balanced models.          │
+│                                                              │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│ Agents Configuration                                        │
+│                                                              │
+│ ✓ Stack Detector                                            │
+│   Deterministic analysis (no LLM)                           │
+│   Estimated time: ~2 minutes                                │
+│                                                              │
+│ ✓ Architecture Context Builder                             │
+│   Deterministic analysis (no LLM)                           │
+│   Estimated time: ~3 minutes                                │
+│                                                              │
+│ ✓ System Mapper                                             │
+│   Task: Analysis | Uses LLM                                 │
+│   Model: GPT-4 Turbo (from Standard tier)                  │
+│   [$0.01/1K in, $0.03/1K out]                              │
+│   └─ Override model: [Keep default ▼]                      │
+│      Options: Claude Opus 3.5, GPT-3.5, Llama 3            │
+│   Estimated time: ~10 minutes                               │
+│                                                              │
+│ ✓ Tech Debt Analyzer                                        │
+│   Task: Analysis | Uses LLM                                 │
+│   Model: Claude Haiku (from Standard tier)                 │
+│   [$0.00025/1K in, $0.00125/1K out]                        │
+│   └─ Override model: [Keep default ▼]                      │
+│   Estimated time: ~5 minutes                                │
+│                                                              │
+│ ✓ Technical Doc Writer                                      │
+│   Task: Text Generation | Uses LLM                          │
+│   Model: GPT-3.5 Turbo (from Standard tier)                │
+│   └─ Override model: [Keep default ▼]                      │
+│   Estimated time: ~4 minutes                                │
+│                                                              │
+│ ☐ Human Doc Writer (Optional)                              │
+│   Task: Text Generation | Uses LLM                          │
+│   Model: GPT-3.5 Turbo                                      │
+│   Estimated time: ~3 minutes                                │
+│                                                              │
+│ ☐ AI Context Writer (Optional)                             │
+│   Task: Structured Generation | Uses LLM                    │
+│   Model: GPT-3.5 Turbo                                      │
+│   Estimated time: ~2 minutes                                │
+│                                                              │
+│ ☐ Debt Doc Writer (Optional)                               │
+│   Task: Text Generation | Uses LLM                          │
+│   Model: Claude Haiku                                       │
+│   Estimated time: ~2.5 minutes                              │
+│                                                              │
+│ [← Back]                    [Next: Review & Start →]        │
+└─────────────────────────────────────────────────────────────┘
+
+**Notas de implementación**:
+- Tier seleccionado aplica modelos default a todos los agentes
+- Usuario puede override modelo por agente específico
+- Agentes opcionales pueden deshabilitarse (unchecked)
+- Mostrar costos por modelo para transparencia
+- Mostrar tiempo estimado por agente
+
+---
+
+**Paso 3: Pre-análisis y Confirmación**
+
+Antes de iniciar, el frontend debe solicitar estimación de costos.
+
+**Endpoint requerido**:
+POST /api/jobs/estimate
+
+**Request body**:
+```json
+{
+  "repo_url": "https://github.com/company/api-backend",
+  "branch": "main",
+  "github_token": "ghp_xxxxxxxxxxxx",
+  "tier": "standard",
+  "agent_configs": [
+    {
+      "agent_id": "stack_detector",
+      "enabled": true,
+      "model": null
+    },
+    {
+      "agent_id": "architecture_context_builder",
+      "enabled": true,
+      "model": null
+    },
+    {
+      "agent_id": "system_mapper",
+      "enabled": true,
+      "model": "gpt-4-turbo"
+    },
+    {
+      "agent_id": "tech_debt_analyzer",
+      "enabled": true,
+      "model": "claude-haiku"
+    },
+    {
+      "agent_id": "technical_doc_writer",
+      "enabled": true,
+      "model": "gpt-3.5-turbo"
+    },
+    {
+      "agent_id": "human_doc_writer",
+      "enabled": false,
+      "model": null
+    },
+    {
+      "agent_id": "ai_context_writer",
+      "enabled": false,
+      "model": null
+    },
+    {
+      "agent_id": "debt_doc_writer",
+      "enabled": false,
+      "model": null
+    }
+  ]
+}
+```
+
+**Response esperado**:
+```json
+{
+  "estimated_tokens_total": 125000,
+  "estimated_cost_usd": 4.85,
+  "estimated_duration_minutes": 18,
+  "breakdown_by_agent": [
+    {
+      "agent_id": "stack_detector",
+      "agent_name": "Stack Detector",
+      "tokens": 0,
+      "cost_usd": 0.0,
+      "duration_minutes": 2
+    },
+    {
+      "agent_id": "architecture_context_builder",
+      "agent_name": "Architecture Context Builder",
+      "tokens": 0,
+      "cost_usd": 0.0,
+      "duration_minutes": 3
+    },
+    {
+      "agent_id": "system_mapper",
+      "agent_name": "System Mapper",
+      "tokens": 80000,
+      "cost_usd": 3.20,
+      "duration_minutes": 10,
+      "model": "gpt-4-turbo"
+    },
+    {
+      "agent_id": "tech_debt_analyzer",
+      "agent_name": "Tech Debt Analyzer",
+      "tokens": 35000,
+      "cost_usd": 0.45,
+      "duration_minutes": 5,
+      "model": "claude-haiku"
+    },
+    {
+      "agent_id": "technical_doc_writer",
+      "agent_name": "Technical Doc Writer",
+      "tokens": 10000,
+      "cost_usd": 0.20,
+      "duration_minutes": 4,
+      "model": "gpt-3.5-turbo"
+    }
+  ],
+  "warnings": [
+    "Repository is large (5,247 files). Analysis may take longer than estimated."
+  ]
+}
+```
+
+**UI - Modal de Confirmación**:
+┌─────────────────────────────────────────────────┐
+│  ⚠️  Confirm Analysis                           │
+├─────────────────────────────────────────────────┤
+│                                                  │
+│  Repository: api-backend                        │
+│  Branch: main                                   │
+│  Tier: Standard                                 │
+│                                                  │
+│  Estimated Cost: $4.85 USD                      │
+│  Estimated Time: ~18 minutes                    │
+│  Estimated Tokens: 125,000                      │
+│                                                  │
+│  ┌────────────────────────────────────────────┐ │
+│  │ Breakdown by Agent:                        │ │
+│  │                                             │ │
+│  │ System Mapper          $3.20  (10 min)    │ │
+│  │ Tech Debt Analyzer     $0.45  (5 min)     │ │
+│  │ Technical Doc Writer   $0.20  (4 min)     │ │
+│  │ Other agents           $0.00  (5 min)     │ │
+│  └────────────────────────────────────────────┘ │
+│                                                  │
+│  ⚠️  Repository is large (5,247 files).         │
+│     Analysis may take longer than estimated.    │
+│                                                  │
+│  [Cancel]              [Start Analysis →]       │
+└─────────────────────────────────────────────────┘
+
+**Cuando usuario hace click en "Start Analysis"**:
+
+**Endpoint**:
+POST /api/jobs
+
+**Request body** (mismo que el de `/estimate` pero sin el `github_token` expuesto, solo una referencia si ya lo guardaste):
+```json
+{
+  "repo_url": "https://github.com/company/api-backend",
+  "branch": "main",
+  "github_token": "ghp_xxxxxxxxxxxx",
+  "tier": "standard",
+  "agent_configs": [...]
+}
+```
+
+**Response**:
+```json
+{
+  "job_id": "uuid-1234",
+  "status": "running",
+  "created_at": "2024-01-15T10:30:00Z",
+  "started_at": "2024-01-15T10:30:15Z",
+  "repo_url": "https://github.com/company/api-backend",
+  "branch": "main"
+}
+```
+
+**Frontend navega a**: `/jobs/{job_id}` (Job Live View)
+
+---
+
+### Flujo 3: Vista en Vivo de Job (Running)
+
+**URL**: `/jobs/{job_id}` (cuando status = running)
+
+**Actualización en tiempo real**: SSE (Server-Sent Events) o WebSocket
+
+**Endpoint SSE**:
+GET /api/jobs/{job_id}/stream
+
+**Eventos SSE que el backend envía**:
+
+**Tipo 1: Job status update**
+event: job_status
+data: {"status": "running", "elapsed_seconds": 145}
+
+**Tipo 2: Agent started**
+event: agent_started
+data: {
+"agent_id": "system_mapper",
+"agent_name": "System Mapper",
+"started_at": "2024-01-15T10:35:30Z"
+}
+
+**Tipo 3: Agent progress**
+event: agent_progress
+data: {
+"agent_id": "system_mapper",
+"status": "running",
+"progress_pct": 45,
+"tokens_used": 25000,
+"cost_usd": 0.35,
+"current_activity": "Analyzing zone 2/5"
+}
+
+**Tipo 4: Agent output streaming** (JSON parcial)
+event: agent_output_chunk
+data: {
+"agent_id": "system_mapper",
+"chunk": "{"dominant_architecture": "layered", "patterns_detected": ["
+}
+
+**Tipo 5: Agent completed**
+event: agent_completed
+data: {
+"agent_id": "system_mapper",
+"status": "success",
+"completed_at": "2024-01-15T10:43:12Z",
+"duration_seconds": 462,
+"tokens_used": 85230,
+"cost_usd": 1.45,
+"output_summary": "Detected layered architecture with 87% confidence"
+}
+
+**Tipo 6: Agent communication** (cuando pasa datos a otro)
+event: agent_communication
+data: {
+"from_agent_id": "architecture_context_builder",
+"to_agent_id": "system_mapper",
+"message": "Sending ArchitectureContextPayload (87KB)",
+"timestamp": "2024-01-15T10:35:29Z"
+}
+
+**Tipo 7: Job completed**
+event: job_completed
+data: {
+"status": "completed",
+"completed_at": "2024-01-15T10:48:57Z",
+"total_duration_seconds": 1122,
+"total_tokens": 123456,
+"total_cost_usd": 2.45
+}
+
+**Tipo 8: Job failed**
+event: job_failed
+data: {
+"status": "failed",
+"failed_at": "2024-01-15T10:40:00Z",
+"error": "Budget exceeded. Job stopped.",
+"failed_agent": "system_mapper"
+}
+
+---
+
+**UI - Vista en Vivo**
+
+**Layout principal**:
+┌──────────────────────────────────────────────────────────────────┐
+│  Job #1234: api-backend (main)                    [Stop Job] [X] │
+│  Status: 🔄 Running | Elapsed: 12m 45s | Cost so far: $0.72      │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│  Agent Timeline (horizontal)                                     │
+│                                                                   │
+│  ┌─────────┐      ┌─────────┐      ┌─────────┐      ┌─────────┐│
+│  │ Stack   │─────→│ Context │─────→│ System  │─────→│ Tech    ││
+│  │Detector │  ✓   │ Builder │  ✓   │ Mapper  │  🔄  │ Debt    ││
+│  │         │      │         │      │         │      │         ││
+│  │ ✅ Done │      │ ✅ Done │      │🔄Running│      │⏸Pending││
+│  │ 2m 15s  │      │ 3m 08s  │      │ 7m 22s  │      │         ││
+│  │ $0.00   │      │ $0.00   │      │ $0.35   │      │         ││
+│  └─────────┘      └─────────┘      └─────────┘      └─────────┘│
+│                                          ↑                        │
+│                                     (animación                    │
+│                                      pulsando)                    │
+│                                                                   │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│  📊 Active Agent: System Mapper                                  │
+│  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│                                                                   │
+│  Model: GPT-4 Turbo                                              │
+│  Status: Analyzing zone 3/5                                      │
+│  Progress: ████████████████░░░░░░░░ 45%                         │
+│  Tokens: 45,230 input | 8,920 output                            │
+│  Cost: $0.72                                                     │
+│  Duration: 7m 22s                                                │
+│                                                                   │
+│  📄 Live Output (streaming JSON):                                │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │ {                                                           │ │
+│  │   "dominant_architecture": "layered",                       │ │
+│  │   "architecture_confidence": 0.78,                          │ │
+│  │   "system_style": "Backend uses layered architecture...",  │ │
+│  │   "patterns_detected": [                                    │ │
+│  │     {                                                       │ │
+│  │       "pattern_name": "service_layer",                      │ │
+│  │       "description": "Business logic in services/",         │ │
+│  │       "evidence_files": [                                   │ │
+│  │         "payments/services.py",                             │ │
+│  │         "auth/services.py"                                  │ │
+│  │       ],                                                    │ │
+│  │       "confidence_score": 0.85                              │ │
+│  │     },                                                      │ │
+│  │     {                                                       │ │
+│  │       "pattern_name": "repository_pattern",                 │ │
+│  │       "evidence_files": [                                   │ │
+│  │         "payments/repositor▋                                │ │
+│  │                                                             │ │
+│  │  (cursor parpadeando - texto apareciendo en tiempo real)   │ │
+│  └────────────────────────────────────────────────────────────┘ │
+│                                                                   │
+│  [Collapse Active Agent ▲]  [Expand All Agents ▼]               │
+│                                                                   │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│  Completed Agents (collapsible)                                 │
+│                                                                   │
+│  ✅ Stack Detector                                               │
+│     Duration: 2m 15s | Tokens: 0 | Cost: $0.00                  │
+│     [View Output]                                                │
+│                                                                   │
+│  ✅ Architecture Context Builder                                │
+│     Duration: 3m 08s | Tokens: 0 | Cost: $0.00                  │
+│     [View Output]                                                │
+│                                                                   │
+└──────────────────────────────────────────────────────────────────┘
+
+**Animación de comunicación entre agentes**:
+
+Cuando el SSE envía evento `agent_communication`, mostrar animación:
+┌─────────┐
+│ Context │ ═══════════════════════════════════════╗
+│ Builder │  ArchitectureContextPayload (87KB)     ║
+└─────────┘                                         ║
+▼
+┌─────────┐
+│ System  │
+│ Mapper  │
+└─────────┘
+(Flecha animada moviéndose de izquierda a derecha durante 1-2 segundos)
+
+**Estados visuales de cada agente en timeline**:
+- ⏸ **Pending** (gris, sin borde)
+- 🔄 **Running** (azul pulsante, borde animado)
+- ✅ **Completed** (verde, checkmark)
+- ❌ **Failed** (rojo, X)
+
+**Interacciones**:
+- Click en agente completed → Expand panel con output
+- Click en agente running → Scroll to active agent panel
+- "Expand All Agents" → Muestra todos los outputs en accordion
+- "Stop Job" → Muestra modal de confirmación, llama `DELETE /api/jobs/{job_id}`
+
+---
+
+### Flujo 4: Vista Detallada de Job Completado
+
+**URL**: `/jobs/{job_id}` (cuando status = completed o failed)
+
+**Endpoint**:
+GET /api/jobs/{job_id}
+
+**Response esperado**:
+```json
+{
+  "job": {
+    "id": "uuid-1234",
+    "repo_url": "https://github.com/company/api-backend",
+    "repo_name": "api-backend",
+    "branch": "main",
+    "status": "completed",
+    "analysis_scope": "backend",
+    "tier": "standard",
+    "started_at": "2024-01-15T10:30:15Z",
+    "completed_at": "2024-01-15T10:48:57Z",
+    "duration_seconds": 1122,
+    "total_tokens": 123456,
+    "total_cost_usd": 2.45,
+    "created_at": "2024-01-15T10:30:00Z"
+  },
+  "agents": [
+    {
+      "agent_id": "stack_detector",
+      "agent_name": "Stack Detector",
+      "status": "success",
+      "model": null,
+      "started_at": "2024-01-15T10:30:15Z",
+      "completed_at": "2024-01-15T10:32:30Z",
+      "duration_seconds": 135,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "output_type": "stack_report",
+      "output_summary": "Detected Django 4.2, PostgreSQL 14, React 18"
+    },
+    {
+      "agent_id": "architecture_context_builder",
+      "agent_name": "Architecture Context Builder",
+      "status": "success",
+      "model": null,
+      "started_at": "2024-01-15T10:32:30Z",
+      "completed_at": "2024-01-15T10:35:38Z",
+      "duration_seconds": 188,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "output_type": "architecture_context",
+      "output_summary": "Classified 1,247 files, selected 87 samples"
+    },
+    {
+      "agent_id": "system_mapper",
+      "agent_name": "System Mapper",
+      "status": "success",
+      "model": "gpt-4-turbo",
+      "mode": "multi_zone",
+      "zones_analyzed": 5,
+      "started_at": "2024-01-15T10:35:38Z",
+      "completed_at": "2024-01-15T10:43:12Z",
+      "duration_seconds": 454,
+      "input_tokens": 72150,
+      "output_tokens": 13080,
+      "total_tokens": 85230,
+      "cost_usd": 1.45,
+      "output_type": "system_map",
+      "output_summary": "Detected layered architecture (87% confidence)"
+    },
+    {
+      "agent_id": "tech_debt_analyzer",
+      "agent_name": "Tech Debt Analyzer",
+      "status": "success",
+      "model": "claude-haiku",
+      "started_at": "2024-01-15T10:43:12Z",
+      "completed_at": "2024-01-15T10:48:20Z",
+      "duration_seconds": 308,
+      "input_tokens": 24890,
+      "output_tokens": 3230,
+      "total_tokens": 28120,
+      "cost_usd": 0.35,
+      "output_type": "tech_debt_analysis",
+      "output_summary": "487 findings detected, 15 quick wins identified"
+    },
+    {
+      "agent_id": "technical_doc_writer",
+      "agent_name": "Technical Doc Writer",
+      "status": "success",
+      "model": "gpt-3.5-turbo",
+      "started_at": "2024-01-15T10:48:20Z",
+      "completed_at": "2024-01-15T10:48:57Z",
+      "duration_seconds": 37,
+      "input_tokens": 8520,
+      "output_tokens": 1586,
+      "total_tokens": 10106,
+      "cost_usd": 0.15,
+      "output_type": "technical_doc",
+      "output_summary": "Generated 3,247 words of technical documentation"
+    }
+  ],
+  "outputs": [
+    {
+      "type": "stack_report",
+      "agent_id": "stack_detector",
+      "format": "json",
+      "size_bytes": 8420,
+      "url": "/api/jobs/uuid-1234/outputs/stack_report"
+    },
+    {
+      "type": "architecture_context",
+      "agent_id": "architecture_context_builder",
+      "format": "json",
+      "size_bytes": 89234,
+      "url": "/api/jobs/uuid-1234/outputs/architecture_context"
+    },
+    {
+      "type": "system_map",
+      "agent_id": "system_mapper",
+      "format": "json",
+      "size_bytes": 15678,
+      "url": "/api/jobs/uuid-1234/outputs/system_map"
+    },
+    {
+      "type": "tech_debt_analysis",
+      "agent_id": "tech_debt_analyzer",
+      "format": "json",
+      "size_bytes": 42890,
+      "url": "/api/jobs/uuid-1234/outputs/tech_debt_analysis"
+    },
+    {
+      "type": "technical_doc",
+      "agent_id": "technical_doc_writer",
+      "format": "markdown",
+      "size_bytes": 18234,
+      "url": "/api/jobs/uuid-1234/outputs/technical_doc"
+    }
+  ],
+  "logs": {
+    "url": "/api/jobs/uuid-1234/logs",
+    "total_entries": 1247
+  }
+}
+```
+
+---
+
+**UI - Tabs de Job Completado**:
+┌──────────────────────────────────────────────────────────┐
+│  Job #1234: api-backend (main)             [Delete Job]  │
+│  Status: ✅ Completed | Duration: 18m 42s | Cost: $2.45  │
+├──────────────────────────────────────────────────────────┤
+│                                                           │
+│  [Overview] [Agents] [Outputs] [Costs] [Logs]            │
+│  ═════════                                                │
+│                                                           │
+│  (contenido del tab activo aquí)                         │
+│                                                           │
+└──────────────────────────────────────────────────────────┘
+
+---
+
+**Tab 1: Overview**
+┌──────────────────────────────────────────────────────────┐
+│  Overview                                                 │
+├──────────────────────────────────────────────────────────┤
+│                                                           │
+│  Repository Information                                  │
+│  ├─ URL: https://github.com/company/api-backend         │
+│  ├─ Branch: main                                         │
+│  └─ Scope: Backend (auto-detected)                       │
+│                                                           │
+│  Analysis Summary                                        │
+│  ├─ Status: ✅ Completed                                 │
+│  ├─ Tier: Standard                                       │
+│  ├─ Started: Jan 15, 2024 at 10:30 AM                   │
+│  ├─ Completed: Jan 15, 2024 at 10:48 AM                 │
+│  └─ Total Duration: 18 minutes 42 seconds                │
+│                                                           │
+│  Resource Usage                                          │
+│  ├─ Total Tokens: 123,456                                │
+│  ├─ Total Cost: $2.45 USD                                │
+│  └─ Models Used: GPT-4 Turbo, Claude Haiku, GPT-3.5     │
+│                                                           │
+│  Key Findings                                            │
+│  ├─ Architecture: Layered (87% confidence)               │
+│  ├─ Tech Debt: 487 findings (15 quick wins)             │
+│  ├─ Documentation: 3,247 words generated                 │
+│  └─ Stack: Django 4.2, PostgreSQL 14, React 18          │
+│                                                           │
+└──────────────────────────────────────────────────────────┘
+
+---
+
+**Tab 2: Agents**
+
+Tabla de agentes ejecutados:
+┌────────────────────────────────────────────────────────────────────────────┐
+│  Agents Execution Details                                                  │
+├────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  Agent                  | Status | Model      | Tokens  | Cost   | Time   │
+│  ──────────────────────────────────────────────────────────────────────────│
+│  Stack Detector         | ✅     | N/A        | 0       | $0.00  | 2m 15s │
+│  Context Builder        | ✅     | N/A        | 0       | $0.00  | 3m 08s │
+│  System Mapper          | ✅     | GPT-4 Turbo| 85,230  | $1.45  | 7m 34s │
+│  Tech Debt Analyzer     | ✅     | Claude Haiku| 28,120 | $0.35  | 5m 08s │
+│  Technical Doc Writer   | ✅     | GPT-3.5    | 10,106  | $0.15  | 37s    │
+│                                                                             │
+│  Total                                        | 123,456 | $2.45  | 18m42s │
+└────────────────────────────────────────────────────────────────────────────┘
+(Click en fila → Abre modal o accordion con detalles del agente)
+
+**Modal de Detalle de Agente** (cuando usuario hace click en fila):
+┌──────────────────────────────────────────────────────────┐
+│  System Mapper - Execution Details                  [X]  │
+├──────────────────────────────────────────────────────────┤
+│                                                           │
+│  Status: ✅ Success                                       │
+│  Model: GPT-4 Turbo (gpt-4-turbo)                        │
+│  Mode: multi_zone (5 zones analyzed)                     │
+│                                                           │
+│  Timing                                                  │
+│  ├─ Started: 10:35:38                                    │
+│  ├─ Completed: 10:43:12                                  │
+│  └─ Duration: 7 minutes 34 seconds                       │
+│                                                           │
+│  Token Usage                                             │
+│  ├─ Input: 72,150 tokens ($0.72)                        │
+│  ├─ Output: 13,080 tokens ($0.39)                       │
+│  └─ Total: 85,230 tokens ($1.45)                        │
+│                                                           │
+│  Output Summary                                          │
+│  Detected layered architecture with 87% confidence.      │
+│  Identified service layer pattern, repository pattern,   │
+│  and clear separation of concerns.                       │
+│                                                           │
+│  [View Full Output →]  [Download JSON]                   │
+│                                                           │
+└──────────────────────────────────────────────────────────┘
+
+---
+
+**Tab 3: Outputs**
+
+Lista de outputs generados con tabs JSON/Rendered:
+┌──────────────────────────────────────────────────────────┐
+│  Generated Outputs                                        │
+├──────────────────────────────────────────────────────────┤
+│                                                           │
+│  📊 Stack Intelligence Report                            │
+│  └─ Agent: Stack Detector | Size: 8.4 KB                │
+│     [Raw JSON] [Rendered] [Download]                     │
+│                                                           │
+│     (Si "Rendered" está activo)                          │
+│     ┌──────────────────────────────────────────────────┐│
+│     │ Stack Summary                                     ││
+│     │ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ││
+│     │                                                   ││
+│     │ Primary Language: Python                          ││
+│     │ Analysis Scope: Backend                           ││
+│     │                                                   ││
+│     │ Frameworks Detected:                              ││
+│     │ • Django 4.2.1 (Web Framework)                   ││
+│     │ • Celery 5.2.7 (Task Queue)                      ││
+│     │ • Django REST Framework 3.14.0 (API)             ││
+│     │                                                   ││
+│     │ Services:                                         ││
+│     │ • PostgreSQL 14                                   ││
+│     │ • Redis 7.0                                       ││
+│     │                                                   ││
+│     │ ... (más contenido renderizado)                   ││
+│     └──────────────────────────────────────────────────┘│
+│                                                           │
+├──────────────────────────────────────────────────────────┤
+│                                                           │
+│  🏗️  Architecture Context Payload                        │
+│  └─ Agent: Context Builder | Size: 89.2 KB              │
+│     [Raw JSON] [Rendered] [Download]                     │
+│                                                           │
+├──────────────────────────────────────────────────────────┤
+│                                                           │
+│  🗺️  System Map Report                                   │
+│  └─ Agent: System Mapper | Size: 15.7 KB                │
+│     [Raw JSON] [Rendered] [Download]                     │
+│                                                           │
+│     (Si "Raw JSON" está activo)                          │
+│     ┌──────────────────────────────────────────────────┐│
+│     │ {                                                 ││
+│     │   "dominant_architecture": "layered",             ││
+│     │   "architecture_confidence": 0.87,                ││
+│     │   "system_style": "Backend follows layered...",  ││
+│     │   "patterns_detected": [                          ││
+│     │     {                                             ││
+│     │       "pattern_name": "service_layer",            ││
+│     │       "evidence_files": [...]                     ││
+│     │     }                                             ││
+│     │   ],                                              ││
+│     │   ...                                             ││
+│     │ }                                                 ││
+│     └──────────────────────────────────────────────────┘│
+│                                                           │
+├──────────────────────────────────────────────────────────┤
+│                                                           │
+│  🔧 Tech Debt Analysis Report                            │
+│  └─ Agent: Tech Debt Analyzer | Size: 42.9 KB           │
+│     [Raw JSON] [Rendered] [Download]                     │
+│                                                           │
+├──────────────────────────────────────────────────────────┤
+│                                                           │
+│  📝 Technical Documentation                              │
+│  └─ Agent: Technical Doc Writer | Size: 18.2 KB         │
+│     [Markdown] [Download]                                │
+│                                                           │
+│     ┌──────────────────────────────────────────────────┐│
+│     │ # Technical Architecture Documentation            ││
+│     │                                                   ││
+│     │ ## Overview                                       ││
+│     │ This backend follows a layered architecture...   ││
+│     │                                                   ││
+│     │ ## Architecture Pattern                           ││
+│     │ The system uses a clear layered architecture...  ││
+│     │ ... (markdown renderizado)                        ││
+│     └──────────────────────────────────────────────────┘│
+│                                                           │
+└──────────────────────────────────────────────────────────┘
+
+**Endpoints para obtener outputs**:
+GET /api/jobs/{job_id}/outputs/stack_report
+GET /api/jobs/{job_id}/outputs/architecture_context
+GET /api/jobs/{job_id}/outputs/system_map
+GET /api/jobs/{job_id}/outputs/tech_debt_analysis
+GET /api/jobs/{job_id}/outputs/technical_doc
+
+**Response** (ejemplo de system_map):
+```json
+{
+  "type": "system_map",
+  "format": "json",
+  "content": {
+    "dominant_architecture": "layered",
+    "architecture_confidence": 0.87,
+    "system_style": "Backend follows layered architecture with clear separation...",
+    "patterns_detected": [...],
+    "evidence_files": [...],
+    ...
+  }
+}
+```
+
+---
+
+**Tab 4: Costs**
+
+Breakdown visual de costos:
+┌──────────────────────────────────────────────────────────┐
+│  Cost Breakdown                                           │
+├──────────────────────────────────────────────────────────┤
+│                                                           │
+│  Total Cost: $2.45 USD                                   │
+│                                                           │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │                                                     │ │
+│  │         (Gráfico de pie chart)                     │ │
+│  │                                                     │ │
+│  │     System Mapper: 59%                             │ │
+│  │     Tech Debt: 14%                                 │ │
+│  │     Docs: 6%                                       │ │
+│  │     Deterministic: 0%                              │ │
+│  │                                                     │ │
+│  └────────────────────────────────────────────────────┘ │
+│                                                           │
+│  By Agent                                                │
+│  ──────────────────────────────────────────────────────  │
+│  System Mapper (GPT-4 Turbo)              $1.45  (59%)  │
+│  Tech Debt Analyzer (Claude Haiku)        $0.35  (14%)  │
+│  Technical Doc Writer (GPT-3.5)           $0.15   (6%)  │
+│  Stack Detector (Deterministic)           $0.00   (0%)  │
+│  Context Builder (Deterministic)          $0.00   (0%)  │
+│                                                           │
+│  By Model                                                │
+│  ──────────────────────────────────────────────────────  │
+│  GPT-4 Turbo                              $1.45  (59%)  │
+│  Claude Haiku                             $0.35  (14%)  │
+│  GPT-3.5 Turbo                            $0.15   (6%)  │
+│                                                           │
+│  Token Breakdown                                         │
+│  ──────────────────────────────────────────────────────  │
+│  Input Tokens:   105,560  ($1.56)                       │
+│  Output Tokens:   17,896  ($0.89)                       │
+│  Total Tokens:   123,456  ($2.45)                       │
+│                                                           │
+└──────────────────────────────────────────────────────────┘
+
+---
+
+**Tab 5: Logs**
+
+Timeline de eventos del Job:
+┌──────────────────────────────────────────────────────────┐
+│  Execution Logs                              [Download]  │
+├──────────────────────────────────────────────────────────┤
+│                                                           │
+│  [Timestamp]      [Agent]              [Event]           │
+│  ────────────────────────────────────────────────────────│
+│  10:30:15.234     system               Job started       │
+│  10:30:15.456     stack_detector       Agent started     │
+│  10:30:27.890     stack_detector       Detected Django..│
+│  10:31:05.123     stack_detector       Detected Postgre.│
+│  10:32:30.456     stack_detector       Agent completed ✅│
+│  10:32:30.567     context_builder      Agent started     │
+│  10:33:12.789     context_builder      Scanning files... │
+│  10:34:01.234     context_builder      Classified 1,247..│
+│  10:35:38.901     context_builder      Agent completed ✅│
+│  10:35:38.912     system_mapper        Agent started     │
+│  10:36:45.234     system_mapper        Budget check OK   │
+│  10:37:12.567     system_mapper        Mode: multi_zone  │
+│  10:38:30.890     system_mapper        Analyzing zone 1/5│
+│  10:40:15.123     system_mapper        Analyzing zone 2/5│
+│  10:41:50.456     system_mapper        Analyzing zone 3/5│
+│  10:42:30.789     system_mapper        Consolidating...  │
+│  10:43:12.012     system_mapper        Agent completed ✅│
+│  10:43:12.123     tech_debt_analyzer   Agent started     │
+│  10:44:05.456     tech_debt_analyzer   Running Pylint... │
+│  10:45:30.789     tech_debt_analyzer   Found 487 findings│
+│  10:47:00.012     tech_debt_analyzer   LLM synthesis...  │
+│  10:48:20.345     tech_debt_analyzer   Agent completed ✅│
+│  10:48:20.456     technical_doc_writer Agent started     │
+│  10:48:45.789     technical_doc_writer Generating docs...│
+│  10:48:57.012     technical_doc_writer Agent completed ✅│
+│  10:48:57.123     system               Job completed ✅  │
+│                                                           │
+│  (auto-scroll to bottom, logs actualizándose en vivo     │
+│   si el Job está running)                                │
+│                                                           │
+└──────────────────────────────────────────────────────────┘
+
+**Endpoint**:
+GET /api/jobs/{job_id}/logs
+
+**Response**:
+```json
+{
+  "logs": [
+    {
+      "timestamp": "2024-01-15T10:30:15.234Z",
+      "level": "info",
+      "agent": "system",
+      "message": "Job started"
+    },
+    {
+      "timestamp": "2024-01-15T10:30:15.456Z",
+      "level": "info",
+      "agent": "stack_detector",
+      "message": "Agent started"
+    },
+    ...
+  ],
+  "total": 1247
+}
+```
+
+---
+
+## COMPONENTES UI PRINCIPALES
+
+### 1. JobsTable
+**Descripción**: Tabla principal de Jobs con filtros y paginación
+
+**Props**:
+- `jobs`: Array de objetos Job
+- `onJobClick`: Función callback al hacer click en Job
+- `filters`: Objeto con filtros activos
+- `onFilterChange`: Función callback cuando cambian filtros
+
+**Estados internos**:
+- `sortColumn`: Columna actual de ordenamiento
+- `sortDirection`: Dirección de ordenamiento (asc/desc)
+- `selectedFilters`: Filtros seleccionados
+
+**Subcomponentes**:
+- `FilterBar`: Barra de filtros (Status, Repo, Date, Scope, Tier)
+- `JobRow`: Fila individual de Job
+- `Pagination`: Controles de paginación
+
+---
+
+### 2. CreateJobWizard
+**Descripción**: Wizard multi-paso para crear Job
+
+**Estados**:
+- `step`: Paso actual (1, 2, 3)
+- `repoUrl`: URL del repositorio
+- `githubToken`: Token de GitHub
+- `branch`: Branch seleccionado
+- `tier`: Tier seleccionado (budget/standard/premium)
+- `agentConfigs`: Configuración de agentes
+- `estimate`: Estimación de pre-análisis
+
+**Subcomponentes**:
+- `Step1RepoInput`: Input de repo, token, branch
+- `Step2AgentConfig`: Configuración de agentes y tier
+- `Step3Confirmation`: Modal de confirmación con estimación
+
+**Flujo**:
+1. Usuario completa Step 1 → Valida inputs → Next
+2. Frontend llama `GET /api/agents` → Renderiza Step 2
+3. Usuario configura tier y overrides → Next
+4. Frontend llama `POST /api/jobs/estimate` → Muestra Step 3
+5. Usuario confirma → Frontend llama `POST /api/jobs` → Navega a JobLiveView
+
+---
+
+### 3. AgentConfigurator
+**Descripción**: Panel de configuración de agentes con tier selector
+
+**Props**:
+- `agents`: Array de agentes obtenidos de `/api/agents`
+- `tier`: Tier seleccionado
+- `onTierChange`: Callback cuando cambia tier
+- `onAgentConfigChange`: Callback cuando cambia config de agente
+
+**Estados**:
+- `selectedTier`: Tier actual (budget/standard/premium)
+- `agentOverrides`: Map de overrides por agente
+- `enabledAgents`: Set de agentes habilitados
+
+**UI**:
+- Radio buttons para tier (Budget/Standard/Premium)
+- Lista de agentes con:
+  - Checkbox para habilitar/deshabilitar (si es opcional)
+  - Dropdown de modelo (si usa LLM) con info de costo
+  - Info tooltip con descripción del agente
+
+---
+
+### 4. JobLiveView
+**Descripción**: Vista en tiempo real de Job en ejecución
+
+**Props**:
+- `jobId`: ID del Job
+
+**Estados**:
+- `job`: Objeto Job actual
+- `agents`: Array de agentes con estado actual
+- `activeAgent`: Agente actualmente ejecutándose
+- `streamedOutput`: Output en streaming del agente activo
+- `communications`: Array de comunicaciones entre agentes
+
+**Conexión real-time**:
+- Establece conexión SSE con `GET /api/jobs/{jobId}/stream`
+- Escucha eventos: `job_status`, `agent_started`, `agent_progress`, `agent_output_chunk`, `agent_completed`, `agent_communication`, `job_completed`, `job_failed`
+- Actualiza estados según eventos recibidos
+
+**Subcomponentes**:
+- `AgentTimeline`: Timeline horizontal de agentes
+- `ActiveAgentPanel`: Panel expandido del agente activo
+- `StreamingOutputViewer`: Viewer de JSON/texto en streaming
+- `CompletedAgentsList`: Lista colapsable de agentes completados
+
+---
+
+### 5. AgentTimeline
+**Descripción**: Timeline horizontal mostrando estado de agentes
+
+**Props**:
+- `agents`: Array de agentes con estados
+- `communications`: Array de comunicaciones entre agentes
+- `onAgentClick`: Callback al hacer click en agente
+
+**UI**:
+- Cajas horizontales representando cada agente
+- Estados visuales:
+  - Pending: Gris, sin borde
+  - Running: Azul pulsante, borde animado
+  - Completed: Verde, checkmark
+  - Failed: Rojo, X
+- Flechas animadas entre agentes cuando hay comunicación
+- Info de cada agente: Nombre, duración, costo
+
+---
+
+### 6. StreamingOutputViewer
+**Descripción**: Viewer de JSON que se actualiza en tiempo real
+
+**Props**:
+- `content`: Contenido actual (puede ser parcial)
+- `isStreaming`: Boolean si sigue recibiendo datos
+- `format`: Formato del contenido (json/text/markdown)
+
+**Features**:
+- Syntax highlighting para JSON
+- Auto-scroll mientras está streaming
+- Cursor parpadeante al final mientras streaming activo
+- Botón para detener auto-scroll
+- Validación de JSON parcial (tolerante a JSON incompleto)
+
+---
+
+### 7. JobDetailView
+**Descripción**: Vista completa de Job terminado con tabs
+
+**Props**:
+- `jobId`: ID del Job
+
+**Estados**:
+- `job`: Objeto Job completo
+- `activeTab`: Tab activo (overview/agents/outputs/costs/logs)
+- `outputs`: Map de outputs por tipo
+- `logs`: Array de logs
+
+**Tabs**:
+- `OverviewTab`: Resumen del Job
+- `AgentsTab`: Tabla de agentes ejecutados
+- `OutputsTab`: Lista de outputs con viewers
+- `CostsTab`: Breakdown de costos con gráficos
+- `LogsTab`: Timeline de logs
+
+---
+
+### 8. OutputViewer
+**Descripción**: Viewer de outputs con tabs JSON/Rendered
+
+**Props**:
+- `output`: Objeto output
+- `type`: Tipo de output (stack_report, system_map, etc.)
+
+**Estados**:
+- `viewMode`: Modo de vista (json/rendered)
+- `content`: Contenido del output
+
+**Features**:
+- Tab "Raw JSON": Syntax highlighted JSON
+- Tab "Rendered": Vista renderizada específica por tipo de output
+- Botón "Download": Descarga el JSON
+- Copy to clipboard
+
+**Renders específicos por tipo**:
+- `stack_report`: Cards de tecnologías, frameworks, services
+- `system_map`: Visualización de arquitectura, patrones, evidencias
+- `tech_debt_analysis`: Lista categorizada de findings, quick wins
+- `technical_doc`: Markdown rendered
+
+---
+
+### 9. CostBreakdownChart
+**Descripción**: Gráfico de pie chart de costos
+
+**Props**:
+- `agents`: Array de agentes con costos
+- `totalCost`: Costo total
+
+**Features**:
+- Pie chart interactivo (hover muestra detalles)
+- Leyenda con % por agente
+- Tabla de breakdown por agente y por modelo
+- Breakdown de tokens (input/output)
+
+**Librería sugerida**: Recharts, Chart.js, o Victory
+
+---
+
+### 10. FilterBar
+**Descripción**: Barra de filtros para JobsTable
+
+**Props**:
+- `filters`: Objeto de filtros actuales
+- `onFilterChange`: Callback cuando cambian filtros
+- `repos`: Lista de repos únicos (para dropdown)
+
+**Filtros**:
+- Status: Dropdown (All, Running, Completed, Failed)
+- Repo: Dropdown con autocomplete
+- Date: Date range picker
+- Scope: Dropdown (All, Frontend, Backend, Mobile, etc.)
+- Tier: Dropdown (All, Budget, Standard, Premium)
+
+**Features**:
+- "Clear all filters" button
+- Badge count de filtros activos
+- Filters persisten en URL query params
+
+---
+
+## APIS DEL BACKEND REQUERIDAS
+
+### Jobs
+
+#### GET /api/jobs
+**Descripción**: Lista de Jobs del usuario
+
+**Query params**:
+- `status`: Filter by status (running, completed, failed)
+- `repo`: Filter by repo name
+- `scope`: Filter by analysis_scope
+- `tier`: Filter by tier
+- `start_date`: Filter by date range start
+- `end_date`: Filter by date range end
+- `page`: Page number (default: 1)
+- `page_size`: Items per page (default: 20)
+
+**Response**: Ver "Flujo 1: Dashboard Principal"
+
+---
+
+#### GET /api/jobs/{job_id}
+**Descripción**: Detalle completo de un Job
+
+**Response**: Ver "Flujo 4: Vista Detallada de Job Completado"
+
+---
+
+#### POST /api/jobs
+**Descripción**: Crear nuevo Job
+
+**Request body**:
+```json
+{
+  "repo_url": "https://github.com/company/api-backend",
+  "branch": "main",
+  "github_token": "ghp_xxxxxxxxxxxx",
+  "tier": "standard",
+  "agent_configs": [
+    {
+      "agent_id": "stack_detector",
+      "enabled": true,
+      "model": null
+    },
+    {
+      "agent_id": "system_mapper",
+      "enabled": true,
+      "model": "gpt-4-turbo"
+    },
+    ...
+  ]
+}
+```
+
+**Response**:
+```json
+{
+  "job_id": "uuid-1234",
+  "status": "running",
+  "created_at": "2024-01-15T10:30:00Z",
+  "started_at": "2024-01-15T10:30:15Z"
+}
+```
+
+---
+
+#### POST /api/jobs/estimate
+**Descripción**: Estimar costo y duración de análisis
+
+**Request body**: Same as POST /api/jobs
+
+**Response**: Ver "Paso 3: Pre-análisis y Confirmación"
+
+---
+
+#### DELETE /api/jobs/{job_id}
+**Descripción**: Cancelar/detener Job en ejecución
+
+**Response**:
+```json
+{
+  "job_id": "uuid-1234",
+  "status": "cancelled",
+  "message": "Job stopped successfully"
+}
+```
+
+---
+
+### Agents
+
+#### GET /api/agents
+**Descripción**: Lista de agentes disponibles con configuración de modelos
+
+**Response**: Ver "Paso 2: Configuración de Agentes"
+
+---
+
+### Outputs
+
+#### GET /api/jobs/{job_id}/outputs/{output_type}
+**Descripción**: Obtener output específico de un Job
+
+**Params**:
+- `output_type`: Tipo de output (stack_report, architecture_context, system_map, tech_debt_analysis, technical_doc, etc.)
+
+**Response**:
+```json
+{
+  "type": "system_map",
+  "format": "json",
+  "content": {
+    "dominant_architecture": "layered",
+    ...
+  }
+}
+```
+
+---
+
+### Logs
+
+#### GET /api/jobs/{job_id}/logs
+**Descripción**: Obtener logs completos de ejecución del Job
+
+**Response**: Ver "Tab 5: Logs"
+
+---
+
+### Real-time
+
+#### GET /api/jobs/{job_id}/stream
+**Descripción**: SSE endpoint para updates en tiempo real
+
+**Events emitidos**: Ver "Flujo 3: Vista en Vivo de Job (Running)"
+
+**Event types**:
+- `job_status`
+- `agent_started`
+- `agent_progress`
+- `agent_output_chunk`
+- `agent_completed`
+- `agent_communication`
+- `job_completed`
+- `job_failed`
+
+---
+
+## ESTADOS GLOBALES DE LA APLICACIÓN
+
+### User State
+```javascript
+{
+  id: "user-uuid",
+  email: "user@example.com",
+  name: "John Doe",
+  tier: "standard",  // Default tier del usuario
+  created_at: "2024-01-01T00:00:00Z"
+}
+```
+
+### Jobs State
+```javascript
+{
+  list: [...],  // Array de Jobs
+  current: {...},  // Job actual en detalle
+  filters: {
+    status: null,
+    repo: null,
+    scope: null,
+    tier: null,
+    startDate: null,
+    endDate: null
+  },
+  pagination: {
+    page: 1,
+    pageSize: 20,
+    total: 42
+  }
+}
+```
+
+### Agents State
+```javascript
+{
+  available: [...],  // Array de agentes disponibles
+  tiers: [...],  // Array de tiers con configuraciones
+  loading: false,
+  error: null
+}
+```
+
+### Real-time State (para Job en ejecución)
+```javascript
+{
+  connected: true,
+  jobId: "uuid-1234",
+  agents: [...],  // Estado actual de cada agente
+  activeAgent: {...},  // Agente actualmente ejecutándose
+  streamedOutput: "...",  // Output en streaming
+  communications: [...],  // Comunicaciones entre agentes
+  elapsed: 745  // Segundos transcurridos
+}
+```
+
+---
+
+## NAVEGACIÓN Y RUTAS
+
+### Rutas principales
+/                         → Redirect to /jobs
+/jobs                     → JobsTable (lista de Jobs)
+/jobs/new                 → CreateJobWizard
+/jobs/:jobId              → JobLiveView (si running) o JobDetailView (si completed/failed)
+
+### Navegación condicional en `/jobs/:jobId`
+- Si `job.status === "running"` → Renderiza `JobLiveView`
+- Si `job.status === "completed" || job.status === "failed"` → Renderiza `JobDetailView`
+
+---
+
+## RESPONSIVE DESIGN
+
+### Breakpoints
+- **Mobile**: < 640px
+- **Tablet**: 640px - 1024px
+- **Desktop**: > 1024px
+
+### Adaptaciones por dispositivo
+
+**Mobile (< 640px)**:
+- JobsTable: Cards verticales en vez de tabla
+- CreateJobWizard: Pantalla completa, un paso a la vez
+- AgentTimeline: Vertical en vez de horizontal
+- Tabs: Dropdown selector en vez de tabs horizontales
+- FilterBar: Modal con filtros en vez de barra inline
+
+**Tablet (640px - 1024px)**:
+- JobsTable: Tabla con scroll horizontal si es necesario
+- AgentTimeline: Horizontal pero con scroll si hay muchos agentes
+- Sidebar colapsable (si existe)
+
+**Desktop (> 1024px)**:
+- Layout completo sin restricciones
+- Sidebar fija (si existe)
+- Multi-column layouts donde aplique
+
+---
+
+## MANEJO DE ERRORES
+
+### Errores de API
+```javascript
+{
+  error: {
+    code: "INVALID_TOKEN",
+    message: "GitHub token is invalid or expired",
+    details: {...}
+  }
+}
+```
+
+**UI debe mostrar**:
+- Toast notification con mensaje de error
+- Error boundary para errores críticos
+- Retry button donde aplique
+- Mensajes user-friendly (no técnicos)
+
+### Errores de conexión SSE
+- Si SSE se desconecta durante Job running → Intentar reconectar automáticamente
+- Si falla reconexión → Mostrar warning "Connection lost, retrying..."
+- Después de 3 intentos → Fallback a polling cada 5 segundos
+- Botón manual "Reconnect" siempre disponible
+
+### Validaciones en CreateJobWizard
+- Validar URL de GitHub (formato correcto)
+- Validar token (formato correcto, no vacío)
+- Branch debe seleccionarse de lista (no input libre)
+- Al menos un agente debe estar habilitado
+
+---
+
+## PERFORMANCE Y OPTIMIZACIÓN
+
+### Lazy Loading
+- Outputs grandes (> 100KB) deben cargarse on-demand cuando usuario hace click
+- Logs deben paginarse si son > 1000 entries
+- JobsTable debe virtualizarse si hay > 100 Jobs
+
+### Caching
+- Lista de agentes (`GET /api/agents`) se cachea y solo se revalida cada hora
+- Jobs completados se cachean en memoria durante la sesión
+- Outputs se cachean después de cargarlos
+
+### Real-time Optimizations
+- Debounce de actualizaciones de streaming output (max 10 updates/segundo)
+- Pausar auto-scroll si usuario scrollea manualmente
+- Desconectar SSE cuando usuario sale de la página de Job running
+
+---
+
+## ACCESIBILIDAD (A11Y)
+
+### Keyboard Navigation
+- Todos los elementos interactivos accesibles por Tab
+- Enter/Space activan botones y links
+- Escape cierra modals
+- Arrow keys navegan tabs
+
+### Screen Readers
+- Semantic HTML (nav, main, section, article, etc.)
+- ARIA labels en elementos interactivos
+- ARIA live regions para updates de Job en tiempo real
+- Alt text en íconos y estados visuales
+
+### Contrast
+- Cumplir WCAG AA mínimo (contrast ratio 4.5:1 para texto)
+- Estados de error en rojo con suficiente contraste
+- Estados de éxito en verde accesible
+
+---
+
+## SEGURIDAD
+
+### Tokens de GitHub
+- **NUNCA** almacenar en localStorage/sessionStorage
+- Enviar solo al backend en request de creación de Job
+- Backend debe encriptarlos antes de guardar en DB
+- Frontend no debe recibir token de vuelta en responses
+
+### XSS Prevention
+- Sanitizar todos los outputs de agentes antes de renderizar
+- Usar libraries como DOMPurify para sanitizar HTML/Markdown
+- No usar `dangerouslySetInnerHTML` sin sanitización
+
+### CORS
+- Backend debe tener CORS configurado solo para dominio del frontend
+- Credentials: 'include' si se usan cookies de sesión
+
+---
+
+## TECH STACK RECOMENDADO
+
+### Framework
+- **React** (con TypeScript)
+- **Next.js** (si necesitas SSR/SSG)
+- **Vite** (si solo SPA)
+
+### State Management
+- **Zustand** (simple, moderno)
+- **Redux Toolkit** (si prefieres Redux)
+- **TanStack Query** (para server state y caching)
+
+### Routing
+- **React Router** (si SPA con Vite)
+- **Next.js Router** (si Next.js)
+
+### UI Components
+- **shadcn/ui** (componentes modernos con Tailwind)
+- **Radix UI** (primitivos accesibles)
+- **Headless UI** (si prefieres Tailwind)
+
+### Styling
+- **Tailwind CSS** (utility-first, rápido)
+- **CSS Modules** (si prefieres CSS tradicional)
+
+### Charts
+- **Recharts** (simple, declarativo)
+- **Chart.js** (más potente)
+- **Victory** (muy customizable)
+
+### Real-time
+- **EventSource** (nativo para SSE)
+- **Socket.io-client** (si usas WebSockets en vez de SSE)
+
+### Forms
+- **React Hook Form** (performante, fácil validación)
+- **Zod** (schema validation)
+
+### Code Highlighting
+- **Prism.js** (ligero)
+- **Highlight.js** (más lenguajes)
+- **Monaco Editor** (si quieres editor completo)
+
+### Markdown Rendering
+- **react-markdown** (simple)
+- **MDX** (si quieres componentes React en Markdown)
+
+### Date/Time
+- **date-fns** (funcional, tree-shakeable)
+- **Day.js** (ligero)
+
+### HTTP Client
+- **Axios** (popular, features completas)
+- **Fetch API** (nativo, suficiente para la mayoría)
+
+---
+
+## TESTING
+
+### Unit Tests
+- **Vitest** (rápido, compatible con Vite)
+- **Jest** (estándar de facto)
+- **Testing Library** (tests user-centric)
+
+**Qué testear**:
+- Componentes puros (OutputViewer, AgentCard, etc.)
+- Utility functions (formatters, validators)
+- Custom hooks
+
+### Integration Tests
+- **Testing Library** con React
+- Mock de APIs con **MSW** (Mock Service Worker)
+
+**Qué testear**:
+- Flujos completos (crear Job, ver detalle)
+- Interacciones entre componentes
+- State management
+
+### E2E Tests
+- **Playwright** (moderno, rápido)
+- **Cypress** (popular, maduro)
+
+**Qué testear**:
+- Flujo completo de creación de Job
+- Navegación entre páginas
+- Real-time updates (mock SSE)
+
+---
+
+## DEPLOYMENT
+
+### Build
+```bash
+npm run build
+```
+
+### Environment Variables
+VITE_API_URL=https://api.codeborn.com
+VITE_SSE_URL=https://api.codeborn.com
+
+### Hosting
+- **Vercel** (si Next.js, zero-config)
+- **Netlify** (si SPA)
+- **Cloudflare Pages** (rápido, global)
+- **S3 + CloudFront** (si AWS)
+
+### CI/CD
+- GitHub Actions para build y deploy automático
+- PR previews en Vercel/Netlify
+
+---
+
+## MÉTRICAS Y ANALYTICS
+
+### Tracking recomendado
+- Page views (qué páginas visitan)
+- Job creations (cuántos Jobs se crean)
+- Job success rate (% de Jobs completados vs failed)
+- Tier usage (% de Budget vs Standard vs Premium)
+- Average job duration
+- Average job cost
+- Errors (qué errores ocurren más)
+
+### Herramientas
+- **Google Analytics** (básico)
+- **PostHog** (analytics + feature flags)
+- **Mixpanel** (eventos de producto)
+- **Sentry** (error tracking)
+
+---
+
+## FUTURAS MEJORAS (FUERA DE SCOPE V1)
+
+- Notificaciones push/email cuando Job completa
+- Comparación entre análisis (diff de Jobs)
+- Re-análisis automático (webhooks)
+- Roles y permisos (Admin, Member, Viewer)
+- Múltiples organizaciones por usuario
+- Export de reportes a PDF
+- Integración con Confluence/Jira desde UI
+- Chat multi-repo (búsqueda semántica)
+- Scheduled análisis
+- Presupuesto alerts
+- Custom dashboards
+- Sharing de Jobs (links públicos)
+
+---
+
+## RESUMEN DE DECISIONES CLAVE
+
+✅ Navegación por Jobs (no por Repos)
+✅ Un usuario, una organización
+✅ Configuración híbrida: Tier global + overrides por agente
+✅ Vista en vivo con streaming de outputs
+✅ SSE para real-time updates
+✅ Tabs para outputs (JSON + Rendered)
+✅ Responsive (mobile, tablet, desktop)
+✅ Sin re-análisis en v1
+✅ Sin notificaciones en v1
+✅ Sin roles en v1
+✅ Budget automático por tier (no manual)
+✅ Costos mostrados solo en Job individual (no globales)
+
+---
+
+**FIN DEL PROMPT DE FRONTEND**

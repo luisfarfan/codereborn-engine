@@ -9,6 +9,7 @@ from fastapi import APIRouter
 
 from app.api.routers import (
     agents,
+    auth,
     docs,
     impact,
     jobs,
@@ -21,6 +22,7 @@ from app.api.routers import (
 api_router = APIRouter()
 
 # Core job lifecycle + frontend-facing endpoints
+api_router.include_router(auth.router)         # GET /auth/me (Mock)
 api_router.include_router(jobs.router)
 api_router.include_router(stream.router)       # GET /jobs/{id}/stream (SSE)
 api_router.include_router(agents.router)       # GET /agents (static catalog)

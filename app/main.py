@@ -16,6 +16,7 @@ from app.api.router import api_router
 from app.core.settings import get_settings
 from app.infrastructure.database import create_db_tables
 from app.infrastructure.redis_client import close_redis_client, get_redis_client
+from app.infrastructure.seeds import seed_initial_data
 
 settings = get_settings()
 
@@ -25,6 +26,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """Application startup / shutdown lifecycle."""
     # Startup
     await create_db_tables()
+    await seed_initial_data()
     await get_redis_client()   # warm up connection pool
 
     yield

@@ -12,8 +12,9 @@ Endpoints:
 """
 
 import uuid
+from datetime import datetime
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
@@ -31,6 +32,7 @@ from app.api.schemas.responses import (
     OutputMetaResponse,
     OutputResponse,
 )
+from app.application.job_orchestrator import JobOrchestrator
 from app.domain.enums import AgentName, AgentStatus, JobStatus
 from app.models.db_models import (
     AgentExecution,
@@ -133,7 +135,9 @@ async def estimate_job(body: EstimateJobRequest) -> JobEstimateResponse:
 )
 async def create_job(
     body: CreateJobRequest,
+    background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
+    orchestrator: JobOrchestrator = Depends(JobOrchestrator),
 ) -> JobCreateResponse:
     job = Job(
         repo_url=body.repo_url,
@@ -148,6 +152,9 @@ async def create_job(
     db.add(job)
     await db.flush()
     await db.refresh(job)
+
+    # Trigger asynchronous execution in the background
+    background_tasks.add_task(orchestrator.run_job, job.id)
 
     return JobCreateResponse(
         job_id=job.id,
@@ -177,7 +184,6 @@ async def list_jobs(
     end_date: str | None = Query(default=None, description="ISO date: created before"),
     db: AsyncSession = Depends(get_db),
 ) -> JobListResponse:
-    from datetime import datetime
     offset = (page - 1) * page_size
     query = select(Job).order_by(Job.created_at.desc())
 

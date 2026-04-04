@@ -25,6 +25,30 @@ def _now() -> datetime:
     return datetime.utcnow()
 
 
+# ── User ─────────────────────────────────────────────────────────────────────
+
+
+class User(SQLModel, table=True):
+    """
+    Minimal user model for frontend identification and job ownership.
+    No complex auth (JWT/OAuth) for now, just fixed seeds.
+    """
+
+    __tablename__ = "users"
+
+    id: uuid.UUID = Field(
+        default_factory=_uuid_pk,
+        sa_column=Column(PG_UUID(as_uuid=True), primary_key=True, default=_uuid_pk),
+    )
+    email: str = Field(unique=True, index=True)
+    full_name: str
+    github_username: str | None = Field(default=None, index=True)
+    avatar_url: str | None = Field(default=None)
+    is_active: bool = Field(default=True)
+
+    created_at: datetime = Field(default_factory=_now)
+
+
 # ── Job ──────────────────────────────────────────────────────────────────────
 
 
@@ -66,6 +90,12 @@ class Job(SQLModel, table=True):
     started_at: datetime | None = Field(default=None)
     completed_at: datetime | None = Field(default=None)
     error_detail: str | None = Field(default=None)
+
+    # Owner relationship
+    user_id: uuid.UUID | None = Field(
+        default=None,
+        sa_column=Column(PG_UUID(as_uuid=True), nullable=True, index=True)
+    )
 
 
 # ── AgentExecution ───────────────────────────────────────────────────────────

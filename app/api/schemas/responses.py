@@ -217,3 +217,19 @@ class ErrorResponse(BaseModel):
     error: str
     detail: str | None = None
     code: str | None = None
+
+
+# ── Auth ──────────────────────────────────────────────────────────────────────
+
+
+class UserResponse(BaseModel):
+    """Profile info for the currently identified user."""
+
+    id: uuid.UUID
+    email: str
+    full_name: str
+    github_username: str | None
+    avatar_url: str | None
+    created_at: datetime
+
+    model_config = {"from_attributes": True}

@@ -170,3 +170,75 @@ class StackIntelligenceReport(BaseModel):
     unknowns: list[UnknownSignal] = []
     agent_version: str = "2.0.0"
     analysis_timestamp: datetime = Field(default_factory=datetime.utcnow)
+
+
+# --- Pattern Detector Models (V3 Architectura) ---
+
+class DetectedPattern(BaseModel):
+    pattern: str
+    confidence: float = Field(ge=0.0, le=1.0)
+    evidence: list[str] = []
+
+
+class PatternInsight(BaseModel):
+    primary_pattern: str
+    confidence: float = Field(ge=0.0, le=1.0)
+    evidence: list[str] = []
+    secondary_patterns: list[DetectedPattern] = []
+    notes: str | None = None
+
+
+class DirectoryInterpretation(BaseModel):
+    purpose: str
+    architectural_role: str
+    priority: str  # critical, high, medium, low, ignore
+    reasoning: str | None = None
+
+
+class FrameworkConvention(BaseModel):
+    convention: str
+    detected_in: str
+    confidence: float = Field(ge=0.0, le=1.0)
+    implication: str | None = None
+
+
+class SamplingRule(BaseModel):
+    strategy: str  # analyze_all, sample, skip
+    file_count: int | None = None
+    sample_size: int | None = None
+    sample_method: str | None = None  # largest_files_first, diverse_selection, etc.
+    reason: str | None = None
+
+
+class SamplingStrategy(BaseModel):
+    total_files_in_repo: int
+    recommended_sample_size: int
+    sampling_rules: dict[str, SamplingRule] = {}
+    recommended_files: list[dict[str, Any]] = []
+
+
+class SpecialCase(BaseModel) :
+    case: str
+    confidence: float = Field(ge=0.0, le=1.0)
+    evidence: list[str] = []
+    impact: str | None = None
+
+
+class PatternReport(BaseModel):
+    """
+    Output structure for the Pattern Detector agent.
+    Interprets structure into architectural patterns.
+    """
+    detected_patterns: PatternInsight
+    directory_interpretation: dict[str, DirectoryInterpretation] = {}
+    framework_conventions: list[FrameworkConvention] = []
+    sampling_strategy: SamplingStrategy
+    special_cases: list[SpecialCase] = []
+    
+    # Metadata
+    confidence_score: float = Field(ge=0.0, le=1.0)
+    analysis_timestamp: datetime = Field(default_factory=datetime.utcnow)
+    agent_version: str = "1.0.0"
+    llm_model_used: str | None = None
+    tokens_used: int = 0
+    cost_usd: float = 0.0

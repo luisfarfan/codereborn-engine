@@ -9,7 +9,7 @@
     "JobStatus": ["pending", "running", "completed", "failed", "partial"],
     "AgentName": [
       "stack_detector",
-      "architecture_context_builder",
+      "pattern_detector",
       "system_mapper",
       "tech_debt_analyzer",
       "technical_doc_writer",
@@ -251,49 +251,65 @@
       }
     },
 
-    "ArchitectureContextPayload": {
-      "description": "Full output of ArchitectureContextBuilder. Deterministic — zero LLM tokens. Primary input for SystemMapper.",
-      "produced_by": "architecture_context_builder",
+    "PatternReport": {
+      "description": "Output of the Pattern Detector agent. Interprets repository structure into architectural patterns and sets the sampling strategy for subsequent code analysis.",
+      "produced_by": "pattern_detector",
       "persisted_in": "architecture_contexts",
       "fields": {
-        "repo_tree_summary": {
-          "type": "list[DirectorySummary]",
-          "required": true,
-          "description": "Navigable summary of the directory tree."
-        },
-        "zones": {
-          "type": "list[Zone]",
-          "required": true,
-          "description": "Functional/structural zones detected in the repo."
-        },
-        "file_classifications": {
-          "type": "dict[str, FileClassification]",
-          "required": true,
-          "description": "Map: file_path → classification with role and confidence."
-        },
-        "file_rankings": {
-          "type": "list[FileRanking]",
-          "required": true,
-          "description": "Files sorted descending by architectural value score."
-        },
-        "key_config_files": { "type": "list[FileWithContent]", "required": true },
-        "entrypoints": { "type": "list[FileWithContent]", "required": true },
-        "architectural_samples": {
-          "type": "list[ArchitecturalSample]",
-          "required": true,
-          "description": "Curated code excerpts selected for LLM reasoning."
-        },
-        "selection_rationale": { "type": "str", "required": true, "description": "Explanation of sampling criteria applied." },
-        "import_graph_hints": { "type": "list[ImportGraphNode]", "required": true },
-        "directory_purposes": {
-          "type": "dict[str, str]",
-          "required": true,
-          "description": "Map: dir_path → inferred_purpose string."
-        },
-        "framework_conventions_detected": { "type": "list[FrameworkConvention]", "required": true },
-        "estimated_context_size_tokens": { "type": "int", "required": true },
-        "unknowns": { "type": "list[UnknownSignal]", "required": true },
-        "metadata": { "type": "BuilderMetadata", "required": true }
+        "detected_patterns": { "type": "PatternInsight", "required": true },
+        "directory_interpretation": { "type": "dict[str, DirectoryInterpretation]", "required": true },
+        "framework_conventions": { "type": "list[FrameworkConvention]", "required": true },
+        "sampling_strategy": { "type": "SamplingStrategy", "required": true },
+        "special_cases": { "type": "list[SpecialCase]", "required": true },
+        "confidence_score": { "type": "float", "required": true, "range": [0.0, 1.0] },
+        "analysis_timestamp": { "type": "str", "required": true, "format": "ISO 8601 datetime" }
+      }
+    },
+
+    "PatternInsight": {
+      "fields": {
+        "primary_pattern": { "type": "str", "required": true },
+        "confidence": { "type": "float", "required": true },
+        "evidence": { "type": "list[str]", "required": true },
+        "secondary_patterns": { "type": "list[DetectedPattern]", "required": false },
+        "notes": { "type": "str", "required": false }
+      }
+    },
+
+    "DirectoryInterpretation": {
+      "fields": {
+        "purpose": { "type": "str", "required": true },
+        "architectural_role": { "type": "str", "required": true },
+        "priority": { "type": "str", "required": true, "enum": ["critical", "high", "medium", "low", "ignore"] },
+        "reasoning": { "type": "str", "required": false }
+      }
+    },
+
+    "SamplingStrategy": {
+      "fields": {
+        "total_files_in_repo": { "type": "int", "required": true },
+        "recommended_sample_size": { "type": "int", "required": true },
+        "sampling_rules": { "type": "dict[str, SamplingRule]", "required": true },
+        "recommended_files": { "type": "list[dict]", "required": false }
+      }
+    },
+
+    "SamplingRule": {
+      "fields": {
+        "strategy": { "type": "str", "required": true, "enum": ["analyze_all", "sample", "skip"] },
+        "file_count": { "type": "int", "required": false },
+        "sample_size": { "type": "int", "required": false },
+        "sample_method": { "type": "str", "required": false },
+        "reason": { "type": "str", "required": false }
+      }
+    },
+
+    "SpecialCase": {
+      "fields": {
+        "case": { "type": "str", "required": true },
+        "confidence": { "type": "float", "required": true },
+        "evidence": { "type": "list[str]", "required": true },
+        "impact": { "type": "str", "required": false }
       }
     },
 

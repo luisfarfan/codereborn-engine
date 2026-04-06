@@ -1,17 +1,22 @@
 ; TypeScript Signals Query
 ; ---
+; Minimal, robust patterns for signal extraction
+
 ; Imports
-(import_statement source: (string) @import)
+(import_statement) @import
 
 ; Classes
-(class_declaration name: (identifier) @class_name) @class
+(class_declaration) @class
 
 ; Functions
-(function_declaration name: (identifier) @func_name) @func
+(function_declaration) @func
+
+; Methods inside classes
+(method_definition) @method
 
 ; Interfaces & Types
-(interface_declaration name: (type_identifier) @type_name) @type
-(type_alias_declaration name: (type_identifier) @type_name) @type
+(interface_declaration) @type
+(type_alias_declaration) @type
 
 ; Exports
 (export_statement) @export

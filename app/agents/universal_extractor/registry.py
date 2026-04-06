@@ -19,7 +19,8 @@ class GrammarRegistry:
     """
 
     def __init__(self, grammars_dir: str):
-        self.grammars_dir = grammars_dir
+        self.grammars_dir = os.path.abspath(grammars_dir)
+        logger.info(f"GrammarRegistry initialized with grammars_dir: {self.grammars_dir}")
         self.languages: Dict[str, Language] = {}
         self.queries: Dict[str, Query] = {}
         self.parsers: Dict[str, Parser] = {}
@@ -60,13 +61,16 @@ class GrammarRegistry:
         # Load associated .scm query file if exists
         query_path = os.path.join(self.grammars_dir, f"{name}.scm")
         if os.path.exists(query_path):
+            logger.info(f"Found signal query file at {query_path}")
             try:
                 with open(query_path, "r") as f:
                     query_scm = f.read()
                 self.queries[name] = Query(lang, query_scm)
-                logger.debug(f"Loaded signal query for '{name}'")
+                logger.info(f"Successfully loaded signal query for '{name}'")
             except Exception as e:
-                logger.error(f"Failed to load query for {name}: {e}")
+                logger.error(f"Failed to load query for {name} from {query_path}: {e}")
+        else:
+            logger.warning(f"Query file NOT FOUND for {name} at {query_path}")
 
     def get_parser(self, language_name: str) -> Optional[Parser]:
         """Returns a configured parser for the given language."""

@@ -19,7 +19,7 @@ from app.services.llm_budget_service import LLMBudgetService
 logger = logging.getLogger(__name__)
 
 # Config paths
-GRAMMARS_DIR = os.path.join(os.path.dirname(__file__), "grammars")
+GRAMMARS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "grammars"))
 
 class UniversalExtractorAgent:
     """
@@ -99,7 +99,13 @@ class UniversalExtractorAgent:
             extraction_summary=summary,
             signals_by_file=results_by_file,
             global_patterns={}, # Optimized in Phase 2
-            cost_breakdown=CostBreakdown(llm_cost=total_llm_cost, total_cost_usd=total_llm_cost),
+            cost_breakdown=CostBreakdown(
+                total_cost_usd=self.budget_service.get_state(str(job_id)).spent_usd,
+                llm_cost=self.budget_service.get_state(str(job_id)).spent_usd,
+                tree_sitter_cost=0.0,
+                lsp_cost=0.0,
+                pattern_generation_cost=0.0
+            ),
             analysis_metadata={
                 "analysis_duration_seconds": (datetime.utcnow() - start_time).total_seconds(),
                 "analysis_timestamp": datetime.utcnow().isoformat(),
@@ -122,19 +128,24 @@ class UniversalExtractorAgent:
             if not (os.path.exists(dir_full) and os.path.isdir(dir_full)):
                 continue
 
-            # Get all candidate files in directory
-            # We filter by supported extensions from Registry
-            candidates = [
-                os.path.join(dir_path, f) for f in os.listdir(dir_full)
-                if f.endswith(supported_exts) and os.path.isfile(os.path.join(dir_full, f))
-            ]
+            # Get all candidate files in directory (recursively)
+            candidates = []
+            for root, _, files in os.walk(dir_full):
+                for f in files:
+                    if f.endswith(supported_exts):
+                        full_f = os.path.join(root, f)
+                        rel_f = os.path.relpath(full_f, repo_path)
+                        candidates.append(rel_f)
 
             if rule.strategy == "analyze_all":
                 # Take everything in this critical directory
                 selected.extend(candidates)
             elif rule.strategy == "sample":
                 # Take a sample based on Phase 2 recommendation
+                # Sanitization: ensure at least 1 if not empty, default to 5 if 0 or None
                 sample_size = rule.sample_size or 5
+                if sample_size <= 0 and candidates:
+                    sample_size = 1
                 selected.extend(candidates[:sample_size])
         
         # 2. Fallback: if no rules yielded files, try to find some code files in high-priority dirs

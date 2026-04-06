@@ -11,6 +11,7 @@ compatible with OpenRouter/Gemini.
 """
 
 import uuid
+from typing import Any
 
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -42,6 +43,53 @@ class LLMBudgetService:
     def __init__(self, default_budget_usd: float = 0.50, max_budget_usd: float = 5.00) -> None:
         self.default_budget_usd = default_budget_usd
         self.max_budget_usd = max_budget_usd
+        self._states: dict[str, Any] = {}
+
+    def open_job(self, job_id: str, max_usd: float | None = None, mode: str | None = None) -> Any:
+        """Synchronous job opening for backward compatibility."""
+        max_usd = min(max_usd or self.default_budget_usd, self.max_budget_usd)
+        state = type('BudgetState', (object,), {
+            'job_id': job_id,
+            'max_usd': max_usd,
+            'spent_usd': 0.0,
+            'call_count': 0,
+            'mode': mode
+        })
+        self._states[job_id] = state
+        return state
+
+    def get_state(self, job_id: str) -> Any | None:
+        """Returns the in-memory state for a job."""
+        return self._states.get(job_id)
+
+    def evaluate(self, state: Any, agent: str, model: str, estimated_tokens: int) -> type:
+        """Synchronous evaluation for backward compatibility."""
+        cost_per_1k = MODEL_COSTS_PER_1K.get(model, 0.001)
+        if model in FREE_MODELS:
+            cost_per_1k = 0.0
+        
+        estimated_cost = (estimated_tokens / 1000) * cost_per_1k
+        remaining = state.max_usd - state.spent_usd
+        
+        decision = LLMDecision.APPROVE
+        reason = "Within budget"
+        approved_model = model
+
+        if estimated_cost > remaining:
+            decision = LLMDecision.REJECT
+            reason = f"Insufficient budget: needs ${estimated_cost:.4f}, has ${remaining:.4f}"
+            approved_model = None
+
+        return type('Decision', (object,), {
+            'decision': decision,
+            'approved_model': approved_model,
+            'reason': reason
+        })
+
+    def record_actual_spend(self, state: Any, actual_cost_usd: float) -> None:
+        """Synchronous spend recording for backward compatibility."""
+        state.spent_usd += actual_cost_usd
+        state.call_count += 1
 
     async def evaluate_and_record(
         self,

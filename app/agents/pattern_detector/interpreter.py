@@ -76,7 +76,14 @@ class PatternInterpreter:
 
             # 6. Parse and Validate
             content = response.choices[0].message.content
-            raw_json = json.loads(content)
+            
+            # Robust JSON extraction from Markdown if present
+            if "```json" in content:
+                content = content.split("```json")[1].split("```")[0].strip()
+            elif "```" in content:
+                content = content.split("```")[1].split("```")[0].strip()
+            
+            raw_json = json.loads(content.strip())
             
             # Ensure metadata matches PatternReport schema (AnalysisMetadata)
             # The LLM often puts metadata at the root or within analysis_metadata

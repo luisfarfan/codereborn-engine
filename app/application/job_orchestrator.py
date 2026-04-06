@@ -16,7 +16,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.agents.stack_detector.agent import StackDetectorAgent
 from app.domain.enums import JobStatus
 from app.infrastructure.database import AsyncSessionFactory
-from app.models.db_models import Job
+from app.models.db_models import Job, SignalReport
 from app.services.notification_service import NotificationService
 
 logger = logging.getLogger(__name__)
@@ -66,14 +66,55 @@ class JobOrchestrator:
                 pattern_detector = PatternDetectorAgent(session)
 
                 try:
-                    await pattern_detector.execute(job_id, target_path)
+                    pattern_report = await pattern_detector.execute(job_id, target_path)
                 except Exception as e:
                     logger.error(f"PatternDetector failed: {str(e)}")
                     # PatternDetector failure is critical as it sets the sampling strategy
                     await self._fail_job(session, job, f"Pattern Detection failed: {str(e)}")
                     return
 
-                # 4. RUN Phase 3: System Mapper & Beyond (To be integrated)
+                # 4. RUN Phase 4: Universal Signal Extractor (Hybrid Extraction)
+                logger.info(f"Executing UniversalExtractor for job {job_id}")
+                from app.agents.universal_extractor.agent import UniversalExtractorAgent
+                from app.services.llm_budget_service import LLMBudgetService
+                
+                extractor = UniversalExtractorAgent(LLMBudgetService())
+                
+                try:
+                    # Execute extraction (sampling from pattern_report)
+                    signal_report = await extractor.execute(
+                        job_id=job_id,
+                        repo_path=target_path,
+                        stack_report=report,
+                        pattern_report=pattern_report,
+                        db_session=session
+                    )
+                    
+                    # Persist SignalReport
+                    from sqlmodel import select
+                    q = select(SignalReport).where(SignalReport.job_id == job_id)
+                    existing_result = await session.execute(q)
+                    existing = existing_result.scalars().first()
+                    
+                    if existing:
+                        existing.report_data = signal_report.model_dump(mode="json")
+                        existing.analysis_timestamp = datetime.utcnow()
+                        session.add(existing)
+                    else:
+                        db_report = SignalReport(
+                            job_id=job_id,
+                            report_data=signal_report.model_dump(mode="json")
+                        )
+                        session.add(db_report)
+                    
+                    await session.commit()
+                except Exception as e:
+                    logger.error(f"UniversalExtractor failed: {str(e)}")
+                    # For MVP, we can continue if this fails, but better to fail if critical
+                    await self._fail_job(session, job, f"Signal Extraction failed: {str(e)}")
+                    return
+
+                # 5. RUN Phase 5: System Mapper & Beyond
 
                 # 4. Finalize Job
                 await self._complete_job(session, job)

@@ -250,3 +250,60 @@ class PatternReport(BaseModel):
     
     # Root level confidence for safety
     confidence_score: float = Field(default=1.0, ge=0.0, le=1.0)
+
+
+# --- Universal Signal Extractor Models (V1 MVP) ---
+
+class SignalDeclaration(BaseModel):
+    name: str
+    is_exported: bool = True
+    line_number: int | None = None
+    base_classes: list[str] | None = None  # For classes
+    metadata: dict[str, Any] = {}
+
+
+class UniversalSignalFormat(BaseModel):
+    file_path: str
+    language: str
+    extraction_method: str  # tree-sitter, lsp, llm_zero_shot, pattern_mining
+    signals: dict[str, list[SignalDeclaration]] = {
+        "imports": [],
+        "class_declarations": [],
+        "function_declarations": [],
+        "decorators": [],
+        "type_definitions": [],
+        "file_dependencies": []
+    }
+    metadata: dict[str, Any] = {
+        "lines_of_code": 0,
+        "confidence": 1.0
+    }
+
+
+class ExtractionSummary(BaseModel):
+    total_files_analyzed: int
+    total_files_in_repo: int
+    extraction_strategies_used: dict[str, int] = {}
+    languages_analyzed: dict[str, int] = {}
+    sampling_applied: bool = True
+    sampling_ratio: float = 0.0
+
+
+class CostBreakdown(BaseModel):
+    tree_sitter_cost: float = 0.0
+    lsp_cost: float = 0.0
+    llm_cost: float = 0.0
+    pattern_generation_cost: float = 0.0
+    total_cost_usd: float = 0.0
+
+
+class SignalExtractionReport(BaseModel):
+    """
+    Final output structure for the Universal Signal Extractor agent.
+    Contains unified signal maps extracted via Tree-sitter or LLMs.
+    """
+    extraction_summary: ExtractionSummary
+    signals_by_file: dict[str, UniversalSignalFormat] = {}
+    global_patterns: dict[str, Any] = {}
+    cost_breakdown: CostBreakdown
+    analysis_metadata: AnalysisMetadata = Field(default_factory=AnalysisMetadata)

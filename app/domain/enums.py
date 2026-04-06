@@ -117,6 +117,7 @@ class AgentName(StrEnum):
 
     STACK_DETECTOR = "stack_detector"
     PATTERN_DETECTOR = "pattern_detector"
+    UNIVERSAL_SIGNAL_EXTRACTOR = "universal_signal_extractor"
     SYSTEM_MAPPER = "system_mapper"
     DEBT_ANALYZER = "tech_debt_analyzer"
     TECHNICAL_WRITER = "technical_doc_writer"

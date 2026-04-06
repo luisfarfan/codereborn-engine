@@ -26,6 +26,20 @@ dependencies = [
     "litellm>=1.40.0",
     "langfuse>=2.0.0",
 
+    # Tree-sitter
+    "tree-sitter>=0.23.0",
+    "tree-sitter-python",
+    "tree-sitter-javascript",
+    "tree-sitter-typescript",
+    "tree-sitter-go",
+    "tree-sitter-rust",
+    "tree-sitter-java",
+    "tree-sitter-cpp",
+    "tree-sitter-ruby",
+    "tree-sitter-php",
+    "tree-sitter-bash",
+    "tree-sitter-c-sharp",
+
     # Config / validation
     "pydantic>=2.7.0",
     "pydantic-settings>=2.2.1",
@@ -40,6 +54,9 @@ dependencies = [
     # Auth
     "python-jose[cryptography]>=3.3.0",
     "passlib[bcrypt]>=1.7.4",
+
+    # MCP (Model Context Protocol) 
+    "mcp[fastapi]>=1.0.0",
 ]
 
 [project.optional-dependencies]

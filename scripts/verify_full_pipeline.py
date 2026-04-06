@@ -6,6 +6,8 @@ import json
 from app.infrastructure.database import AsyncSessionFactory
 from app.agents.stack_detector.agent import StackDetectorAgent
 from app.agents.pattern_detector.agent import PatternDetectorAgent
+from app.agents.universal_extractor.agent import UniversalExtractorAgent
+from app.services.llm_budget_service import LLMBudgetService
 from app.domain.enums import AnalysisScope
 
 # Configure logging
@@ -60,8 +62,45 @@ async def run_pipeline(repo_path: str):
                 }
                 json.dump(combined, f, indent=2)
             
-            logger.info(f"\n📄 Full pipeline report saved to '{output_file}'")
+            logger.info(f"\n📄 Architectural report saved to '{output_file}'")
             
+            # PHASE 3: Universal Signal Extractor (Hybrid Extraction)
+            logger.info("\n--- [PHASE 3: SIGNAL EXTRACTOR] ---")
+            try:
+                # Initialize agent and budget service (baseline)
+                budget_service = LLMBudgetService()
+                signal_agent = UniversalExtractorAgent(budget_service)
+                
+                # Execute extraction (sampling from pattern_report)
+                logger.info(f"Extracting signals from {repo_path}...")
+                signal_report = await signal_agent.execute(
+                    job_id=job_id,
+                    repo_path=repo_path,
+                    stack_report=stack_report,
+                    pattern_report=pattern_report,
+                    db_session=session
+                )
+                
+                logger.info(f"✅ Signal Extractor completed!")
+                summary = signal_report.extraction_summary
+                logger.info(f"Files Analyzed: {summary.total_files_analyzed}")
+                logger.info(f"Strategies Used: {summary.extraction_strategies_used}")
+                logger.info(f"LLM Costs (USD): ${signal_report.cost_breakdown.total_cost_usd:.4f}")
+                
+                # Update unified result for inspection
+                with open(output_file, "r") as f:
+                    combined = json.load(f)
+                
+                combined["signal_intelligence"] = signal_report.model_dump(mode="json")
+                
+                with open(output_file, "w") as f:
+                    json.dump(combined, f, indent=2)
+                
+                logger.info(f"📄 Final pipeline report updated in '{output_file}'")
+                
+            except Exception as e:
+                logger.error(f"❌ Phase 3 failed: {str(e)}")
+                # We show the error but continue to allow inspection of Phase 1&2
         except Exception as e:
             logger.error(f"❌ Phase 2 failed: {str(e)}")
 

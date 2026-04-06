@@ -14,6 +14,7 @@ from fastapi.responses import JSONResponse
 
 from app.api.router import api_router
 from app.core.settings import get_settings
+from app.mcp.server import mcp
 from app.infrastructure.database import create_db_tables
 from app.infrastructure.redis_client import close_redis_client, get_redis_client
 from app.infrastructure.seeds import seed_initial_data
@@ -57,6 +58,11 @@ def create_app() -> FastAPI:
 
     # ── Routers ───────────────────────────────────────────────────────────
     app.include_router(api_router, prefix=settings.API_V1_STR)
+
+    # ── MCP (Model Context Protocol) ──────────────────────────────────────
+    # Expose tools to the frontend via SSE on /mcp/sse
+    mcp_app = mcp.sse_app()
+    app.mount("/mcp", mcp_app)
 
     # ── Health / meta endpoints ───────────────────────────────────────────
     @app.get("/health", tags=["Meta"], summary="Liveness probe")

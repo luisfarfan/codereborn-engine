@@ -70,4 +70,5 @@ def get_api_domains() -> dict[str, Any]:
     return _load_spec("04_repo_intelligence_api.json")
 
 if __name__ == "__main__":
+    # Local run (stdio)
     mcp.run()

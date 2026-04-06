@@ -1,0 +1,3574 @@
+{
+  "job_id": "6f41f550-f368-44ea-9628-e7000f165039",
+  "stack_intelligence": {
+    "job_id": "6f41f550-f368-44ea-9628-e7000f165039",
+    "analysis_scope": "backend",
+    "primary_language": "Python",
+    "confidence_score": 1.0,
+    "report_data": {
+      "stack_summary": "Project main uses Python",
+      "project_name": "main",
+      "analysis_scope": "backend",
+      "primary_language": "Python",
+      "languages": [
+        {
+          "language": "Python",
+          "estimated_percentage": 85.03
+        },
+        {
+          "language": "C",
+          "estimated_percentage": 5.09
+        },
+        {
+          "language": "Text",
+          "estimated_percentage": 3.35
+        },
+        {
+          "language": "Cython",
+          "estimated_percentage": 1.44
+        },
+        {
+          "language": "Markdown",
+          "estimated_percentage": 1.0
+        },
+        {
+          "language": "JSON",
+          "estimated_percentage": 0.79
+        },
+        {
+          "language": "YAML",
+          "estimated_percentage": 0.7
+        },
+        {
+          "language": "SVG",
+          "estimated_percentage": 0.52
+        },
+        {
+          "language": "Protocol Buffer",
+          "estimated_percentage": 0.45
+        },
+        {
+          "language": "Scheme",
+          "estimated_percentage": 0.4
+        },
+        {
+          "language": "C++",
+          "estimated_percentage": 0.39
+        },
+        {
+          "language": "HTML",
+          "estimated_percentage": 0.26
+        },
+        {
+          "language": "AL",
+          "estimated_percentage": 0.11
+        },
+        {
+          "language": "Mako",
+          "estimated_percentage": 0.09
+        },
+        {
+          "language": "CSS",
+          "estimated_percentage": 0.04
+        },
+        {
+          "language": "reStructuredText",
+          "estimated_percentage": 0.04
+        },
+        {
+          "language": "XSLT",
+          "estimated_percentage": 0.04
+        },
+        {
+          "language": "INI",
+          "estimated_percentage": 0.03
+        },
+        {
+          "language": "JavaScript",
+          "estimated_percentage": 0.03
+        },
+        {
+          "language": "TOML",
+          "estimated_percentage": 0.03
+        },
+        {
+          "language": "HAProxy",
+          "estimated_percentage": 0.02
+        },
+        {
+          "language": "Jupyter Notebook",
+          "estimated_percentage": 0.01
+        },
+        {
+          "language": "SCSS",
+          "estimated_percentage": 0.01
+        },
+        {
+          "language": "Jinja",
+          "estimated_percentage": 0.01
+        },
+        {
+          "language": "Batchfile",
+          "estimated_percentage": 0.01
+        },
+        {
+          "language": "Assembly",
+          "estimated_percentage": 0.01
+        },
+        {
+          "language": "Wavefront Object",
+          "estimated_percentage": 0.01
+        },
+        {
+          "language": "Prisma",
+          "estimated_percentage": 0.01
+        },
+        {
+          "language": "CSV",
+          "estimated_percentage": 0.01
+        },
+        {
+          "language": "Shell",
+          "estimated_percentage": 0.01
+        },
+        {
+          "language": "XML",
+          "estimated_percentage": 0.01
+        },
+        {
+          "language": "CMake",
+          "estimated_percentage": 0.01
+        },
+        {
+          "language": "ANTLR",
+          "estimated_percentage": 0.01
+        },
+        {
+          "language": "Lark",
+          "estimated_percentage": 0.01
+        },
+        {
+          "language": "Roff",
+          "estimated_percentage": 0.01
+        }
+      ],
+      "frameworks": [],
+      "dependencies": [
+        {
+          "name": "fastapi",
+          "version": "0.111.0",
+          "dep_type": "python"
+        },
+        {
+          "name": "sqlmodel",
+          "version": "0.0.19",
+          "dep_type": "python"
+        },
+        {
+          "name": "asyncpg",
+          "version": "0.29.0",
+          "dep_type": "python"
+        },
+        {
+          "name": "alembic",
+          "version": "1.13.0",
+          "dep_type": "python"
+        },
+        {
+          "name": "crewai",
+          "version": "0.63.0",
+          "dep_type": "python"
+        },
+        {
+          "name": "litellm",
+          "version": "1.40.0",
+          "dep_type": "python"
+        },
+        {
+          "name": "langfuse",
+          "version": "2.0.0",
+          "dep_type": "python"
+        },
+        {
+          "name": "tree-sitter",
+          "version": "0.23.0",
+          "dep_type": "python"
+        },
+        {
+          "name": "tree-sitter-python",
+          "version": "latest",
+          "dep_type": "python"
+        },
+        {
+          "name": "tree-sitter-javascript",
+          "version": "latest",
+          "dep_type": "python"
+        },
+        {
+          "name": "tree-sitter-typescript",
+          "version": "latest",
+          "dep_type": "python"
+        },
+        {
+          "name": "tree-sitter-go",
+          "version": "latest",
+          "dep_type": "python"
+        },
+        {
+          "name": "tree-sitter-rust",
+          "version": "latest",
+          "dep_type": "python"
+        },
+        {
+          "name": "tree-sitter-java",
+          "version": "latest",
+          "dep_type": "python"
+        },
+        {
+          "name": "tree-sitter-cpp",
+          "version": "latest",
+          "dep_type": "python"
+        },
+        {
+          "name": "tree-sitter-ruby",
+          "version": "latest",
+          "dep_type": "python"
+        },
+        {
+          "name": "tree-sitter-php",
+          "version": "latest",
+          "dep_type": "python"
+        },
+        {
+          "name": "tree-sitter-bash",
+          "version": "latest",
+          "dep_type": "python"
+        },
+        {
+          "name": "tree-sitter-c-sharp",
+          "version": "latest",
+          "dep_type": "python"
+        },
+        {
+          "name": "pydantic",
+          "version": "2.7.0",
+          "dep_type": "python"
+        },
+        {
+          "name": "pydantic-settings",
+          "version": "2.2.1",
+          "dep_type": "python"
+        },
+        {
+          "name": "python-dotenv",
+          "version": "1.0.1",
+          "dep_type": "python"
+        },
+        {
+          "name": "httpx",
+          "version": "0.27.0",
+          "dep_type": "python"
+        },
+        {
+          "name": "sse-starlette",
+          "version": "2.1.0",
+          "dep_type": "python"
+        },
+        {
+          "name": "postgres",
+          "version": "15-alpine",
+          "dep_type": "docker"
+        },
+        {
+          "name": "redis",
+          "version": "7-alpine",
+          "dep_type": "docker"
+        }
+      ],
+      "services": [
+        {
+          "name": "Redis",
+          "service_type": "cache",
+          "evidence": null,
+          "description": "Detected in repository structure"
+        },
+        {
+          "name": "PostgreSQL",
+          "service_type": "database",
+          "evidence": null,
+          "description": "Detected in repository structure"
+        }
+      ],
+      "infra_hints": [
+        {
+          "signal": "Docker",
+          "description": "Infrastructure signal: container"
+        }
+      ],
+      "docker_hints": {
+        "dockerfile_present": false,
+        "compose_present": true,
+        "services_defined": [
+          "docker"
+        ]
+      },
+      "build_tools": [],
+      "test_frameworks": [],
+      "entrypoints": [],
+      "config_files": [
+        {
+          "file_path": "pyproject.toml",
+          "config_type": "config",
+          "description": null
+        },
+        {
+          "file_path": ".env",
+          "config_type": "config",
+          "description": null
+        }
+      ],
+      "evidence_files": {},
+      "package_managers": [],
+      "monorepo_signals": {
+        "is_monorepo": true,
+        "signals": []
+      },
+      "file_inventory": {
+        "by_language": {
+          "json": {
+            "code_files": [],
+            "test_files": [],
+            "total_files": 10,
+            "total_lines_of_code": 0
+          },
+          "other": {
+            "code_files": [
+              "PROMPT.AI",
+              "PROMPT_FRONTEND.AI",
+              "server.log",
+              "app/agents/universal_extractor/grammars/go.scm",
+              "app/agents/universal_extractor/grammars/php.scm",
+              "app/agents/universal_extractor/grammars/typescript.scm",
+              "app/agents/universal_extractor/grammars/python.scm",
+              "app/agents/universal_extractor/grammars/cpp.scm",
+              "app/agents/universal_extractor/grammars/ruby.scm",
+              "app/agents/universal_extractor/grammars/c-sharp.scm",
+              "app/agents/universal_extractor/grammars/javascript.scm",
+              "app/agents/universal_extractor/grammars/rust.scm",
+              "app/agents/universal_extractor/grammars/java.scm",
+              "app/agents/universal_extractor/grammars/bash.scm"
+            ],
+            "test_files": [],
+            "total_files": 15,
+            "total_lines_of_code": 0
+          },
+          "toml": {
+            "code_files": [],
+            "test_files": [],
+            "total_files": 1,
+            "total_lines_of_code": 0
+          },
+          "markdown": {
+            "code_files": [],
+            "test_files": [],
+            "total_files": 32,
+            "total_lines_of_code": 0
+          },
+          "yaml": {
+            "code_files": [],
+            "test_files": [],
+            "total_files": 1,
+            "total_lines_of_code": 0
+          },
+          "python": {
+            "code_files": [
+              "app/__init__.py",
+              "app/main.py",
+              "app/core/__init__.py",
+              "app/core/settings.py",
+              "app/core/exceptions.py",
+              "app/agents/__init__.py",
+              "app/agents/doc_writers/__init__.py",
+              "app/agents/universal_extractor/registry.py",
+              "app/agents/universal_extractor/__init__.py",
+              "app/agents/universal_extractor/extractor.py",
+              "app/agents/universal_extractor/interpreter.py",
+              "app/agents/universal_extractor/agent.py",
+              "app/agents/system_mapper/__init__.py",
+              "app/agents/debt_analyzer/__init__.py",
+              "app/agents/pattern_detector/interpreter.py",
+              "app/agents/pattern_detector/agent.py",
+              "app/agents/stack_detector/scanner.py",
+              "app/agents/stack_detector/post_processor.py",
+              "app/agents/stack_detector/specfy_tool.py",
+              "app/agents/stack_detector/__init__.py",
+              "app/agents/stack_detector/agent.py",
+              "app/agents/stack_detector/tech_registry.py",
+              "app/mcp/server.py",
+              "app/mcp/__init__.py",
+              "app/models/__init__.py",
+              "app/models/db_models.py",
+              "app/models/stack_models.py",
+              "app/api/__init__.py",
+              "app/api/router.py",
+              "app/api/dependencies.py",
+              "app/api/routers/auth.py",
+              "app/api/routers/understanding.py",
+              "app/api/routers/__init__.py",
+              "app/api/routers/docs.py",
+              "app/api/routers/stream.py",
+              "app/api/routers/agents.py",
+              "app/api/routers/jobs.py",
+              "app/api/routers/navigation.py",
+              "app/api/routers/task_context.py",
+              "app/api/routers/impact.py",
+              "app/api/schemas/responses.py",
+              "app/api/schemas/__init__.py",
+              "app/api/schemas/requests.py",
+              "app/application/job_orchestrator.py",
+              "app/application/__init__.py",
+              "app/infrastructure/database.py",
+              "app/infrastructure/__init__.py",
+              "app/infrastructure/redis_client.py",
+              "app/infrastructure/seeds.py",
+              "app/domain/enums.py",
+              "app/domain/__init__.py",
+              "app/services/notification_service.py",
+              "app/services/__init__.py",
+              "app/services/estimation_service.py",
+              "app/services/llm_budget_service.py",
+              "tests/conftest.py",
+              "tests/__init__.py",
+              "scripts/run_stack_detector.py",
+              "scripts/verify_full_pipeline.py",
+              "scripts/run_mcp.py",
+              "scripts/verify_pattern_detector.py"
+            ],
+            "test_files": [
+              "tests/test_llm_budget_service.py",
+              "tests/test_jobs.py",
+              "tests/test_health.py",
+              "scripts/test_signal_extractor_step1.py"
+            ],
+            "total_files": 65,
+            "total_lines_of_code": 0
+          }
+        },
+        "by_type": {
+          "code": 75,
+          "tests": 4,
+          "configs": 13,
+          "docs": 32,
+          "other": 0
+        },
+        "total_files": 124,
+        "excluded_files": 4,
+        "exclusion_reasons": {
+          "vendor_dependencies": 0,
+          "generated_code": 0,
+          "binary_files": 0,
+          "hidden_files": 4
+        }
+      },
+      "directory_structure": {
+        "root_directories": [
+          {
+            "path": "/",
+            "name": "root",
+            "depth": 1,
+            "parent": null,
+            "subdirectories": [
+              "app",
+              "tests",
+              "docs",
+              "storage",
+              "scripts",
+              "PROMPTS",
+              "tmp"
+            ],
+            "file_count": 10,
+            "file_breakdown": {
+              "json": 2,
+              "other": 4,
+              "toml": 1,
+              "markdown": 2,
+              "yaml": 1
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "app",
+            "name": "app",
+            "depth": 2,
+            "parent": ".",
+            "subdirectories": [
+              "core",
+              "agents",
+              "mcp",
+              "models",
+              "api",
+              "application",
+              "infrastructure",
+              "domain",
+              "services"
+            ],
+            "file_count": 2,
+            "file_breakdown": {
+              "python": 2
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "app/core",
+            "name": "core",
+            "depth": 3,
+            "parent": "app",
+            "subdirectories": [],
+            "file_count": 3,
+            "file_breakdown": {
+              "python": 3
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "app/agents",
+            "name": "agents",
+            "depth": 3,
+            "parent": "app",
+            "subdirectories": [
+              "doc_writers",
+              "universal_extractor",
+              "system_mapper",
+              "debt_analyzer",
+              "pattern_detector",
+              "stack_detector"
+            ],
+            "file_count": 1,
+            "file_breakdown": {
+              "python": 1
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "app/agents/doc_writers",
+            "name": "doc_writers",
+            "depth": 4,
+            "parent": "app/agents",
+            "subdirectories": [],
+            "file_count": 1,
+            "file_breakdown": {
+              "python": 1
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "app/agents/universal_extractor",
+            "name": "universal_extractor",
+            "depth": 4,
+            "parent": "app/agents",
+            "subdirectories": [
+              "grammars"
+            ],
+            "file_count": 5,
+            "file_breakdown": {
+              "python": 5
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "app/agents/universal_extractor/grammars",
+            "name": "grammars",
+            "depth": 5,
+            "parent": "app/agents/universal_extractor",
+            "subdirectories": [],
+            "file_count": 11,
+            "file_breakdown": {
+              "other": 11
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "app/agents/system_mapper",
+            "name": "system_mapper",
+            "depth": 4,
+            "parent": "app/agents",
+            "subdirectories": [],
+            "file_count": 1,
+            "file_breakdown": {
+              "python": 1
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "app/agents/debt_analyzer",
+            "name": "debt_analyzer",
+            "depth": 4,
+            "parent": "app/agents",
+            "subdirectories": [],
+            "file_count": 1,
+            "file_breakdown": {
+              "python": 1
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "app/agents/pattern_detector",
+            "name": "pattern_detector",
+            "depth": 4,
+            "parent": "app/agents",
+            "subdirectories": [],
+            "file_count": 2,
+            "file_breakdown": {
+              "python": 2
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "app/agents/stack_detector",
+            "name": "stack_detector",
+            "depth": 4,
+            "parent": "app/agents",
+            "subdirectories": [],
+            "file_count": 6,
+            "file_breakdown": {
+              "python": 6
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "app/mcp",
+            "name": "mcp",
+            "depth": 3,
+            "parent": "app",
+            "subdirectories": [],
+            "file_count": 2,
+            "file_breakdown": {
+              "python": 2
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "app/models",
+            "name": "models",
+            "depth": 3,
+            "parent": "app",
+            "subdirectories": [],
+            "file_count": 3,
+            "file_breakdown": {
+              "python": 3
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "app/api",
+            "name": "api",
+            "depth": 3,
+            "parent": "app",
+            "subdirectories": [
+              "routers",
+              "schemas"
+            ],
+            "file_count": 3,
+            "file_breakdown": {
+              "python": 3
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "app/api/routers",
+            "name": "routers",
+            "depth": 4,
+            "parent": "app/api",
+            "subdirectories": [],
+            "file_count": 10,
+            "file_breakdown": {
+              "python": 10
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "app/api/schemas",
+            "name": "schemas",
+            "depth": 4,
+            "parent": "app/api",
+            "subdirectories": [],
+            "file_count": 3,
+            "file_breakdown": {
+              "python": 3
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "app/application",
+            "name": "application",
+            "depth": 3,
+            "parent": "app",
+            "subdirectories": [],
+            "file_count": 2,
+            "file_breakdown": {
+              "python": 2
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "app/infrastructure",
+            "name": "infrastructure",
+            "depth": 3,
+            "parent": "app",
+            "subdirectories": [],
+            "file_count": 4,
+            "file_breakdown": {
+              "python": 4
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "app/domain",
+            "name": "domain",
+            "depth": 3,
+            "parent": "app",
+            "subdirectories": [],
+            "file_count": 2,
+            "file_breakdown": {
+              "python": 2
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "app/services",
+            "name": "services",
+            "depth": 3,
+            "parent": "app",
+            "subdirectories": [],
+            "file_count": 4,
+            "file_breakdown": {
+              "python": 4
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "tests",
+            "name": "tests",
+            "depth": 2,
+            "parent": ".",
+            "subdirectories": [],
+            "file_count": 5,
+            "file_breakdown": {
+              "python": 5
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "docs",
+            "name": "docs",
+            "depth": 2,
+            "parent": ".",
+            "subdirectories": [
+              "pipeline",
+              "roadmap",
+              "agents",
+              "operations",
+              "architecture",
+              "ai_spec",
+              "api",
+              "overview",
+              "domain"
+            ],
+            "file_count": 1,
+            "file_breakdown": {
+              "markdown": 1
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "docs/pipeline",
+            "name": "pipeline",
+            "depth": 3,
+            "parent": "docs",
+            "subdirectories": [],
+            "file_count": 1,
+            "file_breakdown": {
+              "markdown": 1
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "docs/roadmap",
+            "name": "roadmap",
+            "depth": 3,
+            "parent": "docs",
+            "subdirectories": [],
+            "file_count": 1,
+            "file_breakdown": {
+              "markdown": 1
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "docs/agents",
+            "name": "agents",
+            "depth": 3,
+            "parent": "docs",
+            "subdirectories": [],
+            "file_count": 7,
+            "file_breakdown": {
+              "markdown": 7
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "docs/operations",
+            "name": "operations",
+            "depth": 3,
+            "parent": "docs",
+            "subdirectories": [],
+            "file_count": 3,
+            "file_breakdown": {
+              "markdown": 3
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "docs/architecture",
+            "name": "architecture",
+            "depth": 3,
+            "parent": "docs",
+            "subdirectories": [],
+            "file_count": 3,
+            "file_breakdown": {
+              "markdown": 3
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "docs/ai_spec",
+            "name": "ai_spec",
+            "depth": 3,
+            "parent": "docs",
+            "subdirectories": [],
+            "file_count": 9,
+            "file_breakdown": {
+              "json": 8,
+              "markdown": 1
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "docs/api",
+            "name": "api",
+            "depth": 3,
+            "parent": "docs",
+            "subdirectories": [],
+            "file_count": 4,
+            "file_breakdown": {
+              "markdown": 4
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "docs/overview",
+            "name": "overview",
+            "depth": 3,
+            "parent": "docs",
+            "subdirectories": [],
+            "file_count": 3,
+            "file_breakdown": {
+              "markdown": 3
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "docs/domain",
+            "name": "domain",
+            "depth": 3,
+            "parent": "docs",
+            "subdirectories": [],
+            "file_count": 3,
+            "file_breakdown": {
+              "markdown": 3
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "scripts",
+            "name": "scripts",
+            "depth": 2,
+            "parent": ".",
+            "subdirectories": [],
+            "file_count": 5,
+            "file_breakdown": {
+              "python": 5
+            },
+            "total_lines": 0
+          },
+          {
+            "path": "PROMPTS",
+            "name": "PROMPTS",
+            "depth": 2,
+            "parent": ".",
+            "subdirectories": [],
+            "file_count": 3,
+            "file_breakdown": {
+              "markdown": 3
+            },
+            "total_lines": 0
+          }
+        ],
+        "statistics": {
+          "total_directories": 33,
+          "max_depth": 5,
+          "largest_directory": {
+            "path": "app/agents/universal_extractor/grammars",
+            "file_count": 11
+          }
+        }
+      },
+      "repository_metadata": {
+        "total_size_bytes": 845200601,
+        "git_available": true,
+        "branch_analyzed": null,
+        "last_commit_date": null,
+        "file_count_by_depth": {
+          "1": 10,
+          "2": 16,
+          "3": 58,
+          "4": 29,
+          "5": 11
+        }
+      },
+      "confidence_score": 1.0,
+      "unknowns": [
+        {
+          "signal": "geminiai",
+          "description": "Unmapped technology or library detected"
+        },
+        {
+          "signal": "scss",
+          "description": "Unmapped technology or library detected"
+        },
+        {
+          "signal": "anthropic",
+          "description": "Unmapped technology or library detected"
+        },
+        {
+          "signal": "perl",
+          "description": "Unmapped technology or library detected"
+        },
+        {
+          "signal": "openai",
+          "description": "Unmapped technology or library detected"
+        },
+        {
+          "signal": "openapi",
+          "description": "Unmapped technology or library detected"
+        },
+        {
+          "signal": "prisma",
+          "description": "Unmapped technology or library detected"
+        },
+        {
+          "signal": "css",
+          "description": "Unmapped technology or library detected"
+        }
+      ],
+      "agent_version": "2.0.0",
+      "analysis_timestamp": "2026-04-06T02:44:57.999661"
+    },
+    "raw_tool_output": {
+      "id": "nqBtRKjKJZHb",
+      "name": "main",
+      "path": [
+        "/",
+        "/docker-compose.yml",
+        "",
+        "/.env.example",
+        "/.venv/lib/python3.11/site-packages/crewai/cli/templates/flow",
+        "/.venv/lib/python3.11/site-packages/crewai/cli/templates/tool"
+      ],
+      "tech": null,
+      "edges": [],
+      "inComponent": null,
+      "childs": [
+        {
+          "id": "MK1qW6LlYZ9Q",
+          "name": "Anthropic",
+          "path": [
+            "/.env.example"
+          ],
+          "tech": "anthropic",
+          "edges": [],
+          "inComponent": null,
+          "childs": [],
+          "techs": [],
+          "languages": {},
+          "licenses": [],
+          "dependencies": [],
+          "reason": [
+            "anthropic matched env: ANTHROPIC_"
+          ]
+        },
+        {
+          "id": "bJG6Km784JjX",
+          "name": "Gemini AI",
+          "path": [
+            "/.env.example"
+          ],
+          "tech": "geminiai",
+          "edges": [],
+          "inComponent": null,
+          "childs": [],
+          "techs": [],
+          "languages": {},
+          "licenses": [],
+          "dependencies": [],
+          "reason": [
+            "geminiai matched env: GEMINI_"
+          ]
+        },
+        {
+          "id": "EBKatDiAloTc",
+          "name": "Openai",
+          "path": [
+            "/.env.example"
+          ],
+          "tech": "openai",
+          "edges": [],
+          "inComponent": null,
+          "childs": [],
+          "techs": [],
+          "languages": {},
+          "licenses": [],
+          "dependencies": [],
+          "reason": [
+            "openai matched env: OPENAI_"
+          ]
+        },
+        {
+          "id": "g9cjwNCF8oeN",
+          "name": "codereborn-db",
+          "path": [
+            "/docker-compose.yml"
+          ],
+          "tech": "postgresql",
+          "edges": [],
+          "inComponent": null,
+          "childs": [],
+          "techs": [],
+          "languages": {},
+          "licenses": [],
+          "dependencies": [
+            [
+              "docker",
+              "postgres",
+              "15-alpine"
+            ]
+          ],
+          "reason": [
+            "postgresql matched: /^postgres$/"
+          ]
+        },
+        {
+          "id": "wn7xybRj713h",
+          "name": "codereborn-redis",
+          "path": [
+            "/docker-compose.yml",
+            "/.env.example"
+          ],
+          "tech": "redis",
+          "edges": [],
+          "inComponent": null,
+          "childs": [],
+          "techs": [],
+          "languages": {},
+          "licenses": [],
+          "dependencies": [
+            [
+              "docker",
+              "redis",
+              "7-alpine"
+            ]
+          ],
+          "reason": [
+            "redis matched: /redis/"
+          ]
+        }
+      ],
+      "techs": [
+        "anthropic",
+        "bash",
+        "c",
+        "cplusplus",
+        "css",
+        "docker",
+        "geminiai",
+        "javascript",
+        "objectivec",
+        "openai",
+        "openapi",
+        "perl",
+        "prisma",
+        "python",
+        "redis",
+        "scss"
+      ],
+      "languages": {
+        "Markdown": 141,
+        "C": 717,
+        "Python": 11989,
+        "Cython": 203,
+        "Text": 472,
+        "Mako": 12,
+        "Jupyter Notebook": 1,
+        "YAML": 98,
+        "INI": 4,
+        "JSON": 112,
+        "JavaScript": 4,
+        "HTML": 37,
+        "CSS": 5,
+        "SCSS": 1,
+        "TOML": 4,
+        "Jinja": 2,
+        "reStructuredText": 6,
+        "Protocol Buffer": 63,
+        "C++": 55,
+        "Batchfile": 1,
+        "Assembly": 2,
+        "Wavefront Object": 2,
+        "SVG": 73,
+        "Prisma": 2,
+        "CSV": 2,
+        "Shell": 2,
+        "XSLT": 5,
+        "XML": 1,
+        "HAProxy": 3,
+        "CMake": 1,
+        "ANTLR": 2,
+        "AL": 16,
+        "Lark": 2,
+        "Scheme": 57,
+        "Roff": 2
+      },
+      "licenses": [],
+      "dependencies": [
+        [
+          "python",
+          "fastapi",
+          "0.111.0"
+        ],
+        [
+          "python",
+          "sqlmodel",
+          "0.0.19"
+        ],
+        [
+          "python",
+          "asyncpg",
+          "0.29.0"
+        ],
+        [
+          "python",
+          "alembic",
+          "1.13.0"
+        ],
+        [
+          "python",
+          "crewai",
+          "0.63.0"
+        ],
+        [
+          "python",
+          "litellm",
+          "1.40.0"
+        ],
+        [
+          "python",
+          "langfuse",
+          "2.0.0"
+        ],
+        [
+          "python",
+          "tree-sitter",
+          "0.23.0"
+        ],
+        [
+          "python",
+          "tree-sitter-python",
+          "latest"
+        ],
+        [
+          "python",
+          "tree-sitter-javascript",
+          "latest"
+        ],
+        [
+          "python",
+          "tree-sitter-typescript",
+          "latest"
+        ],
+        [
+          "python",
+          "tree-sitter-go",
+          "latest"
+        ],
+        [
+          "python",
+          "tree-sitter-rust",
+          "latest"
+        ],
+        [
+          "python",
+          "tree-sitter-java",
+          "latest"
+        ],
+        [
+          "python",
+          "tree-sitter-cpp",
+          "latest"
+        ],
+        [
+          "python",
+          "tree-sitter-ruby",
+          "latest"
+        ],
+        [
+          "python",
+          "tree-sitter-php",
+          "latest"
+        ],
+        [
+          "python",
+          "tree-sitter-bash",
+          "latest"
+        ],
+        [
+          "python",
+          "tree-sitter-c-sharp",
+          "latest"
+        ],
+        [
+          "python",
+          "pydantic",
+          "2.7.0"
+        ],
+        [
+          "python",
+          "pydantic-settings",
+          "2.2.1"
+        ],
+        [
+          "python",
+          "python-dotenv",
+          "1.0.1"
+        ],
+        [
+          "python",
+          "httpx",
+          "0.27.0"
+        ],
+        [
+          "python",
+          "sse-starlette",
+          "2.1.0"
+        ]
+      ],
+      "reason": [
+        "matched file: docker-compose.yml",
+        "matched extension: .h",
+        "matched extension: .py",
+        "matched extension: .css",
+        "matched extension: .js",
+        "matched extension: .scss",
+        "matched extension: .pyi",
+        "matched extension: .cpp",
+        "matched extension: .cc",
+        "matched file: schema.prisma",
+        "matched file: openapi.json",
+        "matched extension: .sh",
+        "matched extension: .c",
+        "matched extension: .hpp",
+        "matched extension: .al"
+      ]
+    },
+    "id": "55d7c803-593d-4cfd-9d18-db629c821734",
+    "created_at": "2026-04-06T02:44:58.545430",
+    "analysis_timestamp": "2026-04-06T02:44:58.545437"
+  },
+  "architectural_interpretation": {
+    "detected_patterns": {
+      "primary_pattern": "layered",
+      "confidence": 0.85,
+      "evidence": [
+        "Directory structure suggests a layered architecture: core, api, application, infrastructure, domain, and services.",
+        "Separation of concerns is evident across different directories.",
+        "The presence of 'models', 'api', and 'services' directories further supports a layered design."
+      ],
+      "secondary_patterns": [
+        {
+          "pattern": "agent_pattern",
+          "confidence": 0.75,
+          "evidence": [
+            "The 'app/agents' directory suggests an agent-based architecture.",
+            "Different agents are present within the 'agents' directory, indicating a modular design."
+          ]
+        }
+      ],
+      "notes": null,
+      "confidence_score": null
+    },
+    "directory_interpretation": {
+      "/": {
+        "purpose": "project_root",
+        "architectural_role": "project_root",
+        "priority": "high",
+        "reasoning": "Root directory includes general project files."
+      },
+      "app": {
+        "purpose": "application_code",
+        "architectural_role": "application_code",
+        "priority": "high",
+        "reasoning": "Contains core application logic, agents, models, API, application logic, infrastructure, domain and service layers."
+      },
+      "app/core": {
+        "purpose": "core_utilities",
+        "architectural_role": "core_utilities",
+        "priority": "medium",
+        "reasoning": "Likely contains core application utilities."
+      },
+      "app/agents": {
+        "purpose": "autonomous_agents",
+        "architectural_role": "autonomous_agents",
+        "priority": "high",
+        "reasoning": "Contains several autonomous agents, each with a specific responsibility."
+      },
+      "app/agents/doc_writers": {
+        "purpose": "documentation_generation",
+        "architectural_role": "documentation_generation",
+        "priority": "low",
+        "reasoning": "Dedicated to generating documentation."
+      },
+      "app/agents/universal_extractor": {
+        "purpose": "code_extraction",
+        "architectural_role": "code_extraction",
+        "priority": "high",
+        "reasoning": "Code extraction from different languages"
+      },
+      "app/agents/universal_extractor/grammars": {
+        "purpose": "grammar_definitions",
+        "architectural_role": "code_extraction_grammar",
+        "priority": "low",
+        "reasoning": "Contains grammars for code extraction within the universal_extractor agent"
+      },
+      "app/agents/system_mapper": {
+        "purpose": "system_mapping",
+        "architectural_role": "system_mapping",
+        "priority": "high",
+        "reasoning": "Responsible for mapping system components."
+      },
+      "app/agents/debt_analyzer": {
+        "purpose": "technical_debt_analysis",
+        "architectural_role": "analysis",
+        "priority": "high",
+        "reasoning": "Focuses on analyzing technical debt within the system."
+      },
+      "app/agents/pattern_detector": {
+        "purpose": "pattern_detection",
+        "architectural_role": "analysis",
+        "priority": "high",
+        "reasoning": "Responsible for detecting architectural patterns."
+      },
+      "app/agents/stack_detector": {
+        "purpose": "stack_detection",
+        "architectural_role": "analysis",
+        "priority": "high",
+        "reasoning": "To analyze and detect the technology stack used."
+      },
+      "app/mcp": {
+        "purpose": "model_code_processing",
+        "architectural_role": "model_code_processing",
+        "priority": "medium",
+        "reasoning": "Handling operations related to model code"
+      },
+      "app/models": {
+        "purpose": "data_models",
+        "architectural_role": "domain_layer",
+        "priority": "critical",
+        "reasoning": "Contains domain data models."
+      },
+      "app/api": {
+        "purpose": "api_endpoints",
+        "architectural_role": "presentation_layer",
+        "priority": "high",
+        "reasoning": "API endpoint definitions."
+      },
+      "app/api/routers": {
+        "purpose": "api_routers",
+        "architectural_role": "presentation_layer",
+        "priority": "high",
+        "reasoning": "API routers definition"
+      },
+      "app/api/schemas": {
+        "purpose": "api_schemas",
+        "architectural_role": "presentation_layer",
+        "priority": "high",
+        "reasoning": "Data schemas for API."
+      },
+      "app/application": {
+        "purpose": "application_logic",
+        "architectural_role": "application_layer",
+        "priority": "high",
+        "reasoning": "Contains application logic, coordinating the domain and infrastructure layers."
+      },
+      "app/infrastructure": {
+        "purpose": "infrastructure_code",
+        "architectural_role": "infrastructure_layer",
+        "priority": "medium",
+        "reasoning": "Database, external services, etc."
+      },
+      "app/domain": {
+        "purpose": "domain_logic",
+        "architectural_role": "domain_layer",
+        "priority": "critical",
+        "reasoning": "Core business logic and entities."
+      },
+      "app/services": {
+        "purpose": "service_layer",
+        "architectural_role": "application_layer",
+        "priority": "high",
+        "reasoning": "Orchestrates business logic and interactions between other layers."
+      },
+      "tests": {
+        "purpose": "testing",
+        "architectural_role": "testing",
+        "priority": "low",
+        "reasoning": "Testing code."
+      },
+      "docs": {
+        "purpose": "documentation",
+        "architectural_role": "documentation",
+        "priority": "low",
+        "reasoning": "Contains project documentation."
+      },
+      "docs/pipeline": {
+        "purpose": "pipeline_documentation",
+        "architectural_role": "documentation",
+        "priority": "low",
+        "reasoning": "Documentation for the CI/CD pipeline."
+      },
+      "docs/roadmap": {
+        "purpose": "roadmap_documentation",
+        "architectural_role": "documentation",
+        "priority": "low",
+        "reasoning": "Project roadmap documentation."
+      },
+      "docs/agents": {
+        "purpose": "agent_documentation",
+        "architectural_role": "documentation",
+        "priority": "low",
+        "reasoning": "Documentation of different agents."
+      },
+      "docs/operations": {
+        "purpose": "operations_documentation",
+        "architectural_role": "documentation",
+        "priority": "low",
+        "reasoning": "Documentation of operations."
+      },
+      "docs/architecture": {
+        "purpose": "architecture_documentation",
+        "architectural_role": "documentation",
+        "priority": "low",
+        "reasoning": "Documentation of the system architecture."
+      },
+      "docs/ai_spec": {
+        "purpose": "ai_specification_documentation",
+        "architectural_role": "specifications",
+        "priority": "low",
+        "reasoning": "Specifications for AI components or functionality."
+      },
+      "docs/api": {
+        "purpose": "api_documentation",
+        "architectural_role": "api_documentation",
+        "priority": "low",
+        "reasoning": "Documentation for the API endpoints."
+      },
+      "docs/overview": {
+        "purpose": "project_overview",
+        "architectural_role": "documentation",
+        "priority": "low",
+        "reasoning": "General overview documentation."
+      },
+      "docs/domain": {
+        "purpose": "domain_documentation",
+        "architectural_role": "documentation",
+        "priority": "low",
+        "reasoning": "Domain specific documentation."
+      },
+      "scripts": {
+        "purpose": "application_scripts",
+        "architectural_role": "scripts",
+        "priority": "low",
+        "reasoning": "Contains various scripts used to perform different operations needed by the application."
+      },
+      "PROMPTS": {
+        "purpose": "prompt_definitions",
+        "architectural_role": "prompt_definitions",
+        "priority": "low",
+        "reasoning": "Contains files related to prompt definitions."
+      },
+      "tmp": {
+        "purpose": "temporary_files",
+        "architectural_role": "temporary_files",
+        "priority": "ignore",
+        "reasoning": "Temporary directory, typically ignored."
+      }
+    },
+    "framework_conventions": [],
+    "sampling_strategy": {
+      "total_files_in_repo": 124,
+      "recommended_sample_size": 50,
+      "sampling_rules": {
+        "app": {
+          "strategy": "analyze_all",
+          "file_count": 2,
+          "sample_size": null,
+          "sample_method": null,
+          "reason": "Core python files in the application directory."
+        },
+        "app/core": {
+          "strategy": "analyze_all",
+          "file_count": 3,
+          "sample_size": null,
+          "sample_method": null,
+          "reason": "Core application utilities"
+        },
+        "app/agents": {
+          "strategy": "sample",
+          "file_count": null,
+          "sample_size": 7,
+          "sample_method": "diverse_selection",
+          "reason": "Sample key agents for understanding architecture."
+        },
+        "app/mcp": {
+          "strategy": "sample",
+          "file_count": null,
+          "sample_size": 2,
+          "sample_method": null,
+          "reason": "Important for understanding the code structure"
+        },
+        "app/models": {
+          "strategy": "analyze_all",
+          "file_count": 3,
+          "sample_size": null,
+          "sample_method": null,
+          "reason": "Analyze core domain models"
+        },
+        "app/api": {
+          "strategy": "sample",
+          "file_count": null,
+          "sample_size": 7,
+          "sample_method": "diverse_selection",
+          "reason": "Sample API endpoints for understanding the API structure."
+        },
+        "app/application": {
+          "strategy": "analyze_all",
+          "file_count": 2,
+          "sample_size": null,
+          "sample_method": null,
+          "reason": "Key part of the system logic"
+        },
+        "app/infrastructure": {
+          "strategy": "sample",
+          "file_count": null,
+          "sample_size": 3,
+          "sample_method": "largest_files_first",
+          "reason": "Sample representative infrastructure components."
+        },
+        "app/domain": {
+          "strategy": "analyze_all",
+          "file_count": 2,
+          "sample_size": null,
+          "sample_method": null,
+          "reason": "Important for the high level design"
+        },
+        "app/services": {
+          "strategy": "sample",
+          "file_count": null,
+          "sample_size": 4,
+          "sample_method": null,
+          "reason": "Sample services"
+        },
+        "tests": {
+          "strategy": "skip",
+          "file_count": null,
+          "sample_size": null,
+          "sample_method": null,
+          "reason": "Not primarily relevant to architectural analysis"
+        },
+        "docs": {
+          "strategy": "skip",
+          "file_count": null,
+          "sample_size": null,
+          "sample_method": null,
+          "reason": "Documentation"
+        },
+        "scripts": {
+          "strategy": "skip",
+          "file_count": null,
+          "sample_size": null,
+          "sample_method": null,
+          "reason": "Scripts"
+        },
+        "PROMPTS": {
+          "strategy": "skip",
+          "file_count": null,
+          "sample_size": null,
+          "sample_method": null,
+          "reason": "Prompts"
+        }
+      },
+      "recommended_files": [
+        {
+          "file_path": "app/models/",
+          "priority": "critical",
+          "reason": "Core domain models"
+        },
+        {
+          "file_path": "app/api/routers/",
+          "priority": "high",
+          "reason": "API routes"
+        },
+        {
+          "file_path": "app/services/",
+          "priority": "high",
+          "reason": "Business services logic"
+        }
+      ]
+    },
+    "special_cases": [],
+    "analysis_metadata": {
+      "confidence_score": 0.82,
+      "analysis_timestamp": "2024-06-05T14:15:00Z",
+      "agent_version": "1.0.0",
+      "llm_model_used": "openrouter/google/gemini-2.0-flash-lite-001",
+      "tokens_used": 11896,
+      "cost_usd": 0.001572825
+    },
+    "confidence_score": 0.82
+  },
+  "signal_intelligence": {
+    "extraction_summary": {
+      "total_files_analyzed": 25,
+      "total_files_in_repo": 124,
+      "extraction_strategies_used": {
+        "tree-sitter": 25,
+        "llm_zero_shot": 0,
+        "lsp": 0,
+        "pattern_mining": 0
+      },
+      "languages_analyzed": {
+        "python": 25
+      },
+      "sampling_applied": true,
+      "sampling_ratio": 0.20161290322580644
+    },
+    "signals_by_file": {
+      "app/__init__.py": {
+        "file_path": "app/__init__.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [],
+          "class_declarations": [],
+          "function_declarations": [],
+          "decorators": [],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 0,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.487089"
+        }
+      },
+      "app/main.py": {
+        "file_path": "app/main.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [
+            {
+              "name": "from contextlib import asynccontextmanager",
+              "is_exported": true,
+              "line_number": 8,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from fastapi import FastAPI",
+              "is_exported": true,
+              "line_number": 11,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from fastapi.responses import JSONResponse",
+              "is_exported": true,
+              "line_number": 13,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from collections.abc import AsyncGenerator",
+              "is_exported": true,
+              "line_number": 9,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from fastapi.middleware.cors import CORSMiddleware",
+              "is_exported": true,
+              "line_number": 12,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.api.router import api_router",
+              "is_exported": true,
+              "line_number": 15,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.core.settings import get_settings",
+              "is_exported": true,
+              "line_number": 16,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.mcp.server import mcp",
+              "is_exported": true,
+              "line_number": 17,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.infrastructure.database import create_db_tables",
+              "is_exported": true,
+              "line_number": 18,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.infrastructure.redis_client import close_redis_client, get_redis_client",
+              "is_exported": true,
+              "line_number": 19,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.infrastructure.seeds import seed_initial_data",
+              "is_exported": true,
+              "line_number": 20,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "class_declarations": [],
+          "function_declarations": [
+            {
+              "name": "lifespan",
+              "is_exported": true,
+              "line_number": 26,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "create_app",
+              "is_exported": true,
+              "line_number": 39,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "root",
+              "is_exported": true,
+              "line_number": 73,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "health",
+              "is_exported": true,
+              "line_number": 69,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "decorators": [
+            {
+              "name": "@asynccontextmanager",
+              "is_exported": true,
+              "line_number": 25,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "@app.get(\"/health\", tags=[\"Meta\"], summary=\"Liveness probe\")",
+              "is_exported": true,
+              "line_number": 68,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "@app.get(\"/\", tags=[\"Meta\"], include_in_schema=False)",
+              "is_exported": true,
+              "line_number": 72,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 85,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.488040"
+        }
+      },
+      "app/core/__init__.py": {
+        "file_path": "app/core/__init__.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [],
+          "class_declarations": [],
+          "function_declarations": [],
+          "decorators": [],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 0,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.488131"
+        }
+      },
+      "app/core/settings.py": {
+        "file_path": "app/core/settings.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [
+            {
+              "name": "from functools import lru_cache",
+              "is_exported": true,
+              "line_number": 1,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from pydantic_settings import BaseSettings, SettingsConfigDict",
+              "is_exported": true,
+              "line_number": 4,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from pydantic import field_validator",
+              "is_exported": true,
+              "line_number": 3,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "class_declarations": [
+            {
+              "name": "Settings",
+              "is_exported": true,
+              "line_number": 7,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "function_declarations": [
+            {
+              "name": "validate_db_url",
+              "is_exported": true,
+              "line_number": 54,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "get_settings",
+              "is_exported": true,
+              "line_number": 64,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "decorators": [
+            {
+              "name": "@field_validator(\"DATABASE_URL\")",
+              "is_exported": true,
+              "line_number": 52,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "@lru_cache",
+              "is_exported": true,
+              "line_number": 63,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "@classmethod",
+              "is_exported": true,
+              "line_number": 53,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 65,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.488613"
+        }
+      },
+      "app/core/exceptions.py": {
+        "file_path": "app/core/exceptions.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [],
+          "class_declarations": [
+            {
+              "name": "CodeRebornError",
+              "is_exported": true,
+              "line_number": 9,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "BudgetExceededError",
+              "is_exported": true,
+              "line_number": 51,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "InvalidJobStateTransitionError",
+              "is_exported": true,
+              "line_number": 39,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "JobAlreadyRunningError",
+              "is_exported": true,
+              "line_number": 29,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "JobNotFoundError",
+              "is_exported": true,
+              "line_number": 21,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "DatabaseConnectionError",
+              "is_exported": true,
+              "line_number": 66,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "RedisConnectionError",
+              "is_exported": true,
+              "line_number": 70,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "RepositoryAccessError",
+              "is_exported": true,
+              "line_number": 77,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "StackDetectionError",
+              "is_exported": true,
+              "line_number": 86,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "AgentExecutionError",
+              "is_exported": true,
+              "line_number": 90,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "function_declarations": [
+            {
+              "name": "__init__",
+              "is_exported": true,
+              "line_number": 93,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "__init__",
+              "is_exported": true,
+              "line_number": 12,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "__init__",
+              "is_exported": true,
+              "line_number": 24,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "__init__",
+              "is_exported": true,
+              "line_number": 42,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "__init__",
+              "is_exported": true,
+              "line_number": 32,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "__init__",
+              "is_exported": true,
+              "line_number": 54,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "__init__",
+              "is_exported": true,
+              "line_number": 80,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "decorators": [],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 95,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.489304"
+        }
+      },
+      "app/agents/__init__.py": {
+        "file_path": "app/agents/__init__.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [],
+          "class_declarations": [],
+          "function_declarations": [],
+          "decorators": [],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 0,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.489366"
+        }
+      },
+      "app/mcp/server.py": {
+        "file_path": "app/mcp/server.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [
+            {
+              "name": "import json",
+              "is_exported": true,
+              "line_number": 1,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from pathlib import Path",
+              "is_exported": true,
+              "line_number": 2,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from typing import Any",
+              "is_exported": true,
+              "line_number": 3,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from mcp.server.fastmcp import FastMCP",
+              "is_exported": true,
+              "line_number": 5,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "class_declarations": [],
+          "function_declarations": [
+            {
+              "name": "get_implementation_map",
+              "is_exported": true,
+              "line_number": 57,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "_load_spec",
+              "is_exported": true,
+              "line_number": 13,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "get_system_overview",
+              "is_exported": true,
+              "line_number": 23,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "get_api_contracts",
+              "is_exported": true,
+              "line_number": 32,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "get_data_contracts",
+              "is_exported": true,
+              "line_number": 41,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "get_agent_specs",
+              "is_exported": true,
+              "line_number": 49,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "get_api_domains",
+              "is_exported": true,
+              "line_number": 65,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "decorators": [
+            {
+              "name": "@mcp.tool()",
+              "is_exported": true,
+              "line_number": 22,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 74,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.489963"
+        }
+      },
+      "app/mcp/__init__.py": {
+        "file_path": "app/mcp/__init__.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [],
+          "class_declarations": [],
+          "function_declarations": [],
+          "decorators": [],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 0,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.490023"
+        }
+      },
+      "app/models/__init__.py": {
+        "file_path": "app/models/__init__.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [],
+          "class_declarations": [],
+          "function_declarations": [],
+          "decorators": [],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 0,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.490073"
+        }
+      },
+      "app/models/db_models.py": {
+        "file_path": "app/models/db_models.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [
+            {
+              "name": "import uuid",
+              "is_exported": true,
+              "line_number": 11,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from sqlalchemy import Column, Index, text",
+              "is_exported": true,
+              "line_number": 15,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from datetime import datetime",
+              "is_exported": true,
+              "line_number": 12,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from typing import Any",
+              "is_exported": true,
+              "line_number": 13,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from sqlalchemy.dialects.postgresql import JSONB, UUID as PG_UUID",
+              "is_exported": true,
+              "line_number": 16,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from sqlmodel import Field, SQLModel",
+              "is_exported": true,
+              "line_number": 17,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "class_declarations": [
+            {
+              "name": "User",
+              "is_exported": true,
+              "line_number": 31,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "StackReport",
+              "is_exported": true,
+              "line_number": 141,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "ArchitectureContext",
+              "is_exported": true,
+              "line_number": 180,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "Job",
+              "is_exported": true,
+              "line_number": 55,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "AgentExecution",
+              "is_exported": true,
+              "line_number": 100,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "SystemMap",
+              "is_exported": true,
+              "line_number": 213,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "TechDebtFinding",
+              "is_exported": true,
+              "line_number": 244,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "DocArtifact",
+              "is_exported": true,
+              "line_number": 274,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "LLMCallDecision",
+              "is_exported": true,
+              "line_number": 300,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "SignalReport",
+              "is_exported": true,
+              "line_number": 328,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "function_declarations": [
+            {
+              "name": "_uuid_pk",
+              "is_exported": true,
+              "line_number": 20,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "_now",
+              "is_exported": true,
+              "line_number": 24,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "decorators": [],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 352,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.491851"
+        }
+      },
+      "app/models/stack_models.py": {
+        "file_path": "app/models/stack_models.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [
+            {
+              "name": "from datetime import datetime",
+              "is_exported": true,
+              "line_number": 8,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from pydantic import BaseModel, ConfigDict, Field",
+              "is_exported": true,
+              "line_number": 10,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.domain.enums import AnalysisScope",
+              "is_exported": true,
+              "line_number": 11,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from typing import Any",
+              "is_exported": true,
+              "line_number": 9,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "class_declarations": [
+            {
+              "name": "SamplingStrategy",
+              "is_exported": true,
+              "line_number": 214,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "DirectoryStructure",
+              "is_exported": true,
+              "line_number": 122,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "FileInventory",
+              "is_exported": true,
+              "line_number": 92,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "LanguageInfo",
+              "is_exported": true,
+              "line_number": 14,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "DependencyInfo",
+              "is_exported": true,
+              "line_number": 26,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "InfraHint",
+              "is_exported": true,
+              "line_number": 39,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "FrameworkInfo",
+              "is_exported": true,
+              "line_number": 19,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "ServiceInfo",
+              "is_exported": true,
+              "line_number": 32,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "DockerHints",
+              "is_exported": true,
+              "line_number": 44,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "BuildToolInfo",
+              "is_exported": true,
+              "line_number": 50,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "TestFrameworkInfo",
+              "is_exported": true,
+              "line_number": 55,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "StackIntelligenceReport",
+              "is_exported": true,
+              "line_number": 139,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "SignalDeclaration",
+              "is_exported": true,
+              "line_number": 257,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "PatternReport",
+              "is_exported": true,
+              "line_number": 237,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "ExtractionSummary",
+              "is_exported": true,
+              "line_number": 283,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "PatternInsight",
+              "is_exported": true,
+              "line_number": 183,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "AnalysisMetadata",
+              "is_exported": true,
+              "line_number": 228,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "DetectedPattern",
+              "is_exported": true,
+              "line_number": 177,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "DirectoryNode",
+              "is_exported": true,
+              "line_number": 111,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "UniversalSignalFormat",
+              "is_exported": true,
+              "line_number": 265,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "MonorepoSignals",
+              "is_exported": true,
+              "line_number": 73,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "CostBreakdown",
+              "is_exported": true,
+              "line_number": 292,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "UnknownSignal",
+              "is_exported": true,
+              "line_number": 78,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "EntrypointInfo",
+              "is_exported": true,
+              "line_number": 60,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "RepositoryMetadata",
+              "is_exported": true,
+              "line_number": 131,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "DirectoryInterpretation",
+              "is_exported": true,
+              "line_number": 192,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "ConfigFileInfo",
+              "is_exported": true,
+              "line_number": 67,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "FrameworkConvention",
+              "is_exported": true,
+              "line_number": 199,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "LanguageFileBreakdown",
+              "is_exported": true,
+              "line_number": 85,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "SpecialCase",
+              "is_exported": true,
+              "line_number": 221,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "SignalExtractionReport",
+              "is_exported": true,
+              "line_number": 300,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "SamplingRule",
+              "is_exported": true,
+              "line_number": 206,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "function_declarations": [],
+          "decorators": [],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 309,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.493645"
+        }
+      },
+      "app/api/__init__.py": {
+        "file_path": "app/api/__init__.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [],
+          "class_declarations": [],
+          "function_declarations": [],
+          "decorators": [],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 0,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.493790"
+        }
+      },
+      "app/api/router.py": {
+        "file_path": "app/api/router.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [
+            {
+              "name": "from fastapi import APIRouter",
+              "is_exported": true,
+              "line_number": 8,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.api.routers import (\n    agents,\n    auth,\n    docs,\n    impact,\n    jobs,\n    navigation,\n    stream,\n    task_context,\n    understanding,\n)",
+              "is_exported": true,
+              "line_number": 10,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "class_declarations": [],
+          "function_declarations": [],
+          "decorators": [],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 35,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.494250"
+        }
+      },
+      "app/api/dependencies.py": {
+        "file_path": "app/api/dependencies.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [
+            {
+              "name": "from collections.abc import AsyncGenerator",
+              "is_exported": true,
+              "line_number": 8,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.core.settings import Settings, get_settings",
+              "is_exported": true,
+              "line_number": 14,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from redis.asyncio import Redis",
+              "is_exported": true,
+              "line_number": 11,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from sqlalchemy.ext.asyncio import AsyncSession",
+              "is_exported": true,
+              "line_number": 12,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from fastapi import Depends",
+              "is_exported": true,
+              "line_number": 10,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.infrastructure.database import get_session",
+              "is_exported": true,
+              "line_number": 15,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.infrastructure.redis_client import get_redis",
+              "is_exported": true,
+              "line_number": 16,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.services.llm_budget_service import LLMBudgetService",
+              "is_exported": true,
+              "line_number": 17,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "class_declarations": [],
+          "function_declarations": [
+            {
+              "name": "get_db",
+              "is_exported": true,
+              "line_number": 22,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "get_llm_budget_service",
+              "is_exported": true,
+              "line_number": 32,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "get_cache",
+              "is_exported": true,
+              "line_number": 26,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "decorators": [],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 38,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.494711"
+        }
+      },
+      "app/application/job_orchestrator.py": {
+        "file_path": "app/application/job_orchestrator.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [
+            {
+              "name": "import logging",
+              "is_exported": true,
+              "line_number": 10,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from datetime import datetime",
+              "is_exported": true,
+              "line_number": 12,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.agents.stack_detector.agent import StackDetectorAgent",
+              "is_exported": true,
+              "line_number": 16,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "import uuid",
+              "is_exported": true,
+              "line_number": 11,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from sqlmodel.ext.asyncio.session import AsyncSession",
+              "is_exported": true,
+              "line_number": 14,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.domain.enums import JobStatus",
+              "is_exported": true,
+              "line_number": 17,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.infrastructure.database import AsyncSessionFactory",
+              "is_exported": true,
+              "line_number": 18,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.models.db_models import Job, SignalReport",
+              "is_exported": true,
+              "line_number": 19,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.services.notification_service import NotificationService",
+              "is_exported": true,
+              "line_number": 20,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.agents.pattern_detector.agent import PatternDetectorAgent",
+              "is_exported": true,
+              "line_number": 65,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.agents.universal_extractor.agent import UniversalExtractorAgent",
+              "is_exported": true,
+              "line_number": 78,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from sqlmodel import select",
+              "is_exported": true,
+              "line_number": 94,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.services.llm_budget_service import LLMBudgetService",
+              "is_exported": true,
+              "line_number": 79,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "class_declarations": [
+            {
+              "name": "JobOrchestrator",
+              "is_exported": true,
+              "line_number": 25,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "function_declarations": [
+            {
+              "name": "run_job",
+              "is_exported": true,
+              "line_number": 30,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "_initialize_job",
+              "is_exported": true,
+              "line_number": 134,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "_complete_job",
+              "is_exported": true,
+              "line_number": 147,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "_fail_job",
+              "is_exported": true,
+              "line_number": 155,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "decorators": [],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 162,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.495845"
+        }
+      },
+      "app/application/__init__.py": {
+        "file_path": "app/application/__init__.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [],
+          "class_declarations": [],
+          "function_declarations": [],
+          "decorators": [],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 0,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.495932"
+        }
+      },
+      "app/infrastructure/database.py": {
+        "file_path": "app/infrastructure/database.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [
+            {
+              "name": "from collections.abc import AsyncGenerator",
+              "is_exported": true,
+              "line_number": 8,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine",
+              "is_exported": true,
+              "line_number": 11,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.core.settings import get_settings",
+              "is_exported": true,
+              "line_number": 14,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from sqlalchemy.exc import SQLAlchemyError",
+              "is_exported": true,
+              "line_number": 10,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from sqlmodel import SQLModel",
+              "is_exported": true,
+              "line_number": 12,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "class_declarations": [],
+          "function_declarations": [
+            {
+              "name": "create_db_tables",
+              "is_exported": true,
+              "line_number": 33,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "get_session",
+              "is_exported": true,
+              "line_number": 39,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "decorators": [],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 50,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.496295"
+        }
+      },
+      "app/infrastructure/__init__.py": {
+        "file_path": "app/infrastructure/__init__.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [],
+          "class_declarations": [],
+          "function_declarations": [],
+          "decorators": [],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 0,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.496343"
+        }
+      },
+      "app/infrastructure/redis_client.py": {
+        "file_path": "app/infrastructure/redis_client.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [
+            {
+              "name": "from collections.abc import AsyncGenerator",
+              "is_exported": true,
+              "line_number": 10,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from redis.asyncio import Redis",
+              "is_exported": true,
+              "line_number": 13,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "import redis.asyncio as aioredis",
+              "is_exported": true,
+              "line_number": 12,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.core.settings import get_settings",
+              "is_exported": true,
+              "line_number": 15,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "class_declarations": [],
+          "function_declarations": [
+            {
+              "name": "get_redis_client",
+              "is_exported": true,
+              "line_number": 24,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "get_redis",
+              "is_exported": true,
+              "line_number": 44,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "close_redis_client",
+              "is_exported": true,
+              "line_number": 36,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "decorators": [],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 47,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.496658"
+        }
+      },
+      "app/domain/enums.py": {
+        "file_path": "app/domain/enums.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [
+            {
+              "name": "from enum import StrEnum",
+              "is_exported": true,
+              "line_number": 9,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "class_declarations": [
+            {
+              "name": "AnalysisDepth",
+              "is_exported": true,
+              "line_number": 12,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "AnalysisScope",
+              "is_exported": true,
+              "line_number": 20,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "AnalysisTier",
+              "is_exported": true,
+              "line_number": 41,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "AnalysisMode",
+              "is_exported": true,
+              "line_number": 33,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "JobStatus",
+              "is_exported": true,
+              "line_number": 58,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "AgentStatus",
+              "is_exported": true,
+              "line_number": 68,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "LLMDecision",
+              "is_exported": true,
+              "line_number": 78,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "TechDebtSeverity",
+              "is_exported": true,
+              "line_number": 86,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "TechDebtCategory",
+              "is_exported": true,
+              "line_number": 94,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "DocArtifactType",
+              "is_exported": true,
+              "line_number": 105,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "AgentName",
+              "is_exported": true,
+              "line_number": 115,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "function_declarations": [
+            {
+              "name": "to_analysis_mode",
+              "is_exported": true,
+              "line_number": 48,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "decorators": [],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 126,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.497216"
+        }
+      },
+      "app/domain/__init__.py": {
+        "file_path": "app/domain/__init__.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [],
+          "class_declarations": [],
+          "function_declarations": [],
+          "decorators": [],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 0,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.497264"
+        }
+      },
+      "app/services/notification_service.py": {
+        "file_path": "app/services/notification_service.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [
+            {
+              "name": "import json",
+              "is_exported": true,
+              "line_number": 11,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from datetime import datetime",
+              "is_exported": true,
+              "line_number": 13,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.infrastructure.redis_client import get_redis_client",
+              "is_exported": true,
+              "line_number": 15,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "import uuid",
+              "is_exported": true,
+              "line_number": 12,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "class_declarations": [
+            {
+              "name": "NotificationService",
+              "is_exported": true,
+              "line_number": 18,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "function_declarations": [
+            {
+              "name": "_publish",
+              "is_exported": true,
+              "line_number": 25,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "notify_agent_completed",
+              "is_exported": true,
+              "line_number": 62,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "notify_agent_started",
+              "is_exported": true,
+              "line_number": 42,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "notify_job_status",
+              "is_exported": true,
+              "line_number": 37,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "notify_agent_progress",
+              "is_exported": true,
+              "line_number": 51,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "notify_job_completed",
+              "is_exported": true,
+              "line_number": 74,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "notify_job_failed",
+              "is_exported": true,
+              "line_number": 83,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "decorators": [
+            {
+              "name": "@staticmethod",
+              "is_exported": true,
+              "line_number": 24,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "@classmethod",
+              "is_exported": true,
+              "line_number": 50,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 89,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.497838"
+        }
+      },
+      "app/services/__init__.py": {
+        "file_path": "app/services/__init__.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [],
+          "class_declarations": [],
+          "function_declarations": [],
+          "decorators": [],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 0,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.497892"
+        }
+      },
+      "app/services/estimation_service.py": {
+        "file_path": "app/services/estimation_service.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [
+            {
+              "name": "from app.api.schemas.requests import AgentConfigItem, EstimateJobRequest",
+              "is_exported": true,
+              "line_number": 13,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.api.schemas.responses import AgentEstimateItem, JobEstimateResponse",
+              "is_exported": true,
+              "line_number": 14,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "class_declarations": [],
+          "function_declarations": [
+            {
+              "name": "_cost_for_agent",
+              "is_exported": true,
+              "line_number": 86,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "estimate",
+              "is_exported": true,
+              "line_number": 103,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "decorators": [],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 187,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.498994"
+        }
+      },
+      "app/services/llm_budget_service.py": {
+        "file_path": "app/services/llm_budget_service.py",
+        "language": "python",
+        "extraction_method": "tree-sitter",
+        "signals": {
+          "imports": [
+            {
+              "name": "import uuid",
+              "is_exported": true,
+              "line_number": 13,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from sqlmodel.ext.asyncio.session import AsyncSession",
+              "is_exported": true,
+              "line_number": 16,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.domain.enums import LLMDecision",
+              "is_exported": true,
+              "line_number": 18,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from app.models.db_models import Job, LLMCallDecision",
+              "is_exported": true,
+              "line_number": 19,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "from typing import Any",
+              "is_exported": true,
+              "line_number": 14,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "class_declarations": [
+            {
+              "name": "LLMBudgetService",
+              "is_exported": true,
+              "line_number": 37,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "function_declarations": [
+            {
+              "name": "__init__",
+              "is_exported": true,
+              "line_number": 43,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "open_job",
+              "is_exported": true,
+              "line_number": 48,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "evaluate_and_record",
+              "is_exported": true,
+              "line_number": 94,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "update_job_spend",
+              "is_exported": true,
+              "line_number": 150,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "evaluate",
+              "is_exported": true,
+              "line_number": 65,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "record_actual_spend",
+              "is_exported": true,
+              "line_number": 89,
+              "base_classes": null,
+              "metadata": {}
+            },
+            {
+              "name": "get_state",
+              "is_exported": true,
+              "line_number": 61,
+              "base_classes": null,
+              "metadata": {}
+            }
+          ],
+          "decorators": [],
+          "type_definitions": [],
+          "file_dependencies": []
+        },
+        "metadata": {
+          "lines_of_code": 172,
+          "confidence": 1.0,
+          "extraction_timestamp": "2026-04-06T02:45:20.499943"
+        }
+      }
+    },
+    "global_patterns": {},
+    "cost_breakdown": {
+      "tree_sitter_cost": 0.0,
+      "lsp_cost": 0.0,
+      "llm_cost": 0.0,
+      "pattern_generation_cost": 0.0,
+      "total_cost_usd": 0.0
+    },
+    "analysis_metadata": {
+      "confidence_score": 1.0,
+      "analysis_timestamp": "2026-04-06T02:45:20.500003",
+      "agent_version": "1.2.0 (Dynamic Decision Engine)",
+      "llm_model_used": null,
+      "tokens_used": 0,
+      "cost_usd": 0.0
+    }
+  }
+}

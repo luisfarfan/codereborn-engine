@@ -320,3 +320,33 @@ class LLMCallDecision(SQLModel, table=True):
     budget_remaining_usd: float
     reason: str | None = Field(default=None)
     created_at: datetime = Field(default_factory=_now)
+
+
+# ── SignalReport ──────────────────────────────────────────────────────────────
+
+
+class SignalReport(SQLModel, table=True):
+    """
+    Output of the UniversalSignalExtractor agent.
+    Contains unified signal maps extracted via Tree-sitter or LLMs.
+    One row per job.
+    """
+
+    __tablename__ = "signal_reports"
+
+    id: uuid.UUID = Field(
+        default_factory=_uuid_pk,
+        sa_column=Column(PG_UUID(as_uuid=True), primary_key=True, default=_uuid_pk),
+    )
+    job_id: uuid.UUID = Field(
+        sa_column=Column(PG_UUID(as_uuid=True), nullable=False, unique=True, index=True)
+    )
+
+    # Full structured data as defined in ai_spec/05_data_contracts.json
+    # Contains: extraction_summary, signals_by_file, cost_breakdown, etc.
+    report_data: dict[str, Any] = Field(
+        default={}, sa_column=Column(JSONB, nullable=False, server_default=text("'{}'::jsonb"))
+    )
+
+    created_at: datetime = Field(default_factory=_now)
+    analysis_timestamp: datetime = Field(default_factory=_now)

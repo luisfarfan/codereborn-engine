@@ -10,40 +10,40 @@ This version is the 'baseline' implementation, using hardcoded costs
 compatible with OpenRouter/Gemini.
 """
 
+import logging
 import uuid
 from typing import Any
 
+from openrouter_insights import LLMIndexSync
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.domain.enums import LLMDecision
 from app.models.db_models import Job, LLMCallDecision
 
-
-# Cost estimates in USD per 1K tokens (Blended input/output for simplicity)
-# Rates based on OpenRouter / Google Gemini Flash Lite
-MODEL_COSTS_PER_1K: dict[str, float] = {
-    "openrouter/google/gemini-2.0-flash-lite-001": 0.0001,  # Est. $0.10 per 1M
-    "google/gemini-2.0-flash-lite-001": 0.0001,
-    "gpt-4o": 0.005,
-    "gpt-4o-mini": 0.00015,
-}
-
-# Free models are explicitly mapped to 0.0
-FREE_MODELS = [
-    "openrouter/google/gemini-2.0-flash-lite-preview-001:free",
-]
-
+logger = logging.getLogger(__name__)
 
 class LLMBudgetService:
     """
-    Handles LLM budget evaluation and persistence.
-    Simplified version for initial CodeReborn Engine integration.
+    Handles LLM budget evaluation and persistence using openrouter-insights
+    for dynamic model intelligence and pricing.
     """
 
     def __init__(self, default_budget_usd: float = 0.50, max_budget_usd: float = 5.00) -> None:
         self.default_budget_usd = default_budget_usd
         self.max_budget_usd = max_budget_usd
         self._states: dict[str, Any] = {}
+        
+        # Initialize the global LLM index (offline-first mode)
+        try:
+            self.index = LLMIndexSync(mode="json")
+            logger.info("LLMBudgetService: Dynamic model index initialized.")
+        except Exception as e:
+            logger.error(f"Failed to initialize LLMIndexSync: {e}")
+            self.index = None
+
+    def get_state(self, job_id: str) -> Any | None:
+        """Returns the in-memory state for a job."""
+        return self._states.get(job_id)
 
     def open_job(self, job_id: str, max_usd: float | None = None, mode: str | None = None) -> Any:
         """Synchronous job opening for backward compatibility."""
@@ -58,16 +58,26 @@ class LLMBudgetService:
         self._states[job_id] = state
         return state
 
-    def get_state(self, job_id: str) -> Any | None:
-        """Returns the in-memory state for a job."""
-        return self._states.get(job_id)
+    def _get_model_cost_per_1k(self, model_id: str) -> float:
+        """Helper to get blended cost per 1K tokens from the index."""
+        if not self.index:
+            return 0.001
+            
+        model = self.index.get_model(model_id)
+        if not model or not model.pricing:
+            return 0.001
+            
+        # Pricing in index (0.6.0+) is per 1M tokens. 
+        # Built-in filtering now handles openrouter/auto and negative prices.
+        blended_1m = (model.pricing.input * 0.7) + (model.pricing.output * 0.3)
+        return blended_1m / 1000.0
 
-    def evaluate(self, state: Any, agent: str, model: str, estimated_tokens: int) -> type:
-        """Synchronous evaluation for backward compatibility."""
-        cost_per_1k = MODEL_COSTS_PER_1K.get(model, 0.001)
-        if model in FREE_MODELS:
-            cost_per_1k = 0.0
-        
+    def evaluate(self, state: Any, agent: str, model: str, estimated_tokens: int) -> Any:
+        """
+        Evaluate if the call is affordable.
+        Uses openrouter-insights 0.6.0 for smart fallback selection.
+        """
+        cost_per_1k = self._get_model_cost_per_1k(model)
         estimated_cost = (estimated_tokens / 1000) * cost_per_1k
         remaining = state.max_usd - state.spent_usd
         
@@ -76,9 +86,24 @@ class LLMBudgetService:
         approved_model = model
 
         if estimated_cost > remaining:
-            decision = LLMDecision.REJECT
-            reason = f"Insufficient budget: needs ${estimated_cost:.4f}, has ${remaining:.4f}"
-            approved_model = None
+            logger.info(f"Budget exceeded for {model} (${estimated_cost:.4f} > ${remaining:.4f}).")
+            
+            # Use 0.6.0's get_best_alternative()
+            # max_price is in USD per 1M tokens in the library
+            max_price_1m = (remaining / estimated_tokens) * 1_000_000
+            
+            fallback = None
+            if self.index:
+                fallback = self.index.get_best_alternative(model, max_price=max_price_1m)
+            
+            if fallback:
+                decision = LLMDecision.DOWNGRADE
+                reason = f"Original model too expensive. Downgraded to {fallback.id}."
+                approved_model = fallback.id
+            else:
+                decision = LLMDecision.REJECT
+                reason = f"Insufficient budget: needs ${estimated_cost:.4f}, has ${remaining:.4f}. No smart alternative found."
+                approved_model = None
 
         return type('Decision', (object,), {
             'decision': decision,
@@ -87,7 +112,7 @@ class LLMBudgetService:
         })
 
     def record_actual_spend(self, state: Any, actual_cost_usd: float) -> None:
-        """Synchronous spend recording for backward compatibility."""
+        """Record the actual cost after the LLM call completes."""
         state.spent_usd += actual_cost_usd
         state.call_count += 1
 
@@ -100,46 +125,30 @@ class LLMBudgetService:
         estimated_tokens: int,
     ) -> LLMCallDecision:
         """
-        Main entry point: Evaluates if a call is affordable AND persists the decision.
+        Async version with persistence.
         """
-        # 1. Get current job state
         job = await session.get(Job, job_id)
         if not job:
             raise ValueError(f"Job {job_id} not found")
 
-        # 2. Calculate estimated cost
-        cost_per_1k = MODEL_COSTS_PER_1K.get(model, 0.001)  # Default $1/1M if unknown
-        if model in FREE_MODELS:
-            cost_per_1k = 0.0
+        # Reuse the sync evaluate logic
+        state = type('State', (object,), {
+            'max_usd': job.budget_config.get("max_usd", self.default_budget_usd) if job.budget_config else self.default_budget_usd,
+            'spent_usd': job.cost_usd
+        })
+        
+        eval_res = self.evaluate(state, agent_name, model, estimated_tokens)
 
-        estimated_cost = (estimated_tokens / 1000) * cost_per_1k
-
-        # 3. Determine remaining budget
-        # budget_config usually contains {"max_usd": 1.0}
-        max_usd = job.budget_config.get("max_usd", self.default_budget_usd) \
-            if job.budget_config else self.default_budget_usd
-        remaining = max_usd - job.cost_usd
-
-        # 4. Make decision
-        decision_val = LLMDecision.APPROVE
-        reason = "Within budget"
-        approved_model = model
-
-        if estimated_cost > remaining:
-            decision_val = LLMDecision.REJECT
-            reason = f"Insufficient budget: needs ${estimated_cost:.4f}, has ${remaining:.4f}"
-            approved_model = None
-
-        # 5. Persist the decision
+        # Persist the decision
         decision = LLMCallDecision(
             job_id=job_id,
             agent_name=agent_name,
             requested_model=model,
-            approved_model=approved_model,
-            decision=decision_val,
-            estimated_cost_usd=estimated_cost,
-            budget_remaining_usd=remaining,
-            reason=reason
+            approved_model=eval_res.approved_model,
+            decision=eval_res.decision,
+            estimated_cost_usd=(estimated_tokens / 1000) * self._get_model_cost_per_1k(model),
+            budget_remaining_usd=state.max_usd - state.spent_usd,
+            reason=eval_res.reason
         )
         session.add(decision)
         await session.commit()

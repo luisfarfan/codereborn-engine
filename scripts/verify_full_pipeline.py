@@ -67,8 +67,9 @@ async def run_pipeline(repo_path: str):
             # PHASE 3: Universal Signal Extractor (Hybrid Extraction)
             logger.info("\n--- [PHASE 3: SIGNAL EXTRACTOR] ---")
             try:
-                # Initialize agent and budget service (baseline)
+                # 1. Initialize agent and budget service (baseline)
                 budget_service = LLMBudgetService()
+                budget_service.open_job(str(job_id)) # CRITICAL: Open job state for Phase 3!
                 signal_agent = UniversalExtractorAgent(budget_service)
                 
                 # Execute extraction (sampling from pattern_report)

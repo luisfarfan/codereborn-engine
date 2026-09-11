@@ -1,0 +1,7288 @@
+[
+  {
+    "id": "google/gemma-4-26b-a4b-it",
+    "name": "Google: Gemma 4 26B A4B ",
+    "provider": "Google",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.13,
+      "output": 0.39999999999999997
+    },
+    "modalities": [
+      "image",
+      "text",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemma-4-31b-it",
+    "name": "Google: Gemma 4 31B",
+    "provider": "Google",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.14,
+      "output": 0.39999999999999997
+    },
+    "modalities": [
+      "image",
+      "text",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3.6-plus:free",
+    "name": "Qwen: Qwen3.6 Plus (free)",
+    "provider": "Qwen",
+    "context_length": 1000000,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "z-ai/glm-5v-turbo",
+    "name": "Z.ai: GLM 5V Turbo",
+    "provider": "Z-Ai",
+    "context_length": 202752,
+    "pricing": {
+      "input": 1.2,
+      "output": 4.0
+    },
+    "modalities": [
+      "image",
+      "text",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "arcee-ai/trinity-large-thinking",
+    "name": "Arcee AI: Trinity Large Thinking",
+    "provider": "Arcee-Ai",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.22,
+      "output": 0.85
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "x-ai/grok-4.20-multi-agent",
+    "name": "xAI: Grok 4.20 Multi-Agent",
+    "provider": "xAI",
+    "context_length": 2000000,
+    "pricing": {
+      "input": 2.0,
+      "output": 6.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "x-ai/grok-4.20",
+    "name": "xAI: Grok 4.20",
+    "provider": "xAI",
+    "context_length": 2000000,
+    "pricing": {
+      "input": 2.0,
+      "output": 6.0
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/lyria-3-pro-preview",
+    "name": "Google: Lyria 3 Pro Preview",
+    "provider": "Google",
+    "context_length": 1048576,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/lyria-3-clip-preview",
+    "name": "Google: Lyria 3 Clip Preview",
+    "provider": "Google",
+    "context_length": 1048576,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "kwaipilot/kat-coder-pro-v2",
+    "name": "Kwaipilot: KAT-Coder-Pro V2",
+    "provider": "Kwaipilot",
+    "context_length": 256000,
+    "pricing": {
+      "input": 0.3,
+      "output": 1.2
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "rekaai/reka-edge",
+    "name": "Reka Edge",
+    "provider": "Rekaai",
+    "context_length": 16384,
+    "pricing": {
+      "input": 0.09999999999999999,
+      "output": 0.09999999999999999
+    },
+    "modalities": [
+      "image",
+      "text",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "xiaomi/mimo-v2-omni",
+    "name": "Xiaomi: MiMo-V2-Omni",
+    "provider": "Xiaomi",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.39999999999999997,
+      "output": 2.0
+    },
+    "modalities": [
+      "text",
+      "audio",
+      "image",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "xiaomi/mimo-v2-pro",
+    "name": "Xiaomi: MiMo-V2-Pro",
+    "provider": "Xiaomi",
+    "context_length": 1048576,
+    "pricing": {
+      "input": 1.0,
+      "output": 3.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "minimax/minimax-m2.7",
+    "name": "MiniMax: MiniMax M2.7",
+    "provider": "Minimax",
+    "context_length": 204800,
+    "pricing": {
+      "input": 0.3,
+      "output": 1.2
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5.4-nano",
+    "name": "OpenAI: GPT-5.4 Nano",
+    "provider": "OpenAI",
+    "context_length": 400000,
+    "pricing": {
+      "input": 0.19999999999999998,
+      "output": 1.25
+    },
+    "modalities": [
+      "file",
+      "image",
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5.4-mini",
+    "name": "OpenAI: GPT-5.4 Mini",
+    "provider": "OpenAI",
+    "context_length": 400000,
+    "pricing": {
+      "input": 0.75,
+      "output": 4.5
+    },
+    "modalities": [
+      "file",
+      "image",
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/mistral-small-2603",
+    "name": "Mistral: Mistral Small 4",
+    "provider": "Mistralai",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.15,
+      "output": 0.6
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "z-ai/glm-5-turbo",
+    "name": "Z.ai: GLM 5 Turbo",
+    "provider": "Z-Ai",
+    "context_length": 202752,
+    "pricing": {
+      "input": 1.2,
+      "output": 4.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "nvidia/nemotron-3-super-120b-a12b:free",
+    "name": "NVIDIA: Nemotron 3 Super (free)",
+    "provider": "Nvidia",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "nvidia/nemotron-3-super-120b-a12b",
+    "name": "NVIDIA: Nemotron 3 Super",
+    "provider": "Nvidia",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.09999999999999999,
+      "output": 0.5
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "bytedance-seed/seed-2.0-lite",
+    "name": "ByteDance Seed: Seed-2.0-Lite",
+    "provider": "Bytedance-Seed",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.25,
+      "output": 2.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3.5-9b",
+    "name": "Qwen: Qwen3.5-9B",
+    "provider": "Qwen",
+    "context_length": 256000,
+    "pricing": {
+      "input": 0.049999999999999996,
+      "output": 0.15
+    },
+    "modalities": [
+      "text",
+      "image",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5.4-pro",
+    "name": "OpenAI: GPT-5.4 Pro",
+    "provider": "OpenAI",
+    "context_length": 1050000,
+    "pricing": {
+      "input": 30.0,
+      "output": 180.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5.4",
+    "name": "OpenAI: GPT-5.4",
+    "provider": "OpenAI",
+    "context_length": 1050000,
+    "pricing": {
+      "input": 2.5,
+      "output": 15.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "inception/mercury-2",
+    "name": "Inception: Mercury 2",
+    "provider": "Inception",
+    "context_length": 128000,
+    "pricing": {
+      "input": 0.25,
+      "output": 0.75
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5.3-chat",
+    "name": "OpenAI: GPT-5.3 Chat",
+    "provider": "OpenAI",
+    "context_length": 128000,
+    "pricing": {
+      "input": 1.75,
+      "output": 14.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemini-3.1-flash-lite-preview",
+    "name": "Google: Gemini 3.1 Flash Lite Preview",
+    "provider": "Google",
+    "context_length": 1048576,
+    "pricing": {
+      "input": 0.25,
+      "output": 1.5
+    },
+    "modalities": [
+      "text",
+      "image",
+      "video",
+      "file",
+      "audio"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "bytedance-seed/seed-2.0-mini",
+    "name": "ByteDance Seed: Seed-2.0-Mini",
+    "provider": "Bytedance-Seed",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.09999999999999999,
+      "output": 0.39999999999999997
+    },
+    "modalities": [
+      "text",
+      "image",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemini-3.1-flash-image-preview",
+    "name": "Google: Nano Banana 2 (Gemini 3.1 Flash Image Preview)",
+    "provider": "Google",
+    "context_length": 65536,
+    "pricing": {
+      "input": 0.5,
+      "output": 3.0
+    },
+    "modalities": [
+      "image",
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3.5-35b-a3b",
+    "name": "Qwen: Qwen3.5-35B-A3B",
+    "provider": "Qwen",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.1625,
+      "output": 1.3
+    },
+    "modalities": [
+      "text",
+      "image",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3.5-27b",
+    "name": "Qwen: Qwen3.5-27B",
+    "provider": "Qwen",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.195,
+      "output": 1.56
+    },
+    "modalities": [
+      "text",
+      "image",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3.5-122b-a10b",
+    "name": "Qwen: Qwen3.5-122B-A10B",
+    "provider": "Qwen",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.26,
+      "output": 2.08
+    },
+    "modalities": [
+      "text",
+      "image",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3.5-flash-02-23",
+    "name": "Qwen: Qwen3.5-Flash",
+    "provider": "Qwen",
+    "context_length": 1000000,
+    "pricing": {
+      "input": 0.065,
+      "output": 0.26
+    },
+    "modalities": [
+      "text",
+      "image",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "liquid/lfm-2-24b-a2b",
+    "name": "LiquidAI: LFM2-24B-A2B",
+    "provider": "Liquid",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.03,
+      "output": 0.12
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemini-3.1-pro-preview-customtools",
+    "name": "Google: Gemini 3.1 Pro Preview Custom Tools",
+    "provider": "Google",
+    "context_length": 1048576,
+    "pricing": {
+      "input": 2.0,
+      "output": 12.0
+    },
+    "modalities": [
+      "text",
+      "audio",
+      "image",
+      "video",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5.3-codex",
+    "name": "OpenAI: GPT-5.3-Codex",
+    "provider": "OpenAI",
+    "context_length": 400000,
+    "pricing": {
+      "input": 1.75,
+      "output": 14.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "aion-labs/aion-2.0",
+    "name": "AionLabs: Aion-2.0",
+    "provider": "Aion-Labs",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.7999999999999999,
+      "output": 1.5999999999999999
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemini-3.1-pro-preview",
+    "name": "Google: Gemini 3.1 Pro Preview",
+    "provider": "Google",
+    "context_length": 1048576,
+    "pricing": {
+      "input": 2.0,
+      "output": 12.0
+    },
+    "modalities": [
+      "audio",
+      "file",
+      "image",
+      "text",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "anthropic/claude-sonnet-4.6",
+    "name": "Anthropic: Claude Sonnet 4.6",
+    "provider": "Anthropic",
+    "context_length": 1000000,
+    "pricing": {
+      "input": 3.0,
+      "output": 15.0
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3.5-plus-02-15",
+    "name": "Qwen: Qwen3.5 Plus 2026-02-15",
+    "provider": "Qwen",
+    "context_length": 1000000,
+    "pricing": {
+      "input": 0.26,
+      "output": 1.56
+    },
+    "modalities": [
+      "text",
+      "image",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3.5-397b-a17b",
+    "name": "Qwen: Qwen3.5 397B A17B",
+    "provider": "Qwen",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.39,
+      "output": 2.34
+    },
+    "modalities": [
+      "text",
+      "image",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "minimax/minimax-m2.5:free",
+    "name": "MiniMax: MiniMax M2.5 (free)",
+    "provider": "Minimax",
+    "context_length": 196608,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "minimax/minimax-m2.5",
+    "name": "MiniMax: MiniMax M2.5",
+    "provider": "Minimax",
+    "context_length": 196608,
+    "pricing": {
+      "input": 0.118,
+      "output": 0.9900000000000001
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "z-ai/glm-5",
+    "name": "Z.ai: GLM 5",
+    "provider": "Z-Ai",
+    "context_length": 80000,
+    "pricing": {
+      "input": 0.72,
+      "output": 2.3
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-max-thinking",
+    "name": "Qwen: Qwen3 Max Thinking",
+    "provider": "Qwen",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.78,
+      "output": 3.9
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "anthropic/claude-opus-4.6",
+    "name": "Anthropic: Claude Opus 4.6",
+    "provider": "Anthropic",
+    "context_length": 1000000,
+    "pricing": {
+      "input": 5.0,
+      "output": 25.0
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-coder-next",
+    "name": "Qwen: Qwen3 Coder Next",
+    "provider": "Qwen",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.12,
+      "output": 0.75
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openrouter/free",
+    "name": "Free Models Router",
+    "provider": "Openrouter",
+    "context_length": 200000,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "stepfun/step-3.5-flash:free",
+    "name": "StepFun: Step 3.5 Flash (free)",
+    "provider": "Stepfun",
+    "context_length": 256000,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "stepfun/step-3.5-flash",
+    "name": "StepFun: Step 3.5 Flash",
+    "provider": "Stepfun",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.09999999999999999,
+      "output": 0.3
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "arcee-ai/trinity-large-preview:free",
+    "name": "Arcee AI: Trinity Large Preview (free)",
+    "provider": "Arcee-Ai",
+    "context_length": 131000,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "moonshotai/kimi-k2.5",
+    "name": "MoonshotAI: Kimi K2.5",
+    "provider": "Moonshotai",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.3827,
+      "output": 1.72
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "upstage/solar-pro-3",
+    "name": "Upstage: Solar Pro 3",
+    "provider": "Upstage",
+    "context_length": 128000,
+    "pricing": {
+      "input": 0.15,
+      "output": 0.6
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "minimax/minimax-m2-her",
+    "name": "MiniMax: MiniMax M2-her",
+    "provider": "Minimax",
+    "context_length": 65536,
+    "pricing": {
+      "input": 0.3,
+      "output": 1.2
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "writer/palmyra-x5",
+    "name": "Writer: Palmyra X5",
+    "provider": "Writer",
+    "context_length": 1040000,
+    "pricing": {
+      "input": 0.6,
+      "output": 6.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "liquid/lfm-2.5-1.2b-thinking:free",
+    "name": "LiquidAI: LFM2.5-1.2B-Thinking (free)",
+    "provider": "Liquid",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "liquid/lfm-2.5-1.2b-instruct:free",
+    "name": "LiquidAI: LFM2.5-1.2B-Instruct (free)",
+    "provider": "Liquid",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-audio",
+    "name": "OpenAI: GPT Audio",
+    "provider": "OpenAI",
+    "context_length": 128000,
+    "pricing": {
+      "input": 2.5,
+      "output": 10.0
+    },
+    "modalities": [
+      "text",
+      "audio"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-audio-mini",
+    "name": "OpenAI: GPT Audio Mini",
+    "provider": "OpenAI",
+    "context_length": 128000,
+    "pricing": {
+      "input": 0.6,
+      "output": 2.4
+    },
+    "modalities": [
+      "text",
+      "audio"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "z-ai/glm-4.7-flash",
+    "name": "Z.ai: GLM 4.7 Flash",
+    "provider": "Z-Ai",
+    "context_length": 202752,
+    "pricing": {
+      "input": 0.06,
+      "output": 0.39999999999999997
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5.2-codex",
+    "name": "OpenAI: GPT-5.2-Codex",
+    "provider": "OpenAI",
+    "context_length": 400000,
+    "pricing": {
+      "input": 1.75,
+      "output": 14.0
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "allenai/olmo-3.1-32b-instruct",
+    "name": "AllenAI: Olmo 3.1 32B Instruct",
+    "provider": "Allenai",
+    "context_length": 65536,
+    "pricing": {
+      "input": 0.19999999999999998,
+      "output": 0.6
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "bytedance-seed/seed-1.6-flash",
+    "name": "ByteDance Seed: Seed 1.6 Flash",
+    "provider": "Bytedance-Seed",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.075,
+      "output": 0.3
+    },
+    "modalities": [
+      "image",
+      "text",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "bytedance-seed/seed-1.6",
+    "name": "ByteDance Seed: Seed 1.6",
+    "provider": "Bytedance-Seed",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.25,
+      "output": 2.0
+    },
+    "modalities": [
+      "image",
+      "text",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "minimax/minimax-m2.1",
+    "name": "MiniMax: MiniMax M2.1",
+    "provider": "Minimax",
+    "context_length": 196608,
+    "pricing": {
+      "input": 0.27,
+      "output": 0.95
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "z-ai/glm-4.7",
+    "name": "Z.ai: GLM 4.7",
+    "provider": "Z-Ai",
+    "context_length": 202752,
+    "pricing": {
+      "input": 0.39,
+      "output": 1.75
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemini-3-flash-preview",
+    "name": "Google: Gemini 3 Flash Preview",
+    "provider": "Google",
+    "context_length": 1048576,
+    "pricing": {
+      "input": 0.5,
+      "output": 3.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file",
+      "audio",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/mistral-small-creative",
+    "name": "Mistral: Mistral Small Creative",
+    "provider": "Mistralai",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.09999999999999999,
+      "output": 0.3
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "xiaomi/mimo-v2-flash",
+    "name": "Xiaomi: MiMo-V2-Flash",
+    "provider": "Xiaomi",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.09,
+      "output": 0.29
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "nvidia/nemotron-3-nano-30b-a3b:free",
+    "name": "NVIDIA: Nemotron 3 Nano 30B A3B (free)",
+    "provider": "Nvidia",
+    "context_length": 256000,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "nvidia/nemotron-3-nano-30b-a3b",
+    "name": "NVIDIA: Nemotron 3 Nano 30B A3B",
+    "provider": "Nvidia",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.049999999999999996,
+      "output": 0.19999999999999998
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5.2-chat",
+    "name": "OpenAI: GPT-5.2 Chat",
+    "provider": "OpenAI",
+    "context_length": 128000,
+    "pricing": {
+      "input": 1.75,
+      "output": 14.0
+    },
+    "modalities": [
+      "file",
+      "image",
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5.2-pro",
+    "name": "OpenAI: GPT-5.2 Pro",
+    "provider": "OpenAI",
+    "context_length": 400000,
+    "pricing": {
+      "input": 21.0,
+      "output": 168.0
+    },
+    "modalities": [
+      "image",
+      "text",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5.2",
+    "name": "OpenAI: GPT-5.2",
+    "provider": "OpenAI",
+    "context_length": 400000,
+    "pricing": {
+      "input": 1.75,
+      "output": 14.0
+    },
+    "modalities": [
+      "file",
+      "image",
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/devstral-2512",
+    "name": "Mistral: Devstral 2 2512",
+    "provider": "Mistralai",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.39999999999999997,
+      "output": 2.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "relace/relace-search",
+    "name": "Relace: Relace Search",
+    "provider": "Relace",
+    "context_length": 256000,
+    "pricing": {
+      "input": 1.0,
+      "output": 3.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "z-ai/glm-4.6v",
+    "name": "Z.ai: GLM 4.6V",
+    "provider": "Z-Ai",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.3,
+      "output": 0.8999999999999999
+    },
+    "modalities": [
+      "image",
+      "text",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "nex-agi/deepseek-v3.1-nex-n1",
+    "name": "Nex AGI: DeepSeek V3.1 Nex N1",
+    "provider": "Nex-Agi",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.135,
+      "output": 0.5
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "essentialai/rnj-1-instruct",
+    "name": "EssentialAI: Rnj 1 Instruct",
+    "provider": "Essentialai",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.15,
+      "output": 0.15
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openrouter/bodybuilder",
+    "name": "Body Builder (beta)",
+    "provider": "Openrouter",
+    "context_length": 128000,
+    "pricing": {
+      "input": -1000000.0,
+      "output": -1000000.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5.1-codex-max",
+    "name": "OpenAI: GPT-5.1-Codex-Max",
+    "provider": "OpenAI",
+    "context_length": 400000,
+    "pricing": {
+      "input": 1.25,
+      "output": 10.0
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "amazon/nova-2-lite-v1",
+    "name": "Amazon: Nova 2 Lite",
+    "provider": "Amazon",
+    "context_length": 1000000,
+    "pricing": {
+      "input": 0.3,
+      "output": 2.5
+    },
+    "modalities": [
+      "text",
+      "image",
+      "video",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/ministral-14b-2512",
+    "name": "Mistral: Ministral 3 14B 2512",
+    "provider": "Mistralai",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.19999999999999998,
+      "output": 0.19999999999999998
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/ministral-8b-2512",
+    "name": "Mistral: Ministral 3 8B 2512",
+    "provider": "Mistralai",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.15,
+      "output": 0.15
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/ministral-3b-2512",
+    "name": "Mistral: Ministral 3 3B 2512",
+    "provider": "Mistralai",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.09999999999999999,
+      "output": 0.09999999999999999
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/mistral-large-2512",
+    "name": "Mistral: Mistral Large 3 2512",
+    "provider": "Mistralai",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.5,
+      "output": 1.5
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "arcee-ai/trinity-mini:free",
+    "name": "Arcee AI: Trinity Mini (free)",
+    "provider": "Arcee-Ai",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "arcee-ai/trinity-mini",
+    "name": "Arcee AI: Trinity Mini",
+    "provider": "Arcee-Ai",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.045,
+      "output": 0.15
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "deepseek/deepseek-v3.2-speciale",
+    "name": "DeepSeek: DeepSeek V3.2 Speciale",
+    "provider": "DeepSeek",
+    "context_length": 163840,
+    "pricing": {
+      "input": 0.39999999999999997,
+      "output": 1.2
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "deepseek/deepseek-v3.2",
+    "name": "DeepSeek: DeepSeek V3.2",
+    "provider": "DeepSeek",
+    "context_length": 163840,
+    "pricing": {
+      "input": 0.26,
+      "output": 0.38
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "prime-intellect/intellect-3",
+    "name": "Prime Intellect: INTELLECT-3",
+    "provider": "Prime-Intellect",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.19999999999999998,
+      "output": 1.1
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "anthropic/claude-opus-4.5",
+    "name": "Anthropic: Claude Opus 4.5",
+    "provider": "Anthropic",
+    "context_length": 200000,
+    "pricing": {
+      "input": 5.0,
+      "output": 25.0
+    },
+    "modalities": [
+      "file",
+      "image",
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "allenai/olmo-3-32b-think",
+    "name": "AllenAI: Olmo 3 32B Think",
+    "provider": "Allenai",
+    "context_length": 65536,
+    "pricing": {
+      "input": 0.15,
+      "output": 0.5
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemini-3-pro-image-preview",
+    "name": "Google: Nano Banana Pro (Gemini 3 Pro Image Preview)",
+    "provider": "Google",
+    "context_length": 65536,
+    "pricing": {
+      "input": 2.0,
+      "output": 12.0
+    },
+    "modalities": [
+      "image",
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "x-ai/grok-4.1-fast",
+    "name": "xAI: Grok 4.1 Fast",
+    "provider": "xAI",
+    "context_length": 2000000,
+    "pricing": {
+      "input": 0.19999999999999998,
+      "output": 0.5
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "deepcogito/cogito-v2.1-671b",
+    "name": "Deep Cogito: Cogito v2.1 671B",
+    "provider": "Deepcogito",
+    "context_length": 128000,
+    "pricing": {
+      "input": 1.25,
+      "output": 1.25
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5.1",
+    "name": "OpenAI: GPT-5.1",
+    "provider": "OpenAI",
+    "context_length": 400000,
+    "pricing": {
+      "input": 1.25,
+      "output": 10.0
+    },
+    "modalities": [
+      "image",
+      "text",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5.1-chat",
+    "name": "OpenAI: GPT-5.1 Chat",
+    "provider": "OpenAI",
+    "context_length": 128000,
+    "pricing": {
+      "input": 1.25,
+      "output": 10.0
+    },
+    "modalities": [
+      "file",
+      "image",
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5.1-codex",
+    "name": "OpenAI: GPT-5.1-Codex",
+    "provider": "OpenAI",
+    "context_length": 400000,
+    "pricing": {
+      "input": 1.25,
+      "output": 10.0
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5.1-codex-mini",
+    "name": "OpenAI: GPT-5.1-Codex-Mini",
+    "provider": "OpenAI",
+    "context_length": 400000,
+    "pricing": {
+      "input": 0.25,
+      "output": 2.0
+    },
+    "modalities": [
+      "image",
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "moonshotai/kimi-k2-thinking",
+    "name": "MoonshotAI: Kimi K2 Thinking",
+    "provider": "Moonshotai",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.47,
+      "output": 2.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "amazon/nova-premier-v1",
+    "name": "Amazon: Nova Premier 1.0",
+    "provider": "Amazon",
+    "context_length": 1000000,
+    "pricing": {
+      "input": 2.5,
+      "output": 12.5
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "perplexity/sonar-pro-search",
+    "name": "Perplexity: Sonar Pro Search",
+    "provider": "Perplexity",
+    "context_length": 200000,
+    "pricing": {
+      "input": 3.0,
+      "output": 15.0
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/voxtral-small-24b-2507",
+    "name": "Mistral: Voxtral Small 24B 2507",
+    "provider": "Mistralai",
+    "context_length": 32000,
+    "pricing": {
+      "input": 0.09999999999999999,
+      "output": 0.3
+    },
+    "modalities": [
+      "text",
+      "audio"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-oss-safeguard-20b",
+    "name": "OpenAI: gpt-oss-safeguard-20b",
+    "provider": "OpenAI",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.075,
+      "output": 0.3
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "nvidia/nemotron-nano-12b-v2-vl:free",
+    "name": "NVIDIA: Nemotron Nano 12B 2 VL (free)",
+    "provider": "Nvidia",
+    "context_length": 128000,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "image",
+      "text",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "nvidia/nemotron-nano-12b-v2-vl",
+    "name": "NVIDIA: Nemotron Nano 12B 2 VL",
+    "provider": "Nvidia",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.19999999999999998,
+      "output": 0.6
+    },
+    "modalities": [
+      "image",
+      "text",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "minimax/minimax-m2",
+    "name": "MiniMax: MiniMax M2",
+    "provider": "Minimax",
+    "context_length": 196608,
+    "pricing": {
+      "input": 0.255,
+      "output": 1.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-vl-32b-instruct",
+    "name": "Qwen: Qwen3 VL 32B Instruct",
+    "provider": "Qwen",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.10400000000000001,
+      "output": 0.41600000000000004
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "ibm-granite/granite-4.0-h-micro",
+    "name": "IBM: Granite 4.0 Micro",
+    "provider": "Ibm-Granite",
+    "context_length": 131000,
+    "pricing": {
+      "input": 0.017,
+      "output": 0.11
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5-image-mini",
+    "name": "OpenAI: GPT-5 Image Mini",
+    "provider": "OpenAI",
+    "context_length": 400000,
+    "pricing": {
+      "input": 2.5,
+      "output": 2.0
+    },
+    "modalities": [
+      "file",
+      "image",
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "anthropic/claude-haiku-4.5",
+    "name": "Anthropic: Claude Haiku 4.5",
+    "provider": "Anthropic",
+    "context_length": 200000,
+    "pricing": {
+      "input": 1.0,
+      "output": 5.0
+    },
+    "modalities": [
+      "image",
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-vl-8b-thinking",
+    "name": "Qwen: Qwen3 VL 8B Thinking",
+    "provider": "Qwen",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.117,
+      "output": 1.365
+    },
+    "modalities": [
+      "image",
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-vl-8b-instruct",
+    "name": "Qwen: Qwen3 VL 8B Instruct",
+    "provider": "Qwen",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.08,
+      "output": 0.5
+    },
+    "modalities": [
+      "image",
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5-image",
+    "name": "OpenAI: GPT-5 Image",
+    "provider": "OpenAI",
+    "context_length": 400000,
+    "pricing": {
+      "input": 10.0,
+      "output": 10.0
+    },
+    "modalities": [
+      "image",
+      "text",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/o3-deep-research",
+    "name": "OpenAI: o3 Deep Research",
+    "provider": "OpenAI",
+    "context_length": 200000,
+    "pricing": {
+      "input": 10.0,
+      "output": 40.0
+    },
+    "modalities": [
+      "image",
+      "text",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/o4-mini-deep-research",
+    "name": "OpenAI: o4 Mini Deep Research",
+    "provider": "OpenAI",
+    "context_length": 200000,
+    "pricing": {
+      "input": 2.0,
+      "output": 8.0
+    },
+    "modalities": [
+      "file",
+      "image",
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+    "name": "NVIDIA: Llama 3.3 Nemotron Super 49B V1.5",
+    "provider": "Nvidia",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.09999999999999999,
+      "output": 0.39999999999999997
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "baidu/ernie-4.5-21b-a3b-thinking",
+    "name": "Baidu: ERNIE 4.5 21B A3B Thinking",
+    "provider": "Baidu",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.07,
+      "output": 0.28
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemini-2.5-flash-image",
+    "name": "Google: Nano Banana (Gemini 2.5 Flash Image)",
+    "provider": "Google",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.3,
+      "output": 2.5
+    },
+    "modalities": [
+      "image",
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-vl-30b-a3b-thinking",
+    "name": "Qwen: Qwen3 VL 30B A3B Thinking",
+    "provider": "Qwen",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.13,
+      "output": 1.56
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-vl-30b-a3b-instruct",
+    "name": "Qwen: Qwen3 VL 30B A3B Instruct",
+    "provider": "Qwen",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.13,
+      "output": 0.52
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5-pro",
+    "name": "OpenAI: GPT-5 Pro",
+    "provider": "OpenAI",
+    "context_length": 400000,
+    "pricing": {
+      "input": 15.0,
+      "output": 120.0
+    },
+    "modalities": [
+      "image",
+      "text",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "z-ai/glm-4.6",
+    "name": "Z.ai: GLM 4.6",
+    "provider": "Z-Ai",
+    "context_length": 204800,
+    "pricing": {
+      "input": 0.39,
+      "output": 1.9
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "anthropic/claude-sonnet-4.5",
+    "name": "Anthropic: Claude Sonnet 4.5",
+    "provider": "Anthropic",
+    "context_length": 1000000,
+    "pricing": {
+      "input": 3.0,
+      "output": 15.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "deepseek/deepseek-v3.2-exp",
+    "name": "DeepSeek: DeepSeek V3.2 Exp",
+    "provider": "DeepSeek",
+    "context_length": 163840,
+    "pricing": {
+      "input": 0.27,
+      "output": 0.41
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "thedrummer/cydonia-24b-v4.1",
+    "name": "TheDrummer: Cydonia 24B V4.1",
+    "provider": "Thedrummer",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.3,
+      "output": 0.5
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "relace/relace-apply-3",
+    "name": "Relace: Relace Apply 3",
+    "provider": "Relace",
+    "context_length": 256000,
+    "pricing": {
+      "input": 0.85,
+      "output": 1.25
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemini-2.5-flash-lite-preview-09-2025",
+    "name": "Google: Gemini 2.5 Flash Lite Preview 09-2025",
+    "provider": "Google",
+    "context_length": 1048576,
+    "pricing": {
+      "input": 0.09999999999999999,
+      "output": 0.39999999999999997
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file",
+      "audio",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-vl-235b-a22b-thinking",
+    "name": "Qwen: Qwen3 VL 235B A22B Thinking",
+    "provider": "Qwen",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.26,
+      "output": 2.6
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-vl-235b-a22b-instruct",
+    "name": "Qwen: Qwen3 VL 235B A22B Instruct",
+    "provider": "Qwen",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.19999999999999998,
+      "output": 0.88
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-max",
+    "name": "Qwen: Qwen3 Max",
+    "provider": "Qwen",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.78,
+      "output": 3.9
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-coder-plus",
+    "name": "Qwen: Qwen3 Coder Plus",
+    "provider": "Qwen",
+    "context_length": 1000000,
+    "pricing": {
+      "input": 0.65,
+      "output": 3.25
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5-codex",
+    "name": "OpenAI: GPT-5 Codex",
+    "provider": "OpenAI",
+    "context_length": 400000,
+    "pricing": {
+      "input": 1.25,
+      "output": 10.0
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "deepseek/deepseek-v3.1-terminus",
+    "name": "DeepSeek: DeepSeek V3.1 Terminus",
+    "provider": "DeepSeek",
+    "context_length": 163840,
+    "pricing": {
+      "input": 0.21,
+      "output": 0.7899999999999999
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "x-ai/grok-4-fast",
+    "name": "xAI: Grok 4 Fast",
+    "provider": "xAI",
+    "context_length": 2000000,
+    "pricing": {
+      "input": 0.19999999999999998,
+      "output": 0.5
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "alibaba/tongyi-deepresearch-30b-a3b",
+    "name": "Tongyi DeepResearch 30B A3B",
+    "provider": "Alibaba",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.09,
+      "output": 0.44999999999999996
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-coder-flash",
+    "name": "Qwen: Qwen3 Coder Flash",
+    "provider": "Qwen",
+    "context_length": 1000000,
+    "pricing": {
+      "input": 0.195,
+      "output": 0.975
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-next-80b-a3b-thinking",
+    "name": "Qwen: Qwen3 Next 80B A3B Thinking",
+    "provider": "Qwen",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.0975,
+      "output": 0.78
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-next-80b-a3b-instruct:free",
+    "name": "Qwen: Qwen3 Next 80B A3B Instruct (free)",
+    "provider": "Qwen",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-next-80b-a3b-instruct",
+    "name": "Qwen: Qwen3 Next 80B A3B Instruct",
+    "provider": "Qwen",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.09,
+      "output": 1.1
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "meituan/longcat-flash-chat",
+    "name": "Meituan: LongCat Flash Chat",
+    "provider": "Meituan",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.19999999999999998,
+      "output": 0.7999999999999999
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen-plus-2025-07-28:thinking",
+    "name": "Qwen: Qwen Plus 0728 (thinking)",
+    "provider": "Qwen",
+    "context_length": 1000000,
+    "pricing": {
+      "input": 0.26,
+      "output": 0.78
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen-plus-2025-07-28",
+    "name": "Qwen: Qwen Plus 0728",
+    "provider": "Qwen",
+    "context_length": 1000000,
+    "pricing": {
+      "input": 0.26,
+      "output": 0.78
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "nvidia/nemotron-nano-9b-v2:free",
+    "name": "NVIDIA: Nemotron Nano 9B V2 (free)",
+    "provider": "Nvidia",
+    "context_length": 128000,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "nvidia/nemotron-nano-9b-v2",
+    "name": "NVIDIA: Nemotron Nano 9B V2",
+    "provider": "Nvidia",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.04,
+      "output": 0.16
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "moonshotai/kimi-k2-0905",
+    "name": "MoonshotAI: Kimi K2 0905",
+    "provider": "Moonshotai",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.39999999999999997,
+      "output": 2.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-30b-a3b-thinking-2507",
+    "name": "Qwen: Qwen3 30B A3B Thinking 2507",
+    "provider": "Qwen",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.08,
+      "output": 0.39999999999999997
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "x-ai/grok-code-fast-1",
+    "name": "xAI: Grok Code Fast 1",
+    "provider": "xAI",
+    "context_length": 256000,
+    "pricing": {
+      "input": 0.19999999999999998,
+      "output": 1.5
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "nousresearch/hermes-4-70b",
+    "name": "Nous: Hermes 4 70B",
+    "provider": "Nousresearch",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.13,
+      "output": 0.39999999999999997
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "nousresearch/hermes-4-405b",
+    "name": "Nous: Hermes 4 405B",
+    "provider": "Nousresearch",
+    "context_length": 131072,
+    "pricing": {
+      "input": 1.0,
+      "output": 3.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "deepseek/deepseek-chat-v3.1",
+    "name": "DeepSeek: DeepSeek V3.1",
+    "provider": "DeepSeek",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.15,
+      "output": 0.75
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-4o-audio-preview",
+    "name": "OpenAI: GPT-4o Audio",
+    "provider": "OpenAI",
+    "context_length": 128000,
+    "pricing": {
+      "input": 2.5,
+      "output": 10.0
+    },
+    "modalities": [
+      "audio",
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/mistral-medium-3.1",
+    "name": "Mistral: Mistral Medium 3.1",
+    "provider": "Mistralai",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.39999999999999997,
+      "output": 2.0
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "baidu/ernie-4.5-21b-a3b",
+    "name": "Baidu: ERNIE 4.5 21B A3B",
+    "provider": "Baidu",
+    "context_length": 120000,
+    "pricing": {
+      "input": 0.07,
+      "output": 0.28
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "baidu/ernie-4.5-vl-28b-a3b",
+    "name": "Baidu: ERNIE 4.5 VL 28B A3B",
+    "provider": "Baidu",
+    "context_length": 30000,
+    "pricing": {
+      "input": 0.14,
+      "output": 0.56
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "z-ai/glm-4.5v",
+    "name": "Z.ai: GLM 4.5V",
+    "provider": "Z-Ai",
+    "context_length": 65536,
+    "pricing": {
+      "input": 0.6,
+      "output": 1.7999999999999998
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "ai21/jamba-large-1.7",
+    "name": "AI21: Jamba Large 1.7",
+    "provider": "Ai21",
+    "context_length": 256000,
+    "pricing": {
+      "input": 2.0,
+      "output": 8.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5-chat",
+    "name": "OpenAI: GPT-5 Chat",
+    "provider": "OpenAI",
+    "context_length": 128000,
+    "pricing": {
+      "input": 1.25,
+      "output": 10.0
+    },
+    "modalities": [
+      "file",
+      "image",
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5",
+    "name": "OpenAI: GPT-5",
+    "provider": "OpenAI",
+    "context_length": 400000,
+    "pricing": {
+      "input": 1.25,
+      "output": 10.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5-mini",
+    "name": "OpenAI: GPT-5 Mini",
+    "provider": "OpenAI",
+    "context_length": 400000,
+    "pricing": {
+      "input": 0.25,
+      "output": 2.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-5-nano",
+    "name": "OpenAI: GPT-5 Nano",
+    "provider": "OpenAI",
+    "context_length": 400000,
+    "pricing": {
+      "input": 0.049999999999999996,
+      "output": 0.39999999999999997
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-oss-120b:free",
+    "name": "OpenAI: gpt-oss-120b (free)",
+    "provider": "OpenAI",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-oss-120b",
+    "name": "OpenAI: gpt-oss-120b",
+    "provider": "OpenAI",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.039,
+      "output": 0.19
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-oss-20b:free",
+    "name": "OpenAI: gpt-oss-20b (free)",
+    "provider": "OpenAI",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-oss-20b",
+    "name": "OpenAI: gpt-oss-20b",
+    "provider": "OpenAI",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.03,
+      "output": 0.11
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "anthropic/claude-opus-4.1",
+    "name": "Anthropic: Claude Opus 4.1",
+    "provider": "Anthropic",
+    "context_length": 200000,
+    "pricing": {
+      "input": 15.0,
+      "output": 75.0
+    },
+    "modalities": [
+      "image",
+      "text",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/codestral-2508",
+    "name": "Mistral: Codestral 2508",
+    "provider": "Mistralai",
+    "context_length": 256000,
+    "pricing": {
+      "input": 0.3,
+      "output": 0.8999999999999999
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-coder-30b-a3b-instruct",
+    "name": "Qwen: Qwen3 Coder 30B A3B Instruct",
+    "provider": "Qwen",
+    "context_length": 160000,
+    "pricing": {
+      "input": 0.07,
+      "output": 0.27
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-30b-a3b-instruct-2507",
+    "name": "Qwen: Qwen3 30B A3B Instruct 2507",
+    "provider": "Qwen",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.09,
+      "output": 0.3
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "z-ai/glm-4.5",
+    "name": "Z.ai: GLM 4.5",
+    "provider": "Z-Ai",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.6,
+      "output": 2.2
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "z-ai/glm-4.5-air:free",
+    "name": "Z.ai: GLM 4.5 Air (free)",
+    "provider": "Z-Ai",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "z-ai/glm-4.5-air",
+    "name": "Z.ai: GLM 4.5 Air",
+    "provider": "Z-Ai",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.13,
+      "output": 0.85
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-235b-a22b-thinking-2507",
+    "name": "Qwen: Qwen3 235B A22B Thinking 2507",
+    "provider": "Qwen",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.14950000000000002,
+      "output": 1.495
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "z-ai/glm-4-32b",
+    "name": "Z.ai: GLM 4 32B ",
+    "provider": "Z-Ai",
+    "context_length": 128000,
+    "pricing": {
+      "input": 0.09999999999999999,
+      "output": 0.09999999999999999
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-coder:free",
+    "name": "Qwen: Qwen3 Coder 480B A35B (free)",
+    "provider": "Qwen",
+    "context_length": 262000,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-coder",
+    "name": "Qwen: Qwen3 Coder 480B A35B",
+    "provider": "Qwen",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.22,
+      "output": 1.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "bytedance/ui-tars-1.5-7b",
+    "name": "ByteDance: UI-TARS 7B ",
+    "provider": "Bytedance",
+    "context_length": 128000,
+    "pricing": {
+      "input": 0.09999999999999999,
+      "output": 0.19999999999999998
+    },
+    "modalities": [
+      "image",
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemini-2.5-flash-lite",
+    "name": "Google: Gemini 2.5 Flash Lite",
+    "provider": "Google",
+    "context_length": 1048576,
+    "pricing": {
+      "input": 0.09999999999999999,
+      "output": 0.39999999999999997
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file",
+      "audio",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-235b-a22b-2507",
+    "name": "Qwen: Qwen3 235B A22B Instruct 2507",
+    "provider": "Qwen",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.071,
+      "output": 0.09999999999999999
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "switchpoint/router",
+    "name": "Switchpoint Router",
+    "provider": "Switchpoint",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.85,
+      "output": 3.4
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "moonshotai/kimi-k2",
+    "name": "MoonshotAI: Kimi K2 0711",
+    "provider": "Moonshotai",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.5700000000000001,
+      "output": 2.3
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/devstral-medium",
+    "name": "Mistral: Devstral Medium",
+    "provider": "Mistralai",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.39999999999999997,
+      "output": 2.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/devstral-small",
+    "name": "Mistral: Devstral Small 1.1",
+    "provider": "Mistralai",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.09999999999999999,
+      "output": 0.3
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
+    "name": "Venice: Uncensored (free)",
+    "provider": "Cognitivecomputations",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "x-ai/grok-4",
+    "name": "xAI: Grok 4",
+    "provider": "xAI",
+    "context_length": 256000,
+    "pricing": {
+      "input": 3.0,
+      "output": 15.0
+    },
+    "modalities": [
+      "image",
+      "text",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemma-3n-e2b-it:free",
+    "name": "Google: Gemma 3n 2B (free)",
+    "provider": "Google",
+    "context_length": 8192,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "tencent/hunyuan-a13b-instruct",
+    "name": "Tencent: Hunyuan A13B Instruct",
+    "provider": "Tencent",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.14,
+      "output": 0.5700000000000001
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "tngtech/deepseek-r1t2-chimera",
+    "name": "TNG: DeepSeek R1T2 Chimera",
+    "provider": "Tngtech",
+    "context_length": 163840,
+    "pricing": {
+      "input": 0.3,
+      "output": 1.1
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "morph/morph-v3-large",
+    "name": "Morph: Morph V3 Large",
+    "provider": "Morph",
+    "context_length": 262144,
+    "pricing": {
+      "input": 0.8999999999999999,
+      "output": 1.9
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "morph/morph-v3-fast",
+    "name": "Morph: Morph V3 Fast",
+    "provider": "Morph",
+    "context_length": 81920,
+    "pricing": {
+      "input": 0.7999999999999999,
+      "output": 1.2
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "baidu/ernie-4.5-vl-424b-a47b",
+    "name": "Baidu: ERNIE 4.5 VL 424B A47B ",
+    "provider": "Baidu",
+    "context_length": 123000,
+    "pricing": {
+      "input": 0.42,
+      "output": 1.25
+    },
+    "modalities": [
+      "image",
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "baidu/ernie-4.5-300b-a47b",
+    "name": "Baidu: ERNIE 4.5 300B A47B ",
+    "provider": "Baidu",
+    "context_length": 123000,
+    "pricing": {
+      "input": 0.28,
+      "output": 1.1
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "inception/mercury",
+    "name": "Inception: Mercury",
+    "provider": "Inception",
+    "context_length": 128000,
+    "pricing": {
+      "input": 0.25,
+      "output": 0.75
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/mistral-small-3.2-24b-instruct",
+    "name": "Mistral: Mistral Small 3.2 24B",
+    "provider": "Mistralai",
+    "context_length": 128000,
+    "pricing": {
+      "input": 0.075,
+      "output": 0.19999999999999998
+    },
+    "modalities": [
+      "image",
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "minimax/minimax-m1",
+    "name": "MiniMax: MiniMax M1",
+    "provider": "Minimax",
+    "context_length": 1000000,
+    "pricing": {
+      "input": 0.39999999999999997,
+      "output": 2.2
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemini-2.5-flash",
+    "name": "Google: Gemini 2.5 Flash",
+    "provider": "Google",
+    "context_length": 1048576,
+    "pricing": {
+      "input": 0.3,
+      "output": 2.5
+    },
+    "modalities": [
+      "file",
+      "image",
+      "text",
+      "audio",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemini-2.5-pro",
+    "name": "Google: Gemini 2.5 Pro",
+    "provider": "Google",
+    "context_length": 1048576,
+    "pricing": {
+      "input": 1.25,
+      "output": 10.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file",
+      "audio",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/o3-pro",
+    "name": "OpenAI: o3 Pro",
+    "provider": "OpenAI",
+    "context_length": 200000,
+    "pricing": {
+      "input": 20.0,
+      "output": 80.0
+    },
+    "modalities": [
+      "text",
+      "file",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "x-ai/grok-3-mini",
+    "name": "xAI: Grok 3 Mini",
+    "provider": "xAI",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.3,
+      "output": 0.5
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "x-ai/grok-3",
+    "name": "xAI: Grok 3",
+    "provider": "xAI",
+    "context_length": 131072,
+    "pricing": {
+      "input": 3.0,
+      "output": 15.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemini-2.5-pro-preview",
+    "name": "Google: Gemini 2.5 Pro Preview 06-05",
+    "provider": "Google",
+    "context_length": 1048576,
+    "pricing": {
+      "input": 1.25,
+      "output": 10.0
+    },
+    "modalities": [
+      "file",
+      "image",
+      "text",
+      "audio"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "deepseek/deepseek-r1-0528",
+    "name": "DeepSeek: R1 0528",
+    "provider": "DeepSeek",
+    "context_length": 163840,
+    "pricing": {
+      "input": 0.44999999999999996,
+      "output": 2.1500000000000004
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "anthropic/claude-opus-4",
+    "name": "Anthropic: Claude Opus 4",
+    "provider": "Anthropic",
+    "context_length": 200000,
+    "pricing": {
+      "input": 15.0,
+      "output": 75.0
+    },
+    "modalities": [
+      "image",
+      "text",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "anthropic/claude-sonnet-4",
+    "name": "Anthropic: Claude Sonnet 4",
+    "provider": "Anthropic",
+    "context_length": 200000,
+    "pricing": {
+      "input": 3.0,
+      "output": 15.0
+    },
+    "modalities": [
+      "image",
+      "text",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemma-3n-e4b-it:free",
+    "name": "Google: Gemma 3n 4B (free)",
+    "provider": "Google",
+    "context_length": 8192,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemma-3n-e4b-it",
+    "name": "Google: Gemma 3n 4B",
+    "provider": "Google",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.02,
+      "output": 0.04
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/mistral-medium-3",
+    "name": "Mistral: Mistral Medium 3",
+    "provider": "Mistralai",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.39999999999999997,
+      "output": 2.0
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemini-2.5-pro-preview-05-06",
+    "name": "Google: Gemini 2.5 Pro Preview 05-06",
+    "provider": "Google",
+    "context_length": 1048576,
+    "pricing": {
+      "input": 1.25,
+      "output": 10.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file",
+      "audio",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "arcee-ai/spotlight",
+    "name": "Arcee AI: Spotlight",
+    "provider": "Arcee-Ai",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.18,
+      "output": 0.18
+    },
+    "modalities": [
+      "image",
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "arcee-ai/maestro-reasoning",
+    "name": "Arcee AI: Maestro Reasoning",
+    "provider": "Arcee-Ai",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.8999999999999999,
+      "output": 3.3000000000000003
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "arcee-ai/virtuoso-large",
+    "name": "Arcee AI: Virtuoso Large",
+    "provider": "Arcee-Ai",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.75,
+      "output": 1.2
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "arcee-ai/coder-large",
+    "name": "Arcee AI: Coder Large",
+    "provider": "Arcee-Ai",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.5,
+      "output": 0.7999999999999999
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "inception/mercury-coder",
+    "name": "Inception: Mercury Coder",
+    "provider": "Inception",
+    "context_length": 128000,
+    "pricing": {
+      "input": 0.25,
+      "output": 0.75
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "meta-llama/llama-guard-4-12b",
+    "name": "Meta: Llama Guard 4 12B",
+    "provider": "Meta-Llama",
+    "context_length": 163840,
+    "pricing": {
+      "input": 0.18,
+      "output": 0.18
+    },
+    "modalities": [
+      "image",
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-30b-a3b",
+    "name": "Qwen: Qwen3 30B A3B",
+    "provider": "Qwen",
+    "context_length": 40960,
+    "pricing": {
+      "input": 0.08,
+      "output": 0.28
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-8b",
+    "name": "Qwen: Qwen3 8B",
+    "provider": "Qwen",
+    "context_length": 40960,
+    "pricing": {
+      "input": 0.049999999999999996,
+      "output": 0.39999999999999997
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-14b",
+    "name": "Qwen: Qwen3 14B",
+    "provider": "Qwen",
+    "context_length": 40960,
+    "pricing": {
+      "input": 0.06,
+      "output": 0.24
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-32b",
+    "name": "Qwen: Qwen3 32B",
+    "provider": "Qwen",
+    "context_length": 40960,
+    "pricing": {
+      "input": 0.08,
+      "output": 0.24
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen3-235b-a22b",
+    "name": "Qwen: Qwen3 235B A22B",
+    "provider": "Qwen",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.45499999999999996,
+      "output": 1.8199999999999998
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/o4-mini-high",
+    "name": "OpenAI: o4 Mini High",
+    "provider": "OpenAI",
+    "context_length": 200000,
+    "pricing": {
+      "input": 1.1,
+      "output": 4.4
+    },
+    "modalities": [
+      "image",
+      "text",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/o3",
+    "name": "OpenAI: o3",
+    "provider": "OpenAI",
+    "context_length": 200000,
+    "pricing": {
+      "input": 2.0,
+      "output": 8.0
+    },
+    "modalities": [
+      "image",
+      "text",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/o4-mini",
+    "name": "OpenAI: o4 Mini",
+    "provider": "OpenAI",
+    "context_length": 200000,
+    "pricing": {
+      "input": 1.1,
+      "output": 4.4
+    },
+    "modalities": [
+      "image",
+      "text",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen2.5-coder-7b-instruct",
+    "name": "Qwen: Qwen2.5 Coder 7B Instruct",
+    "provider": "Qwen",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.03,
+      "output": 0.09
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-4.1",
+    "name": "OpenAI: GPT-4.1",
+    "provider": "OpenAI",
+    "context_length": 1047576,
+    "pricing": {
+      "input": 2.0,
+      "output": 8.0
+    },
+    "modalities": [
+      "image",
+      "text",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-4.1-mini",
+    "name": "OpenAI: GPT-4.1 Mini",
+    "provider": "OpenAI",
+    "context_length": 1047576,
+    "pricing": {
+      "input": 0.39999999999999997,
+      "output": 1.5999999999999999
+    },
+    "modalities": [
+      "image",
+      "text",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-4.1-nano",
+    "name": "OpenAI: GPT-4.1 Nano",
+    "provider": "OpenAI",
+    "context_length": 1047576,
+    "pricing": {
+      "input": 0.09999999999999999,
+      "output": 0.39999999999999997
+    },
+    "modalities": [
+      "image",
+      "text",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "eleutherai/llemma_7b",
+    "name": "EleutherAI: Llemma 7b",
+    "provider": "Eleutherai",
+    "context_length": 4096,
+    "pricing": {
+      "input": 0.7999999999999999,
+      "output": 1.2
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "alfredpros/codellama-7b-instruct-solidity",
+    "name": "AlfredPros: CodeLLaMa 7B Instruct Solidity",
+    "provider": "Alfredpros",
+    "context_length": 4096,
+    "pricing": {
+      "input": 0.7999999999999999,
+      "output": 1.2
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "x-ai/grok-3-mini-beta",
+    "name": "xAI: Grok 3 Mini Beta",
+    "provider": "xAI",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.3,
+      "output": 0.5
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "x-ai/grok-3-beta",
+    "name": "xAI: Grok 3 Beta",
+    "provider": "xAI",
+    "context_length": 131072,
+    "pricing": {
+      "input": 3.0,
+      "output": 15.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+    "name": "NVIDIA: Llama 3.1 Nemotron Ultra 253B v1",
+    "provider": "Nvidia",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.6,
+      "output": 1.7999999999999998
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "meta-llama/llama-4-maverick",
+    "name": "Meta: Llama 4 Maverick",
+    "provider": "Meta-Llama",
+    "context_length": 1048576,
+    "pricing": {
+      "input": 0.15,
+      "output": 0.6
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "meta-llama/llama-4-scout",
+    "name": "Meta: Llama 4 Scout",
+    "provider": "Meta-Llama",
+    "context_length": 327680,
+    "pricing": {
+      "input": 0.08,
+      "output": 0.3
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen2.5-vl-32b-instruct",
+    "name": "Qwen: Qwen2.5 VL 32B Instruct",
+    "provider": "Qwen",
+    "context_length": 128000,
+    "pricing": {
+      "input": 0.19999999999999998,
+      "output": 0.6
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "deepseek/deepseek-chat-v3-0324",
+    "name": "DeepSeek: DeepSeek V3 0324",
+    "provider": "DeepSeek",
+    "context_length": 163840,
+    "pricing": {
+      "input": 0.19999999999999998,
+      "output": 0.77
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/o1-pro",
+    "name": "OpenAI: o1-pro",
+    "provider": "OpenAI",
+    "context_length": 200000,
+    "pricing": {
+      "input": 150.0,
+      "output": 600.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/mistral-small-3.1-24b-instruct",
+    "name": "Mistral: Mistral Small 3.1 24B",
+    "provider": "Mistralai",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.03,
+      "output": 0.11
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "allenai/olmo-2-0325-32b-instruct",
+    "name": "AllenAI: Olmo 2 32B Instruct",
+    "provider": "Allenai",
+    "context_length": 128000,
+    "pricing": {
+      "input": 0.049999999999999996,
+      "output": 0.19999999999999998
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemma-3-4b-it:free",
+    "name": "Google: Gemma 3 4B (free)",
+    "provider": "Google",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemma-3-4b-it",
+    "name": "Google: Gemma 3 4B",
+    "provider": "Google",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.04,
+      "output": 0.08
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemma-3-12b-it:free",
+    "name": "Google: Gemma 3 12B (free)",
+    "provider": "Google",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemma-3-12b-it",
+    "name": "Google: Gemma 3 12B",
+    "provider": "Google",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.04,
+      "output": 0.13
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "cohere/command-a",
+    "name": "Cohere: Command A",
+    "provider": "Cohere",
+    "context_length": 256000,
+    "pricing": {
+      "input": 2.5,
+      "output": 10.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-4o-mini-search-preview",
+    "name": "OpenAI: GPT-4o-mini Search Preview",
+    "provider": "OpenAI",
+    "context_length": 128000,
+    "pricing": {
+      "input": 0.15,
+      "output": 0.6
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-4o-search-preview",
+    "name": "OpenAI: GPT-4o Search Preview",
+    "provider": "OpenAI",
+    "context_length": 128000,
+    "pricing": {
+      "input": 2.5,
+      "output": 10.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "rekaai/reka-flash-3",
+    "name": "Reka Flash 3",
+    "provider": "Rekaai",
+    "context_length": 65536,
+    "pricing": {
+      "input": 0.09999999999999999,
+      "output": 0.19999999999999998
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemma-3-27b-it:free",
+    "name": "Google: Gemma 3 27B (free)",
+    "provider": "Google",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemma-3-27b-it",
+    "name": "Google: Gemma 3 27B",
+    "provider": "Google",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.08,
+      "output": 0.16
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "thedrummer/skyfall-36b-v2",
+    "name": "TheDrummer: Skyfall 36B V2",
+    "provider": "Thedrummer",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.55,
+      "output": 0.7999999999999999
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "perplexity/sonar-reasoning-pro",
+    "name": "Perplexity: Sonar Reasoning Pro",
+    "provider": "Perplexity",
+    "context_length": 128000,
+    "pricing": {
+      "input": 2.0,
+      "output": 8.0
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "perplexity/sonar-pro",
+    "name": "Perplexity: Sonar Pro",
+    "provider": "Perplexity",
+    "context_length": 200000,
+    "pricing": {
+      "input": 3.0,
+      "output": 15.0
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "perplexity/sonar-deep-research",
+    "name": "Perplexity: Sonar Deep Research",
+    "provider": "Perplexity",
+    "context_length": 128000,
+    "pricing": {
+      "input": 2.0,
+      "output": 8.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwq-32b",
+    "name": "Qwen: QwQ 32B",
+    "provider": "Qwen",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.15,
+      "output": 0.58
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemini-2.0-flash-lite-001",
+    "name": "Google: Gemini 2.0 Flash Lite",
+    "provider": "Google",
+    "context_length": 1048576,
+    "pricing": {
+      "input": 0.075,
+      "output": 0.3
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file",
+      "audio",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "anthropic/claude-3.7-sonnet",
+    "name": "Anthropic: Claude 3.7 Sonnet",
+    "provider": "Anthropic",
+    "context_length": 200000,
+    "pricing": {
+      "input": 3.0,
+      "output": 15.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "anthropic/claude-3.7-sonnet:thinking",
+    "name": "Anthropic: Claude 3.7 Sonnet (thinking)",
+    "provider": "Anthropic",
+    "context_length": 200000,
+    "pricing": {
+      "input": 3.0,
+      "output": 15.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/mistral-saba",
+    "name": "Mistral: Saba",
+    "provider": "Mistralai",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.19999999999999998,
+      "output": 0.6
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "meta-llama/llama-guard-3-8b",
+    "name": "Llama Guard 3 8B",
+    "provider": "Meta-Llama",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.02,
+      "output": 0.06
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/o3-mini-high",
+    "name": "OpenAI: o3 Mini High",
+    "provider": "OpenAI",
+    "context_length": 200000,
+    "pricing": {
+      "input": 1.1,
+      "output": 4.4
+    },
+    "modalities": [
+      "text",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemini-2.0-flash-001",
+    "name": "Google: Gemini 2.0 Flash",
+    "provider": "Google",
+    "context_length": 1048576,
+    "pricing": {
+      "input": 0.09999999999999999,
+      "output": 0.39999999999999997
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file",
+      "audio",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen-vl-plus",
+    "name": "Qwen: Qwen VL Plus",
+    "provider": "Qwen",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.1365,
+      "output": 0.40950000000000003
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "aion-labs/aion-1.0",
+    "name": "AionLabs: Aion-1.0",
+    "provider": "Aion-Labs",
+    "context_length": 131072,
+    "pricing": {
+      "input": 4.0,
+      "output": 8.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "aion-labs/aion-1.0-mini",
+    "name": "AionLabs: Aion-1.0-Mini",
+    "provider": "Aion-Labs",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.7,
+      "output": 1.4
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "aion-labs/aion-rp-llama-3.1-8b",
+    "name": "AionLabs: Aion-RP 1.0 (8B)",
+    "provider": "Aion-Labs",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.7999999999999999,
+      "output": 1.5999999999999999
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen-vl-max",
+    "name": "Qwen: Qwen VL Max",
+    "provider": "Qwen",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.52,
+      "output": 2.08
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen-turbo",
+    "name": "Qwen: Qwen-Turbo",
+    "provider": "Qwen",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.0325,
+      "output": 0.13
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen2.5-vl-72b-instruct",
+    "name": "Qwen: Qwen2.5 VL 72B Instruct",
+    "provider": "Qwen",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.7999999999999999,
+      "output": 0.7999999999999999
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen-plus",
+    "name": "Qwen: Qwen-Plus",
+    "provider": "Qwen",
+    "context_length": 1000000,
+    "pricing": {
+      "input": 0.26,
+      "output": 0.78
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen-max",
+    "name": "Qwen: Qwen-Max ",
+    "provider": "Qwen",
+    "context_length": 32768,
+    "pricing": {
+      "input": 1.04,
+      "output": 4.16
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/o3-mini",
+    "name": "OpenAI: o3 Mini",
+    "provider": "OpenAI",
+    "context_length": 200000,
+    "pricing": {
+      "input": 1.1,
+      "output": 4.4
+    },
+    "modalities": [
+      "text",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/mistral-small-24b-instruct-2501",
+    "name": "Mistral: Mistral Small 3",
+    "provider": "Mistralai",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.049999999999999996,
+      "output": 0.08
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "deepseek/deepseek-r1-distill-qwen-32b",
+    "name": "DeepSeek: R1 Distill Qwen 32B",
+    "provider": "DeepSeek",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.29,
+      "output": 0.29
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "perplexity/sonar",
+    "name": "Perplexity: Sonar",
+    "provider": "Perplexity",
+    "context_length": 127072,
+    "pricing": {
+      "input": 1.0,
+      "output": 1.0
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "deepseek/deepseek-r1-distill-llama-70b",
+    "name": "DeepSeek: R1 Distill Llama 70B",
+    "provider": "DeepSeek",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.7,
+      "output": 0.7999999999999999
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "deepseek/deepseek-r1",
+    "name": "DeepSeek: R1",
+    "provider": "DeepSeek",
+    "context_length": 64000,
+    "pricing": {
+      "input": 0.7,
+      "output": 2.5
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "minimax/minimax-01",
+    "name": "MiniMax: MiniMax-01",
+    "provider": "Minimax",
+    "context_length": 1000192,
+    "pricing": {
+      "input": 0.19999999999999998,
+      "output": 1.1
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "microsoft/phi-4",
+    "name": "Microsoft: Phi 4",
+    "provider": "Microsoft",
+    "context_length": 16384,
+    "pricing": {
+      "input": 0.065,
+      "output": 0.14
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "sao10k/l3.1-70b-hanami-x1",
+    "name": "Sao10K: Llama 3.1 70B Hanami x1",
+    "provider": "Sao10K",
+    "context_length": 16000,
+    "pricing": {
+      "input": 3.0,
+      "output": 3.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "deepseek/deepseek-chat",
+    "name": "DeepSeek: DeepSeek V3",
+    "provider": "DeepSeek",
+    "context_length": 163840,
+    "pricing": {
+      "input": 0.32,
+      "output": 0.8899999999999999
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "sao10k/l3.3-euryale-70b",
+    "name": "Sao10K: Llama 3.3 Euryale 70B",
+    "provider": "Sao10K",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.65,
+      "output": 0.75
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/o1",
+    "name": "OpenAI: o1",
+    "provider": "OpenAI",
+    "context_length": 200000,
+    "pricing": {
+      "input": 15.0,
+      "output": 60.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "cohere/command-r7b-12-2024",
+    "name": "Cohere: Command R7B (12-2024)",
+    "provider": "Cohere",
+    "context_length": 128000,
+    "pricing": {
+      "input": 0.0375,
+      "output": 0.15
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "meta-llama/llama-3.3-70b-instruct:free",
+    "name": "Meta: Llama 3.3 70B Instruct (free)",
+    "provider": "Meta-Llama",
+    "context_length": 65536,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "meta-llama/llama-3.3-70b-instruct",
+    "name": "Meta: Llama 3.3 70B Instruct",
+    "provider": "Meta-Llama",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.09999999999999999,
+      "output": 0.32
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "amazon/nova-lite-v1",
+    "name": "Amazon: Nova Lite 1.0",
+    "provider": "Amazon",
+    "context_length": 300000,
+    "pricing": {
+      "input": 0.06,
+      "output": 0.24
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "amazon/nova-micro-v1",
+    "name": "Amazon: Nova Micro 1.0",
+    "provider": "Amazon",
+    "context_length": 128000,
+    "pricing": {
+      "input": 0.035,
+      "output": 0.14
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "amazon/nova-pro-v1",
+    "name": "Amazon: Nova Pro 1.0",
+    "provider": "Amazon",
+    "context_length": 300000,
+    "pricing": {
+      "input": 0.7999999999999999,
+      "output": 3.1999999999999997
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-4o-2024-11-20",
+    "name": "OpenAI: GPT-4o (2024-11-20)",
+    "provider": "OpenAI",
+    "context_length": 128000,
+    "pricing": {
+      "input": 2.5,
+      "output": 10.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/mistral-large-2411",
+    "name": "Mistral Large 2411",
+    "provider": "Mistralai",
+    "context_length": 131072,
+    "pricing": {
+      "input": 2.0,
+      "output": 6.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/mistral-large-2407",
+    "name": "Mistral Large 2407",
+    "provider": "Mistralai",
+    "context_length": 131072,
+    "pricing": {
+      "input": 2.0,
+      "output": 6.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/pixtral-large-2411",
+    "name": "Mistral: Pixtral Large 2411",
+    "provider": "Mistralai",
+    "context_length": 131072,
+    "pricing": {
+      "input": 2.0,
+      "output": 6.0
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen-2.5-coder-32b-instruct",
+    "name": "Qwen2.5 Coder 32B Instruct",
+    "provider": "Qwen",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.66,
+      "output": 1.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "thedrummer/unslopnemo-12b",
+    "name": "TheDrummer: UnslopNemo 12B",
+    "provider": "Thedrummer",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.39999999999999997,
+      "output": 0.39999999999999997
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "anthropic/claude-3.5-haiku",
+    "name": "Anthropic: Claude 3.5 Haiku",
+    "provider": "Anthropic",
+    "context_length": 200000,
+    "pricing": {
+      "input": 0.7999999999999999,
+      "output": 4.0
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "anthracite-org/magnum-v4-72b",
+    "name": "Magnum v4 72B",
+    "provider": "Anthracite-Org",
+    "context_length": 16384,
+    "pricing": {
+      "input": 3.0,
+      "output": 5.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen-2.5-7b-instruct",
+    "name": "Qwen: Qwen2.5 7B Instruct",
+    "provider": "Qwen",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.04,
+      "output": 0.09999999999999999
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "nvidia/llama-3.1-nemotron-70b-instruct",
+    "name": "NVIDIA: Llama 3.1 Nemotron 70B Instruct",
+    "provider": "Nvidia",
+    "context_length": 131072,
+    "pricing": {
+      "input": 1.2,
+      "output": 1.2
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "inflection/inflection-3-productivity",
+    "name": "Inflection: Inflection 3 Productivity",
+    "provider": "Inflection",
+    "context_length": 8000,
+    "pricing": {
+      "input": 2.5,
+      "output": 10.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "inflection/inflection-3-pi",
+    "name": "Inflection: Inflection 3 Pi",
+    "provider": "Inflection",
+    "context_length": 8000,
+    "pricing": {
+      "input": 2.5,
+      "output": 10.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "thedrummer/rocinante-12b",
+    "name": "TheDrummer: Rocinante 12B",
+    "provider": "Thedrummer",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.16999999999999998,
+      "output": 0.43
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "meta-llama/llama-3.2-3b-instruct:free",
+    "name": "Meta: Llama 3.2 3B Instruct (free)",
+    "provider": "Meta-Llama",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "meta-llama/llama-3.2-3b-instruct",
+    "name": "Meta: Llama 3.2 3B Instruct",
+    "provider": "Meta-Llama",
+    "context_length": 80000,
+    "pricing": {
+      "input": 0.051,
+      "output": 0.33999999999999997
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "meta-llama/llama-3.2-1b-instruct",
+    "name": "Meta: Llama 3.2 1B Instruct",
+    "provider": "Meta-Llama",
+    "context_length": 60000,
+    "pricing": {
+      "input": 0.027,
+      "output": 0.19999999999999998
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "meta-llama/llama-3.2-11b-vision-instruct",
+    "name": "Meta: Llama 3.2 11B Vision Instruct",
+    "provider": "Meta-Llama",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.049,
+      "output": 0.049
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "qwen/qwen-2.5-72b-instruct",
+    "name": "Qwen2.5 72B Instruct",
+    "provider": "Qwen",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.12,
+      "output": 0.39
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "cohere/command-r-plus-08-2024",
+    "name": "Cohere: Command R+ (08-2024)",
+    "provider": "Cohere",
+    "context_length": 128000,
+    "pricing": {
+      "input": 2.5,
+      "output": 10.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "cohere/command-r-08-2024",
+    "name": "Cohere: Command R (08-2024)",
+    "provider": "Cohere",
+    "context_length": 128000,
+    "pricing": {
+      "input": 0.15,
+      "output": 0.6
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "sao10k/l3.1-euryale-70b",
+    "name": "Sao10K: Llama 3.1 Euryale 70B v2.2",
+    "provider": "Sao10K",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.85,
+      "output": 0.85
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "nousresearch/hermes-3-llama-3.1-70b",
+    "name": "Nous: Hermes 3 70B Instruct",
+    "provider": "Nousresearch",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.3,
+      "output": 0.3
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "nousresearch/hermes-3-llama-3.1-405b:free",
+    "name": "Nous: Hermes 3 405B Instruct (free)",
+    "provider": "Nousresearch",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.0,
+      "output": 0.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "nousresearch/hermes-3-llama-3.1-405b",
+    "name": "Nous: Hermes 3 405B Instruct",
+    "provider": "Nousresearch",
+    "context_length": 131072,
+    "pricing": {
+      "input": 1.0,
+      "output": 1.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "sao10k/l3-lunaris-8b",
+    "name": "Sao10K: Llama 3 8B Lunaris",
+    "provider": "Sao10K",
+    "context_length": 8192,
+    "pricing": {
+      "input": 0.04,
+      "output": 0.049999999999999996
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-4o-2024-08-06",
+    "name": "OpenAI: GPT-4o (2024-08-06)",
+    "provider": "OpenAI",
+    "context_length": 128000,
+    "pricing": {
+      "input": 2.5,
+      "output": 10.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "meta-llama/llama-3.1-8b-instruct",
+    "name": "Meta: Llama 3.1 8B Instruct",
+    "provider": "Meta-Llama",
+    "context_length": 16384,
+    "pricing": {
+      "input": 0.02,
+      "output": 0.049999999999999996
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "meta-llama/llama-3.1-70b-instruct",
+    "name": "Meta: Llama 3.1 70B Instruct",
+    "provider": "Meta-Llama",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.39999999999999997,
+      "output": 0.39999999999999997
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/mistral-nemo",
+    "name": "Mistral: Mistral Nemo",
+    "provider": "Mistralai",
+    "context_length": 131072,
+    "pricing": {
+      "input": 0.02,
+      "output": 0.04
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-4o-mini-2024-07-18",
+    "name": "OpenAI: GPT-4o-mini (2024-07-18)",
+    "provider": "OpenAI",
+    "context_length": 128000,
+    "pricing": {
+      "input": 0.15,
+      "output": 0.6
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-4o-mini",
+    "name": "OpenAI: GPT-4o-mini",
+    "provider": "OpenAI",
+    "context_length": 128000,
+    "pricing": {
+      "input": 0.15,
+      "output": 0.6
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemma-2-27b-it",
+    "name": "Google: Gemma 2 27B",
+    "provider": "Google",
+    "context_length": 8192,
+    "pricing": {
+      "input": 0.65,
+      "output": 0.65
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "google/gemma-2-9b-it",
+    "name": "Google: Gemma 2 9B",
+    "provider": "Google",
+    "context_length": 8192,
+    "pricing": {
+      "input": 0.03,
+      "output": 0.09
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "sao10k/l3-euryale-70b",
+    "name": "Sao10k: Llama 3 Euryale 70B v2.1",
+    "provider": "Sao10K",
+    "context_length": 8192,
+    "pricing": {
+      "input": 1.48,
+      "output": 1.48
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "nousresearch/hermes-2-pro-llama-3-8b",
+    "name": "NousResearch: Hermes 2 Pro - Llama-3 8B",
+    "provider": "Nousresearch",
+    "context_length": 8192,
+    "pricing": {
+      "input": 0.14,
+      "output": 0.14
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-4o-2024-05-13",
+    "name": "OpenAI: GPT-4o (2024-05-13)",
+    "provider": "OpenAI",
+    "context_length": 128000,
+    "pricing": {
+      "input": 5.0,
+      "output": 15.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-4o",
+    "name": "OpenAI: GPT-4o",
+    "provider": "OpenAI",
+    "context_length": 128000,
+    "pricing": {
+      "input": 2.5,
+      "output": 10.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-4o:extended",
+    "name": "OpenAI: GPT-4o (extended)",
+    "provider": "OpenAI",
+    "context_length": 128000,
+    "pricing": {
+      "input": 6.0,
+      "output": 18.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "file"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "meta-llama/llama-3-8b-instruct",
+    "name": "Meta: Llama 3 8B Instruct",
+    "provider": "Meta-Llama",
+    "context_length": 8192,
+    "pricing": {
+      "input": 0.03,
+      "output": 0.04
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "meta-llama/llama-3-70b-instruct",
+    "name": "Meta: Llama 3 70B Instruct",
+    "provider": "Meta-Llama",
+    "context_length": 8192,
+    "pricing": {
+      "input": 0.51,
+      "output": 0.74
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/mixtral-8x22b-instruct",
+    "name": "Mistral: Mixtral 8x22B Instruct",
+    "provider": "Mistralai",
+    "context_length": 65536,
+    "pricing": {
+      "input": 2.0,
+      "output": 6.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "microsoft/wizardlm-2-8x22b",
+    "name": "WizardLM-2 8x22B",
+    "provider": "Microsoft",
+    "context_length": 65535,
+    "pricing": {
+      "input": 0.62,
+      "output": 0.62
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-4-turbo",
+    "name": "OpenAI: GPT-4 Turbo",
+    "provider": "OpenAI",
+    "context_length": 128000,
+    "pricing": {
+      "input": 10.0,
+      "output": 30.0
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "anthropic/claude-3-haiku",
+    "name": "Anthropic: Claude 3 Haiku",
+    "provider": "Anthropic",
+    "context_length": 200000,
+    "pricing": {
+      "input": 0.25,
+      "output": 1.25
+    },
+    "modalities": [
+      "text",
+      "image"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/mistral-large",
+    "name": "Mistral Large",
+    "provider": "Mistralai",
+    "context_length": 128000,
+    "pricing": {
+      "input": 2.0,
+      "output": 6.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-4-turbo-preview",
+    "name": "OpenAI: GPT-4 Turbo Preview",
+    "provider": "OpenAI",
+    "context_length": 128000,
+    "pricing": {
+      "input": 10.0,
+      "output": 30.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-3.5-turbo-0613",
+    "name": "OpenAI: GPT-3.5 Turbo (older v0613)",
+    "provider": "OpenAI",
+    "context_length": 4095,
+    "pricing": {
+      "input": 1.0,
+      "output": 2.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/mixtral-8x7b-instruct",
+    "name": "Mistral: Mixtral 8x7B Instruct",
+    "provider": "Mistralai",
+    "context_length": 32768,
+    "pricing": {
+      "input": 0.54,
+      "output": 0.54
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "alpindale/goliath-120b",
+    "name": "Goliath 120B",
+    "provider": "Alpindale",
+    "context_length": 6144,
+    "pricing": {
+      "input": 3.75,
+      "output": 7.5
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openrouter/auto",
+    "name": "Auto Router",
+    "provider": "Openrouter",
+    "context_length": 2000000,
+    "pricing": {
+      "input": -1000000.0,
+      "output": -1000000.0
+    },
+    "modalities": [
+      "text",
+      "image",
+      "audio",
+      "file",
+      "video"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "multimodal",
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-4-1106-preview",
+    "name": "OpenAI: GPT-4 Turbo (older v1106)",
+    "provider": "OpenAI",
+    "context_length": 128000,
+    "pricing": {
+      "input": 10.0,
+      "output": 30.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "rag",
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-3.5-turbo-instruct",
+    "name": "OpenAI: GPT-3.5 Turbo Instruct",
+    "provider": "OpenAI",
+    "context_length": 4095,
+    "pricing": {
+      "input": 1.5,
+      "output": 2.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mistralai/mistral-7b-instruct-v0.1",
+    "name": "Mistral: Mistral 7B Instruct v0.1",
+    "provider": "Mistralai",
+    "context_length": 2824,
+    "pricing": {
+      "input": 0.11,
+      "output": 0.19
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-3.5-turbo-16k",
+    "name": "OpenAI: GPT-3.5 Turbo 16k",
+    "provider": "OpenAI",
+    "context_length": 16385,
+    "pricing": {
+      "input": 3.0,
+      "output": 4.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "mancer/weaver",
+    "name": "Mancer: Weaver (alpha)",
+    "provider": "Mancer",
+    "context_length": 8000,
+    "pricing": {
+      "input": 0.75,
+      "output": 1.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "undi95/remm-slerp-l2-13b",
+    "name": "ReMM SLERP 13B",
+    "provider": "Undi95",
+    "context_length": 6144,
+    "pricing": {
+      "input": 0.44999999999999996,
+      "output": 0.65
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "gryphe/mythomax-l2-13b",
+    "name": "MythoMax 13B",
+    "provider": "Gryphe",
+    "context_length": 4096,
+    "pricing": {
+      "input": 0.06,
+      "output": 0.06
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-4-0314",
+    "name": "OpenAI: GPT-4 (older v0314)",
+    "provider": "OpenAI",
+    "context_length": 8191,
+    "pricing": {
+      "input": 30.0,
+      "output": 60.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-4",
+    "name": "OpenAI: GPT-4",
+    "provider": "OpenAI",
+    "context_length": 8191,
+    "pricing": {
+      "input": 30.0,
+      "output": 60.0
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  },
+  {
+    "id": "openai/gpt-3.5-turbo",
+    "name": "OpenAI: GPT-3.5 Turbo",
+    "provider": "OpenAI",
+    "context_length": 16385,
+    "pricing": {
+      "input": 0.5,
+      "output": 1.5
+    },
+    "modalities": [
+      "text"
+    ],
+    "benchmarks": null,
+    "best_for": [
+      "lite"
+    ],
+    "performance_tier": "lite",
+    "efficiency_score": 0.0
+  }
+]
